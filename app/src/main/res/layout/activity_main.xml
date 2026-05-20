@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="1024dp"
+    android:layout_height="768dp"
+    android:orientation="horizontal"
+    tools:context=".MainActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/frameHeader"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:tag="frameHeader"
+        tools:layout="@layout/fragment_header"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/ch0"
+        android:layout_width="512dp"
+        android:layout_height="662dp"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/frameHeader"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/ch1"
+        android:layout_width="512dp"
+        android:layout_height="662dp"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="@id/ch0"
+        app:layout_constraintStart_toEndOf="@id/ch0" />
+
+    <View
+        android:id="@+id/viewFooter"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    
+    <ImageView
+        android:id="@+id/imageViewNetwork"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintHorizontal_bias="0.32"
+        android:background="@drawable/nonetwork"
+        android:importantForAccessibility="no"
+        app:layout_constraintStart_toStartOf="@id/viewFooter"
+        app:layout_constraintTop_toTopOf="@id/viewFooter"
+        app:layout_constraintBottom_toBottomOf="@id/viewFooter"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/textViewVersionValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="VER-DEVD 1.0.0 | "
+        android:textSize="19sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="@id/imageViewNetwork"
+        app:layout_constraintStart_toEndOf="@id/imageViewNetwork"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewNetwork" />
+
+    <TextView
+        android:id="@+id/textViewTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2026-01-15 12:47:50"
+        android:textSize="19sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="@id/imageViewNetwork"
+        app:layout_constraintStart_toEndOf="@id/textViewVersionValue"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewNetwork" />
+
+    <FrameLayout
+        android:id="@+id/frameFull"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

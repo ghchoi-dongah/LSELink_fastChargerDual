@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="authMode">
+        <item>1. MAC</item>
+        <item>2. 회원카드</item>
+        <item>3. MAC + 회원카드</item>
+    </string-array>
+</resources>

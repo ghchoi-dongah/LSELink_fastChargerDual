@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="startMode">
+        <item>1. 터치 시작 모드</item>
+        <item>2. 자동 시작 모드</item>
+    </string-array>
+</resources>

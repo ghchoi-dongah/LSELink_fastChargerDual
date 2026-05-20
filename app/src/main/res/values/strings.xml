@@ -1,0 +1,124 @@
+<resources>
+    <string name="app_name">FastCharger</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="initMessage"><font color="#000">차량에 커넥터 연결 시 자동 충전</font></string>
+    <string name="changeModeMessage"><font color="#BB000C">커넥터 제어로 인해 사용 불가</font></string>
+    <string name="seqTime"><font color="#EE282828">예상 충전 시간 : 약 %1$s분 후</font></string>
+    <string name="sequentialMessage"><font color="#000">커넥터를 꽂아 두시면,\n앞선 차량의 충전이 끝난 뒤\n자동으로 충전이 시작됩니다.</font></string>
+    <string name="estimatedChargingTime"><font color="#000">예상 충전 시작: </font></string>
+    <string name="authSelectMessage"><font color="#000">회원 유형을 선택해 주세요.</font></string>
+    <string name="memberCardTagMessage"><font color="#000">회원카드 인증</font></string>
+    <string name="noMacMessage"><font color="#000">등록되지 않은 차량입니다.\n차량 등록은 관리자에게 문의해 주세요.</font></string>
+    <string name="memberCardTagNoMacMessage"><font color="#000">차량이 등록된 회원이 아닙니다.\n회원일 경우 회원카드를 접촉해 주세요.</font></string>
+    <string name="vehicleRegistMessage"><font color="#000">차량 등록은 관리자에게 문의해 주세요.</font></string>
+    <string name="memberCheckWaitMessage"><font color="#000">회원 확인 중</font></string>
+    <string name="memberCheckFailedMessage"><font color="#000">회원 인증 실패</font></string>
+    <string name="memberRegistMessage"><font color="#000">회원 등록은 관리자에게 문의해 주세요.</font></string>
+    <string name="chargingWaitMessage"><font color="#000">충전 대기 중</font></string>
+    <string name="chargingWaitSubMessage"><font color="#000">앞선 차량의 충전이 끝난 뒤 충전이 시작됩니다.</font></string>
+    <string name="chargingMessage"><font color="#000">충전 중</font></string>
+    <string name="chargingFinishMessage"><font color="#000">충전 완료</font></string>
+    <string name="chargingTime">충전시간</string>
+    <string name="useYn"><font color="#000">사용가능여부:</font></string>
+    <string name="limitSoc">최대 충전량</string>
+    <string name="limitKw">출력 제한</string>
+    <string name="connectionFailedMessage"><font color="#000">차량과 통신 실패</font></string>
+    <string name="chargeOfAmount">충전량</string>
+    <string name="chargingTimeRemain">남은시간</string>
+    <string name="chargingVoltage">충전전압</string>
+    <string name="chargingCurrent">충전전류</string>
+    <string name="chargingPower">충전전력</string>
+    <string name="requestCurrent">요청전류</string>
+    <string name="chargingStop">충전종료</string>
+    <string name="chargingFinishWaitMessage"><font color="#000">충전 종료 중</font></string>
+    <string name="check">확인</string>
+    <string name="cancel">취소</string>
+    <string name="faultMessage">SYSTEM ERROR MESSAGE</string>
+    <string name="faultCodeMessage"> </string>
+    <string name="carNum"><font color="#000">차량번호 : </font></string>
+    <string name="voltageUnit">V</string>
+    <string name="currentUnit">A</string>
+    <string name="powerUnit">kW</string>
+    <string name="powerAmountUnit">kWh</string>
+    <string name="adminMessage">패스워드를 입력한 후 확인 버튼을 눌러주세요.</string>
+    <string name="opStopMessage"><font color="#000">서비스 점검 중</font></string>
+    <string name="systemCheckMessage"><font color="#000">안정적인 서비스 제공을 위해 \n시스템 점검을 진행하고 있습니다.</font></string>
+    <string name="screenSaverMessage">현재 화면 보호기가 실행 중입니다.\n충전을 시작하려면 화면을 터치해 주세요.</string>
+    <string name="connector"><font color="#000">커넥터</font></string>
+    <string name="connectorSeq"><font color="#000">커넥터(순차모드)</font></string>
+    <string name="connectorCheckMessage"><font color="#000">커넥터 연결 확인 중</font></string>
+    <string name="EVCheckMessage"><font color="#000">차량과 통신 확인 중</font></string>
+    <string name="connectorRetryMessage"><font color="#000">커넥터를 제거해 주세요.</font></string>
+    <string name="connectorDisconnectMessage"><font color="#000">커넥터를 분리하여 정리해 주세요.</font></string>
+    <string name="etcInfo">기타정보</string>
+    <string name="chargingInfo">충전정보</string>
+    <string name="intiInfo">충전량 제한 : %1$d%%\n출력 제한 : %2$dkW</string>
+
+    <!-- config setting -->
+    <string name="chargePointType"><font color="#000">커플러 타입</font></string>
+    <string name="chargePointModelName"><font color="#000">충전기모델명</font></string>
+    <string name="chargePointModel"><font color="#000">충전기모델ID</font></string>
+    <string name="chargeBoxSerialNumber"><font color="#000">충전소ID</font></string>
+    <string name="chargerId"><font color="#000">충전기ID</font></string>
+    <string name="serverUrl"><font color="#000">서버 URL</font></string>
+    <string name="serverPort"><font color="#000">서버 Port</font></string>
+    <string name="controlPort"><font color="#000">Control Port</font></string>
+    <string name="rfPort"><font color="#000">RF-Card Port</font></string>
+    <string name="creditCardPort"><font color="#000">CreditCard Port</font></string>
+    <string name="vendorId"><font color="#000">제조사 코드</font></string>
+    <string name="testPrice"><font color="#000">테스트 단가</font></string>
+    <string name="connectorPriority"><font color="#000">커넥터 우선순위</font></string>
+    <string name="chargeMode"><font color="#000">충전기 모드</font></string>
+    <string name="mid"><font color="#000">결제MID</font></string>
+    <string name="chargePointSerialNumber"><font color="#000">충전기 Serial</font></string>
+    <string name="chargePointVendor"><font color="#000">충전기 Vendor</font></string>
+    <string name="firmwareVersion"><font color="#000">Firmware Ver.</font></string>
+    <string name="iccid"><font color="#000">모뎀 ICCID</font></string>
+    <string name="imsi"><font color="#000">모뎀 IMSI</font></string>
+    <string name="meterSerialNumber"><font color="#000">전력량계 Serial</font></string>
+    <string name="meterType"><font color="#000">전력량계 타입</font></string>
+    <string name="authMode"><font color="#000">회원인증모드</font></string>
+    <string name="mac"><font color="#000">MAC</font></string>
+    <string name="memberCard"><font color="#000">회원카드</font></string>
+    <string name="macMemberCard"><font color="#000">MAC + 회원카드</font></string>
+    <string name="opMode"><font color="#000">운영모드</font></string>
+    <string name="startMode"><font color="#000">시작모드</font></string>
+    <string name="controlMonitor"><font color="#000">ControlBoard Monitor</font></string>
+    <string name="test"><font color="#000">테스트</font></string>
+    <string name="server"><font color="#000">서버</font></string>
+    <string name="keyboardControl"><font color="#000">키보드 제어</font></string>
+    <string name="hidden"><font color="#06377B">HIDDEN</font></string>
+    <string name="off"><font color="#000">OFF</font></string>
+    <string name="exit">EXIT</string>
+    <string name="save">저장</string>
+    <string name="rebooting">리부팅</string>
+    <string name="configSaveTitle">환경 설정 저장</string>
+    <string name="configSaveSuccess">수정 내용 저장 성공</string>
+    <string name="configSaveYesNo">수정하신 내용을 저장하시겠습니까?</string>
+    <string name="configSaveCancel">수정 내용 취소</string>
+    <string name="configRequired">%1$s는 필수 입력 값입니다</string>
+    <string name="soc"><font color="#000">SoC</font></string>
+    <string name="dr"><font color="#000">출력 전류 제한(kW)</font></string>
+    <string name="initInfoYn"><font color="#000">Soc/출력 정보 표시</font></string>
+
+    <!-- environment   -->
+    <string name="configButton">환경설정</string>
+    <string name="webSocketButton">Web Socket</string>
+    <string name="controlButton">Control Board</string>
+    <string name="dbControl">DB 제어</string>
+    <string name="uiButton">화면\n전환</string>
+    <string name="systemExit">시스템\n종료</string>
+    <string name="loadTest">Load Test</string>
+    <string name="remoteTest">원격\n테스트</string>
+
+    <!-- control board -->
+    <string name="channelSelect">[채널 선택]</string>
+    <string name="channel1">1번 채널</string>
+    <string name="channel2">2번 채널</string>
+    <string name="rx">RX</string>
+    <string name="itemTitle">item title</string>
+    <string name="trueText">true</string>
+
+    <!-- web socket -->
+    <string name="logDel">로그삭제</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="opMode">
+        <item>1. 테스트</item>
+        <item>2. 서버</item>
+    </string-array>
+</resources>

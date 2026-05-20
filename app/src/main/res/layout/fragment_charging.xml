@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="512dp"
+    android:layout_height="662dp"
+    android:padding="5dp"
+    tools:context=".pages.ChargingFragment">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/layer_list_rect" />
+
+    <TextView
+        android:id="@+id/textViewChargingMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="@string/chargingMessage"
+        android:textSize="36sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewCarNum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/carNum"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/textViewChargingMessage" />
+
+    <!-- 1. 배경용 -->
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBackground"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
+        app:indicatorSize="230dp"
+        app:trackThickness="15dp"
+        app:indicatorColor="#EEEEEE"
+        android:progress="100"
+        app:layout_constraintTop_toTopOf="@id/progressCircular"
+        app:layout_constraintBottom_toBottomOf="@id/progressCircular"
+        app:layout_constraintStart_toStartOf="@id/progressCircular"
+        app:layout_constraintEnd_toEndOf="@id/progressCircular" />
+
+    <!-- 2. 실제 게이지 -->
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressCircular"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:layout_marginTop="10dp"
+        android:progress="80"
+        app:indicatorSize="240dp"
+        app:trackThickness="26dp"
+        app:indicatorColor="@color/primary"
+        app:trackCornerRadius="6dp"
+        app:trackColor="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@id/textViewCarNum"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewSocValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:gravity="center_horizontal"
+        android:text="80%"
+        android:textSize="58sp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="@id/progressCircular"
+        app:layout_constraintStart_toStartOf="@id/progressCircular"
+        app:layout_constraintEnd_toEndOf="@id/progressCircular" />
+
+    <TextView
+        android:id="@+id/textViewChargingAmt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="90dp"
+        android:text="@string/chargeOfAmount"
+        android:textSize="18sp"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/progressCircular"
+        app:layout_constraintBottom_toBottomOf="@id/progressCircular"
+        app:layout_constraintEnd_toEndOf="@id/progressCircular" />
+
+    <TextView
+        android:id="@+id/textViewChargingAmtValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1.33kWh"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/textViewChargingAmt"
+        app:layout_constraintStart_toStartOf="@id/textViewChargingAmt"
+        app:layout_constraintEnd_toEndOf="@id/textViewChargingAmt"/>
+
+    <View
+        android:id="@+id/viewLine"
+        android:layout_width="2dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="10dp"
+        android:background="#E7E7E7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progressCircular" />
+    
+    <TextView
+        android:id="@+id/textViewChargingTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/chargingTime"
+        android:textSize="22sp"
+        app:layout_constraintTop_toTopOf="@id/textViewChargingTimeValue"
+        app:layout_constraintEnd_toStartOf="@id/textViewChargingTimeValue"
+        app:layout_constraintBottom_toBottomOf="@id/textViewChargingTimeValue" />
+
+    <TextView
+        android:id="@+id/textViewChargingTimeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="00:01:12"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/viewLine"
+        app:layout_constraintEnd_toStartOf="@id/viewLine"
+        app:layout_constraintBottom_toBottomOf="@id/viewLine" />
+
+    <TextView
+        android:id="@+id/textViewChargingTimeRemain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/chargingTimeRemain"
+        android:textSize="22sp"
+        app:layout_constraintTop_toTopOf="@id/viewLine"
+        app:layout_constraintStart_toEndOf="@id/viewLine"
+        app:layout_constraintBottom_toBottomOf="@id/viewLine"/>
+
+    <TextView
+        android:id="@+id/textViewChargingTimeRemainValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="00:05:35"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/textViewChargingTimeRemain"
+        app:layout_constraintStart_toEndOf="@id/textViewChargingTimeRemain"
+        app:layout_constraintBottom_toBottomOf="@id/textViewChargingTimeRemain" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="374dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnChargingStop">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_card_bg"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp">
+
+            <TextView
+                android:id="@+id/textViewInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/etcInfo"
+                android:textSize="17sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+                android:id="@+id/viewLine2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="5dp"
+                android:background="#E7E7E7"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewInfo" />
+
+            <View
+                android:id="@+id/viewLine3"
+                android:layout_width="2dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="5dp"
+                android:background="#E7E7E7"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/viewLine2"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
+                android:id="@+id/textViewLimitSoc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/limitSoc"
+                android:textSize="17sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/viewLine2"/>
+
+            <TextView
+                android:id="@+id/textViewLimitSocValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:text="90%"
+                android:textSize="17sp"
+                android:textColor="@color/black_500"
+                app:layout_constraintTop_toTopOf="@id/textViewLimitSoc"
+                app:layout_constraintEnd_toStartOf="@id/viewLine3"
+                app:layout_constraintBottom_toBottomOf="@id/textViewLimitSoc" />
+
+            <TextView
+                android:id="@+id/textViewLimitKw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="@string/limitKw"
+                android:textSize="17sp"
+                app:layout_constraintTop_toTopOf="@id/textViewLimitSoc"
+                app:layout_constraintBottom_toBottomOf="@id/textViewLimitSoc"
+                app:layout_constraintStart_toEndOf="@id/viewLine3" />
+
+            <TextView
+                android:id="@+id/textViewLimitKwValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="80kW"
+                android:textSize="17sp"
+                android:textColor="@color/black_500"
+                app:layout_constraintTop_toTopOf="@id/textViewLimitKw"
+                app:layout_constraintBottom_toBottomOf="@id/textViewLimitKw"
+                app:layout_constraintEnd_toEndOf="@id/viewLine2" />
+
+            <TextView
+                android:id="@+id/textViewChargingVoltage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/chargingVoltage"
+                android:textSize="17sp"
+                app:layout_constraintTop_toBottomOf="@id/textViewLimitSoc"
+                app:layout_constraintStart_toStartOf="@id/textViewLimitSoc" />
+
+            <TextView
+                android:id="@+id/textViewChargingVoltageValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="384.7V"
+                android:textSize="17sp"
+                android:textColor="@color/black_500"
+                app:layout_constraintTop_toTopOf="@id/textViewChargingVoltage"
+                app:layout_constraintBottom_toBottomOf="@id/textViewChargingVoltage"
+                app:layout_constraintEnd_toEndOf="@id/textViewLimitSocValue"/>
+
+            <TextView
+                android:id="@+id/textViewChargingCurrent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/chargingCurrent"
+                android:textSize="17sp"
+                app:layout_constraintTop_toBottomOf="@id/textViewChargingVoltage"
+                app:layout_constraintStart_toStartOf="@id/textViewChargingVoltage" />
+
+            <TextView
+                android:id="@+id/textViewChargingCurrentValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="207.94A"
+                android:textSize="17sp"
+                android:textColor="@color/black_500"
+                app:layout_constraintTop_toTopOf="@id/textViewChargingCurrent"
+                app:layout_constraintBottom_toBottomOf="@id/textViewChargingCurrent"
+                app:layout_constraintEnd_toEndOf="@id/textViewLimitSocValue" />
+
+            <TextView
+                android:id="@+id/textViewChargingPower"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/chargingPower"
+                android:textSize="17sp"
+                app:layout_constraintTop_toBottomOf="@id/textViewLimitKw"
+                app:layout_constraintStart_toStartOf="@id/textViewLimitKw" />
+
+            <TextView
+                android:id="@+id/textViewChargingPowerValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="79.99kW"
+                android:textSize="17sp"
+                android:textColor="@color/black_500"
+                app:layout_constraintTop_toTopOf="@id/textViewChargingPower"
+                app:layout_constraintBottom_toBottomOf="@id/textViewChargingPower"
+                app:layout_constraintEnd_toEndOf="@id/textViewLimitKwValue" />
+
+            <TextView
+                android:id="@+id/textViewRequestCurrent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/requestCurrent"
+                android:textSize="17sp"
+                app:layout_constraintStart_toStartOf="@id/textViewChargingPower"
+                app:layout_constraintTop_toBottomOf="@id/textViewChargingPower"/>
+
+            <TextView
+                android:id="@+id/textViewRequestCurrentValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="218.34A"
+                android:textSize="17sp"
+                android:textColor="@color/black_500"
+                app:layout_constraintTop_toTopOf="@id/textViewRequestCurrent"
+                app:layout_constraintBottom_toBottomOf="@id/textViewRequestCurrent"
+                app:layout_constraintEnd_toEndOf="@id/textViewLimitKwValue" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/btnChargingStop"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/chargingStop"
+        android:textSize="20sp"
+        android:textColor="@color/primary"
+        android:background="@drawable/shape_btn_white_stroke_blue"
+        app:backgroundTint="@null"
+        app:layout_constraintWidth_percent="0.85"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 그림자 -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#33FEB05D" />
+        </shape>
+    </item>
+    <!-- 메인 배경 -->
+    <item android:bottom="8dp" android:right="8dp" android:top="8dp" android:left="8dp">
+        <shape android:shape="oval">
+            <solid android:color="#FFFFFF"/>
+            <stroke android:color="#FEB05D" android:width="7dp" />
+        </shape>
+    </item>
+</layer-list>

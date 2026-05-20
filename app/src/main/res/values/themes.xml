@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.FastCharger" parent="Theme.AppCompat.DayNight.NoActionBar" />
+
+    <style name="SpinnerDivideStyle" parent="android:style/Widget.ListView.DropDown">
+        <item name="android:divider">@color/black</item> <!-- divider 색 -->
+        <item name="android:dividerHeight">1dp</item> <!-- divider 높이 -->
+    </style>
+    <style name="SpinnerTheme">
+        <item name="android:dropDownListViewStyle">@style/SpinnerDivideStyle</item>
+    </style>
+</resources>

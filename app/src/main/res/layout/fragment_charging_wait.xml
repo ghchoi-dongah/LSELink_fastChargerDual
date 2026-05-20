@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="512dp"
+    android:layout_height="662dp"
+    android:padding="5dp"
+    tools:context=".pages.ChargingWaitFragment">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/layer_list_rect" />
+
+    <TextView
+        android:id="@+id/textViewChargingWaitMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="@string/chargingWaitMessage"
+        android:textSize="36sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressCircular"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:progress="20"
+        app:indicatorSize="250dp"
+        app:trackThickness="28dp"
+        app:indicatorColor="@color/primary"
+        app:trackColor="#EEEEEE"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="10"
+        android:textSize="82sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/progressCircular"
+        app:layout_constraintEnd_toEndOf="@id/progressCircular"
+        app:layout_constraintTop_toTopOf="@id/progressCircular" />
+
+    <TextView
+        android:id="@+id/textViewMin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="58dp"
+        android:text="MIN"
+        android:textSize="36sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/progressCircular"
+        app:layout_constraintEnd_toEndOf="@id/progressCircular"
+        app:layout_constraintBottom_toBottomOf="@id/progressCircular" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="@string/chargingWaitSubMessage"
+        android:gravity="center"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/progressCircular" />
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/linearLayoutLoadingContainer"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:gravity="center"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent">-->
+
+<!--        <View-->
+<!--            android:id="@+id/dot1"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_marginEnd="50dp"-->
+<!--            android:visibility="invisible" />-->
+
+<!--        <View-->
+<!--            android:id="@+id/dot2"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_marginEnd="50dp"-->
+<!--            android:visibility="invisible" />-->
+
+<!--        <View-->
+<!--            android:id="@+id/dot3"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_marginEnd="50dp"-->
+<!--            android:visibility="invisible" />-->
+
+<!--        <View-->
+<!--            android:id="@+id/dot4"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_marginEnd="50dp"-->
+<!--            android:visibility="invisible" />-->
+
+<!--        <View-->
+<!--            android:id="@+id/dot5"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:visibility="invisible" />-->
+
+<!--    </LinearLayout>-->
+    
+</androidx.constraintlayout.widget.ConstraintLayout>

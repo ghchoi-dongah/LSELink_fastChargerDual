@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="1024dp"
+    android:layout_height="768dp"
+    tools:context=".pages.ConfigSettingFragment">
+
+    <TextView
+        android:id="@+id/textViewChargePointType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="100dp"
+        android:text="@string/chargePointType"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Spinner
+        android:id="@+id/spinnerChargePointType"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:dropDownWidth="300dp"
+        android:spinnerMode="dropdown"
+        android:theme="@style/SpinnerTheme"
+        android:background="@drawable/spinner_background"
+        app:layout_constraintTop_toTopOf="@id/textViewChargePointType"
+        app:layout_constraintStart_toEndOf="@id/textViewChargePointType" />
+
+    <TextView
+        android:id="@+id/textViewChargePointModel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/chargePointModel"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/textViewChargePointType"
+        app:layout_constraintTop_toBottomOf="@id/textViewChargePointType" />
+
+    <Spinner
+        android:id="@+id/spinnerChargePointModel"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:dropDownWidth="300dp"
+        android:spinnerMode="dropdown"
+        android:theme="@style/SpinnerTheme"
+        android:background="@drawable/spinner_background"
+        app:layout_constraintTop_toTopOf="@id/textViewChargePointModel"
+        app:layout_constraintStart_toStartOf="@id/spinnerChargePointType" />
+
+    <TextView
+        android:id="@+id/textViewChargeBoxSerialNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/chargeBoxSerialNumber"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/textViewChargePointType"
+        app:layout_constraintTop_toBottomOf="@id/textViewChargePointModel" />
+
+    <EditText
+        android:id="@+id/editChargeBoxSerialNumber"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewChargeBoxSerialNumber"
+        app:layout_constraintStart_toStartOf="@id/spinnerChargePointType"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewChargerId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/chargerId"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/textViewChargePointType"
+        app:layout_constraintTop_toBottomOf="@id/textViewChargeBoxSerialNumber" />
+
+    <EditText
+        android:id="@+id/editChargerId"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewChargerId"
+        app:layout_constraintStart_toStartOf="@id/spinnerChargePointType"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewServerUrl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/serverUrl"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/textViewChargePointType"
+        app:layout_constraintTop_toBottomOf="@id/textViewChargerId" />
+
+    <EditText
+        android:id="@+id/editServerUrl"
+        android:layout_width="520dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewServerUrl"
+        app:layout_constraintStart_toStartOf="@id/spinnerChargePointType"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewServerPort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/serverPort"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/textViewChargePointType"
+        app:layout_constraintTop_toBottomOf="@id/textViewServerUrl" />
+
+    <EditText
+        android:id="@+id/editServerPort"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewServerPort"
+        app:layout_constraintStart_toStartOf="@id/spinnerChargePointType"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewControlPort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/controlPort"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/textViewChargePointType"
+        app:layout_constraintTop_toBottomOf="@id/textViewServerPort" />
+
+    <EditText
+        android:id="@+id/editControlPort"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewControlPort"
+        app:layout_constraintStart_toStartOf="@id/spinnerChargePointType"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewRfPort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/rfPort"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/textViewChargePointType"
+        app:layout_constraintTop_toBottomOf="@id/textViewControlPort" />
+
+    <EditText
+        android:id="@+id/editRfPort"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewRfPort"
+        app:layout_constraintStart_toStartOf="@id/spinnerChargePointType"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewCreditCardPort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/creditCardPort"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/textViewChargePointType"
+        app:layout_constraintTop_toBottomOf="@id/textViewRfPort" />
+
+    <EditText
+        android:id="@+id/editCreditCardPort"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewCreditCardPort"
+        app:layout_constraintStart_toStartOf="@id/spinnerChargePointType"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewTestPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/testPrice"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/textViewChargePointType"
+        app:layout_constraintTop_toBottomOf="@id/textViewCreditCardPort" />
+
+    <EditText
+        android:id="@+id/editTestPrice"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewTestPrice"
+        app:layout_constraintStart_toStartOf="@id/spinnerChargePointType"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewSoc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/soc"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/textViewChargePointType"
+        app:layout_constraintTop_toBottomOf="@id/textViewTestPrice" />
+
+    <EditText
+        android:id="@+id/editSoc"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewSoc"
+        app:layout_constraintStart_toStartOf="@id/spinnerChargePointType"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewConnectorPriority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/connectorPriority"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/textViewChargePointType"
+        app:layout_constraintTop_toBottomOf="@id/textViewSoc" />
+
+    <EditText
+        android:id="@+id/editConnectorPriority"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewConnectorPriority"
+        app:layout_constraintStart_toStartOf="@id/spinnerChargePointType"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="[1 또는 2 입력]"
+        android:textSize="15sp"
+        android:textColor="@color/gin_grey"
+        app:layout_constraintTop_toTopOf="@id/editConnectorPriority"
+        app:layout_constraintStart_toEndOf="@id/editConnectorPriority" />
+
+    <TextView
+        android:id="@+id/textViewChargePointSerialNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="@string/chargePointSerialNumber"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/editChargePointSerialNumber"
+        app:layout_constraintTop_toTopOf="@id/textViewChargePointType" />
+
+    <EditText
+        android:id="@+id/editChargePointSerialNumber"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewChargePointSerialNumber"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewChargePointVendor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/chargePointVendor"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/editChargePointVendor"
+        app:layout_constraintTop_toBottomOf="@id/textViewChargePointSerialNumber" />
+
+    <EditText
+        android:id="@+id/editChargePointVendor"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewChargePointVendor"
+        app:layout_constraintStart_toStartOf="@id/editChargePointSerialNumber"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewMid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="@string/mid"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/editMid"
+        app:layout_constraintTop_toTopOf="@id/textViewChargeBoxSerialNumber" />
+
+    <EditText
+        android:id="@+id/editMid"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewMid"
+        app:layout_constraintStart_toStartOf="@id/editChargePointSerialNumber"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewFirmwareVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/firmwareVersion"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/editFirmwareVersion"
+        app:layout_constraintTop_toBottomOf="@id/textViewMid" />
+
+    <EditText
+        android:id="@+id/editFirmwareVersion"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewFirmwareVersion"
+        app:layout_constraintStart_toStartOf="@id/editChargePointSerialNumber"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewKeyboardControl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="@string/keyboardControl"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/btnKeyboardControl"
+        app:layout_constraintTop_toTopOf="@id/btnKeyboardControl"
+        app:layout_constraintBottom_toBottomOf="@id/btnKeyboardControl" />
+
+    <Button
+        android:id="@+id/btnKeyboardControl"
+        android:layout_width="140dp"
+        android:layout_height="30dp"
+        android:text="@string/hidden"
+        android:textSize="16sp"
+        android:background="@drawable/shape_btn_white_stroke_blue"
+        app:layout_constraintTop_toTopOf="@id/editServerUrl"
+        app:layout_constraintEnd_toEndOf="@id/editFirmwareVersion" />
+
+    <TextView
+        android:id="@+id/textViewIccid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="@string/iccid"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/editIccid"
+        app:layout_constraintTop_toTopOf="@id/editServerPort" />
+
+    <EditText
+        android:id="@+id/editIccid"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewIccid"
+        app:layout_constraintStart_toStartOf="@id/editChargePointSerialNumber"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewImsi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/imsi"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/editImsi"
+        app:layout_constraintTop_toBottomOf="@id/textViewIccid" />
+
+    <EditText
+        android:id="@+id/editImsi"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewImsi"
+        app:layout_constraintStart_toStartOf="@id/editChargePointSerialNumber"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewMeterSerialNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/meterSerialNumber"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/editMeterSerialNumber"
+        app:layout_constraintTop_toBottomOf="@id/textViewImsi" />
+
+    <EditText
+        android:id="@+id/editMeterSerialNumber"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewMeterSerialNumber"
+        app:layout_constraintStart_toStartOf="@id/editChargePointSerialNumber"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewMeterType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/meterType"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/editMeterType"
+        app:layout_constraintTop_toBottomOf="@id/textViewMeterSerialNumber" />
+
+    <EditText
+        android:id="@+id/editMeterType"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewMeterType"
+        app:layout_constraintStart_toStartOf="@id/editChargePointSerialNumber"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewAuthMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/authMode"
+        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="@id/textViewTestPrice"
+        app:layout_constraintEnd_toEndOf="@id/textViewMeterType"/>
+
+    <Spinner
+        android:id="@+id/spinnerAuthMode"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:dropDownWidth="300dp"
+        android:spinnerMode="dropdown"
+        android:theme="@style/SpinnerTheme"
+        android:background="@drawable/spinner_background"
+        app:layout_constraintTop_toTopOf="@id/textViewAuthMode"
+        app:layout_constraintStart_toStartOf="@id/editChargePointSerialNumber"/>
+
+    <TextView
+        android:id="@+id/textViewOpMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/opMode"
+        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="@id/editSoc"
+        app:layout_constraintEnd_toEndOf="@id/textViewMeterType"/>
+
+    <Spinner
+        android:id="@+id/spinnerOpMode"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:dropDownWidth="300dp"
+        android:spinnerMode="dropdown"
+        android:theme="@style/SpinnerTheme"
+        android:background="@drawable/spinner_background"
+        app:layout_constraintTop_toTopOf="@id/textViewOpMode"
+        app:layout_constraintStart_toStartOf="@id/editChargePointSerialNumber"/>
+
+    <TextView
+        android:id="@+id/textDR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dr"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/textViewOpMode"
+        app:layout_constraintTop_toTopOf="@id/editConnectorPriority" />
+
+    <EditText
+        android:id="@+id/editDR"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/editConnectorPriority"
+        app:layout_constraintStart_toStartOf="@id/editChargePointSerialNumber"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewStartMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/startMode"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/textViewConnectorPriority"
+        app:layout_constraintEnd_toEndOf="@id/textViewConnectorPriority"/>
+
+    <Spinner
+        android:id="@+id/spinnerStartMode"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:dropDownWidth="300dp"
+        android:spinnerMode="dropdown"
+        android:theme="@style/SpinnerTheme"
+        android:background="@drawable/spinner_background"
+        app:layout_constraintTop_toTopOf="@id/textViewStartMode"
+        app:layout_constraintStart_toStartOf="@id/editConnectorPriority"/>
+
+    <TextView
+        android:id="@+id/textViewControlMonitor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/controlMonitor"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/textDR"
+        app:layout_constraintEnd_toEndOf="@id/textDR"/>
+
+    <CheckBox
+        android:id="@+id/checkboxControlMonitor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:scaleX="1.3"
+        android:scaleY="1.3"
+        app:layout_constraintTop_toTopOf="@id/textViewControlMonitor"
+        app:layout_constraintBottom_toBottomOf="@id/textViewControlMonitor"
+        app:layout_constraintStart_toStartOf="@id/editDR" />
+
+    <TextView
+        android:id="@+id/textViewInitInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="@string/initInfoYn"
+        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="@id/textViewControlMonitor"
+        app:layout_constraintEnd_toStartOf="@id/checkboxInitInfo"/>
+
+    <CheckBox
+        android:id="@+id/checkboxInitInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:scaleX="1.3"
+        android:scaleY="1.3"
+        app:layout_constraintTop_toTopOf="@id/textViewInitInfo"
+        app:layout_constraintBottom_toBottomOf="@id/textViewInitInfo"
+        app:layout_constraintEnd_toEndOf="@id/editDR" />
+
+    <Button
+        android:id="@+id/btnExit"
+        android:layout_width="240dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="132dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/exit"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:textColor="#06377B"
+        android:background="@drawable/shape_btn_white_stroke_blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="240dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="20dp"
+        android:text="@string/save"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@drawable/shape_btn_blue"
+        app:layout_constraintStart_toEndOf="@id/btnExit"
+        app:layout_constraintTop_toTopOf="@id/btnExit" />
+
+    <Button
+        android:id="@+id/btnRebooting"
+        android:layout_width="240dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="20dp"
+        android:text="@string/rebooting"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@drawable/shape_btn_red"
+        app:layout_constraintStart_toEndOf="@id/btnSave"
+        app:layout_constraintTop_toTopOf="@id/btnExit" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

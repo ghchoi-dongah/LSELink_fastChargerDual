@@ -1,0 +1,121 @@
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+}
+
+android {
+    namespace 'com.dongah.fastcharger'
+    compileSdk {
+        version = release(36)
+    }
+
+    // clear
+    signingConfigs {
+        platformkeystore {
+            keyAlias "platform"
+            keyPassword "android"
+            storeFile file("D:\\AndroidDongah\\PlatformKeyClear\\keystore\\platform.jks")
+            storePassword "android"
+        }
+    }
+
+    // senke
+//    signingConfigs {
+//        getByName("debug") {
+//            keyAlias = "system-lztek"
+//            keyPassword = "123456"
+//            storeFile = file("D:\\AndroidDongah\\JSK_senke\\platform.jks")
+//            storePassword = "123456"
+//        }
+//    }
+
+    // hola
+//    signingConfigs {
+//        getByName("debug") {
+//            keyAlias = "androiddebugkey"
+//            keyPassword = "android"
+//            storeFile = file("D:\\AndroidDongah\\JKS_hola\\platform.jks")
+//            storePassword = "android"
+//        }
+//    }
+
+    defaultConfig {
+        applicationId "com.dongah.fastcharger"
+        minSdk 24
+        targetSdk 36
+        versionCode 1
+        versionName "1.0.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            ndkBuild {
+                cppFlags ''
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        compose true
+    }
+    externalNativeBuild {
+        ndkBuild {
+            path file('src/main/jni/Android.mk')
+        }
+    }
+}
+
+//java {
+//    toolchain {
+//        languageVersion.set(JavaLanguageVersion.of(8))
+//    }
+//}
+
+dependencies {
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.lifecycle.runtime.ktx
+    implementation libs.androidx.activity.compose
+    implementation platform(libs.androidx.compose.bom)
+    implementation libs.androidx.compose.ui
+    implementation libs.androidx.compose.ui.graphics
+    implementation libs.androidx.compose.ui.tooling.preview
+    implementation libs.androidx.compose.material3
+    implementation libs.androidx.appcompat
+    implementation libs.constraintlayout
+    implementation libs.material
+    implementation libs.rxandroid
+    implementation libs.rxjava
+    implementation libs.okhttp
+    implementation libs.okhttptls
+    implementation libs.zxing
+    implementation libs.jsch
+    implementation libs.slf4j
+    implementation libs.slf4j.android
+    implementation libs.gson
+    implementation libs.jaxb
+    implementation libs.commonsnet
+    implementation libs.cardview
+    implementation libs.avloading
+    coreLibraryDesugaring libs.desugar
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+    androidTestImplementation platform(libs.androidx.compose.bom)
+    androidTestImplementation libs.androidx.compose.ui.test.junit4
+    debugImplementation libs.androidx.compose.ui.tooling
+    debugImplementation libs.androidx.compose.ui.test.manifest
+}

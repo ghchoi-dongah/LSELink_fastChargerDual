@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="512dp"
+    android:layout_height="662dp"
+    android:padding="5dp"
+    tools:context=".pages.FaultFragment">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/layer_list_rect" />
+
+    <TextView
+        android:id="@+id/textViewFaultMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="@string/faultMessage"
+        android:textSize="32sp"
+        android:textColor="#760505"
+        android:textStyle="bold"
+        app:drawableStartCompat="@drawable/fault"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/textViewFaultCode"
+        android:layout_width="400dp"
+        android:layout_height="500dp"
+        android:layout_marginTop="20dp"
+        android:gravity="start"
+        android:textSize="30sp"
+        android:textColor="@color/white"
+        android:background="@color/gin_grey"
+        app:layout_constraintTop_toBottomOf="@id/textViewFaultMessage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

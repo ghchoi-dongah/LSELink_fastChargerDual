@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="1024dp"
+    android:layout_height="768dp"
+    tools:context=".pages.RemoteTestFragment">
+
+    <Button
+        android:id="@+id/btnResetHard"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:text="Reset-Hard"
+        android:textStyle="bold"
+        android:textSize="28sp"
+        android:textColor="@color/black_500"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnResetSoft"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:text="Reset-Soft"
+        android:textStyle="bold"
+        android:textSize="28sp"
+        android:textColor="@color/black_500"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toLeftOf="@id/btnResetHard"
+        app:layout_constraintTop_toBottomOf="@id/btnResetHard" />
+
+    <Button
+        android:id="@+id/btnInoperative"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:text="ChangeAvailability\n- Inoperative ch0"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black_500"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toLeftOf="@id/btnResetHard"
+        app:layout_constraintTop_toBottomOf="@id/btnResetSoft" />
+
+    <Button
+        android:id="@+id/btnOperative"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:text="ChangeAvailability\n- Operative ch0"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black_500"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toLeftOf="@id/btnResetHard"
+        app:layout_constraintTop_toBottomOf="@id/btnInoperative" />
+
+    <Button
+        android:id="@+id/btnInoperativeAll"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:text="ChangeAvailability\n- Inoperative All"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black_500"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toLeftOf="@id/btnResetHard"
+        app:layout_constraintTop_toBottomOf="@id/btnOperative" />
+
+    <Button
+        android:id="@+id/btnOperativeAll"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:text="ChangeAvailability\n- Operative All"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black_500"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toLeftOf="@id/btnResetHard"
+        app:layout_constraintTop_toBottomOf="@id/btnInoperativeAll" />
+
+    <Button
+        android:id="@+id/btnTestChangeModeDM"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="50dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:text="DT(changemode)\n- DM ALL"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black_500"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toRightOf="@id/btnResetHard"
+        app:layout_constraintTop_toTopOf="@id/btnResetHard" />
+
+    <Button
+        android:id="@+id/btnTestChangeModeIM"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:text="DT(changemode)\n- IM ALL"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black_500"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toLeftOf="@id/btnTestChangeModeDM"
+        app:layout_constraintTop_toBottomOf="@id/btnTestChangeModeDM"/>
+
+    <Button
+        android:id="@+id/btnTestChangeElecMode"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:text="DT(changeelecmode)\n- CH0"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black_500"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toLeftOf="@id/btnTestChangeModeIM"
+        app:layout_constraintTop_toBottomOf="@id/btnTestChangeModeIM" />
+
+    <Button
+        android:id="@+id/btnRechgrsocschedule"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:text="DT(rechgrsocschedule)\n- CH0"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:textColor="@color/black_500"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toLeftOf="@id/btnTestChangeModeIM"
+        app:layout_constraintTop_toBottomOf="@id/btnTestChangeElecMode" />
+
+    <Button
+        android:id="@+id/btnTestChangeElecMode2"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:text="DT(changeelecmode)\n- CH1"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black_500"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toLeftOf="@id/btnTestChangeModeIM"
+        app:layout_constraintTop_toBottomOf="@id/btnRechgrsocschedule" />
+
+    <Button
+        android:id="@+id/btnRechgrsocschedule2"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:text="DT(rechgrsocschedule)\n- CH1"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:textColor="@color/black_500"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toLeftOf="@id/btnTestChangeModeIM"
+        app:layout_constraintTop_toBottomOf="@id/btnTestChangeElecMode2" />
+
+    <Button
+        android:id="@+id/btnTestChangeModeDMCh0"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="50dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:text="DT(changemode)\n- DM CH0"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black_500"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toRightOf="@id/btnTestChangeModeDM"
+        app:layout_constraintTop_toTopOf="@id/btnResetHard" />
+
+    <Button
+        android:id="@+id/btnTestChangeModeIMCh0"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:text="DT(changemode)\n- IM CH0"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black_500"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toLeftOf="@id/btnTestChangeModeDMCh0"
+        app:layout_constraintTop_toBottomOf="@id/btnTestChangeModeDMCh0" />
+
+    <Button
+        android:id="@+id/btnTestWebsocketUrl"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:text="ChangeConfiguration\nwebSocketURL"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="@color/black_500"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toLeftOf="@id/btnTestChangeModeIMCh0"
+        app:layout_constraintTop_toBottomOf="@id/btnTestChangeModeIMCh0" />
+
+
+    <Button
+        android:id="@+id/btnExit"
+        android:layout_width="150dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/exit"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:background="@drawable/shape_btn_white"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
