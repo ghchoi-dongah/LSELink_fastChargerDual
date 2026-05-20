@@ -166,14 +166,6 @@ public class ClassUiProcess implements RfCardReaderListener {
                     }
                     break;
 
-                case SEQUENTIAL_CHARGING:
-                    handleSequentialCharging();
-                    break;
-
-                case CHARGING_WAIT:
-                    handleChargingWait(rxData);
-                    break;
-
                 case PLUG_CHECK:
                     handlePlugCheck(rxData);
                     break;
@@ -465,11 +457,6 @@ public class ClassUiProcess implements RfCardReaderListener {
             setUiSeq(UiSeq.OP_STOP);
             fragmentChange.onFragmentChange(getCh(), UiSeq.OP_STOP, "OP_STOP", null);
         }
-        // isCsReady: 예약(false)
-        else if (!controlBoard.getRxData(channel).isCsReady() && chargingCurrentData.isConnectUse()) {
-            setUiSeq(UiSeq.SEQUENTIAL_CHARGING);
-            fragmentChange.onFragmentChange(getCh(), UiSeq.SEQUENTIAL_CHARGING, "SEQUENTIAL_CHARGING", null);
-        }
     }
 
     // Rebooting
@@ -485,24 +472,6 @@ public class ClassUiProcess implements RfCardReaderListener {
             }
         } catch (Exception e) {
             logger.error("ClassUiProcess handleRebooting error : {}", e.getMessage());
-        }
-    }
-
-    // sequential charging
-    private void handleSequentialCharging() {
-        // isCsReady: 대기(true)
-        if (controlBoard.getRxData(channel).isCsReady() || !chargingCurrentData.isConnectUse()) {
-            setUiSeq(UiSeq.INIT);
-            fragmentChange.onFragmentChange(getCh(), UiSeq.INIT, "INIT", null);
-        }
-    }
-
-    // charging wait
-    private void handleChargingWait(RxData rxData) {
-        // 예약 → 대기: 충전 진행
-        if (!rxData.isCsReady()) {
-            setUiSeq(UiSeq.PLUG_CHECK);
-            ((MainActivity) MainActivity.mContext).getFragmentChange().onFragmentChange(getCh(), UiSeq.PLUG_CHECK, "PLUG_CHECK", null);
         }
     }
 

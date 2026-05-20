@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="90dp"
-        android:background="@drawable/bus_blue"
+        android:background="@drawable/car_blue"
         app:layout_constraintTop_toTopOf="@id/viewCircle"
         app:layout_constraintStart_toStartOf="@id/viewCircle"
         app:layout_constraintEnd_toEndOf="@id/viewCircle"

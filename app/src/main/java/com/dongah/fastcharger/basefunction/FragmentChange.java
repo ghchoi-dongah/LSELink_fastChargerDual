@@ -14,8 +14,6 @@ import com.dongah.fastcharger.pages.AdminPasswordFragment;
 import com.dongah.fastcharger.pages.ChargingFinishFragment;
 import com.dongah.fastcharger.pages.ChargingFinishWaitFragment;
 import com.dongah.fastcharger.pages.ChargingFragment;
-import com.dongah.fastcharger.pages.ChargingSequentialFragment;
-import com.dongah.fastcharger.pages.ChargingWaitFragment;
 import com.dongah.fastcharger.pages.ConfigSettingFragment;
 import com.dongah.fastcharger.pages.ConnectionFailedFragment;
 import com.dongah.fastcharger.pages.ConnectorCheckFragment;
@@ -118,17 +116,6 @@ public class FragmentChange {
                     logger.error("onFragmentChange error : PLUG_CHECK {}", e.getMessage());
                 }
                 break;
-            case CHARGING_WAIT:
-                try {
-                    onFrameLayoutChange(false);
-                    ChargingWaitFragment chargingWaitFragment = new ChargingWaitFragment();
-                    chargingWaitFragment.setArguments(bundle);
-                    transaction.replace(frameLayoutId, chargingWaitFragment, "CHARGING_WAIT");
-                    transaction.commit();
-                } catch (Exception e) {
-                    logger.error("onFragmentChange error : CHARGING_WAIT {}", e.getMessage());
-                }
-                break;
             case CHARGING:
                 try {
                     onFrameLayoutChange(false);
@@ -185,17 +172,6 @@ public class FragmentChange {
                     transaction.commit();
                 } catch (Exception e) {
                     logger.error("onFragmentChange error : REBOOTING {}", e.getMessage());
-                }
-                break;
-            case SEQUENTIAL_CHARGING:
-                try {
-                    onFrameLayoutChange(false);
-                    ChargingSequentialFragment chargingSequentialFragment = new ChargingSequentialFragment();
-                    chargingSequentialFragment.setArguments(bundle);
-                    transaction.replace(frameLayoutId, chargingSequentialFragment, "SEQUENTIAL_CHARGING");
-                    transaction.commit();
-                } catch (Exception e) {
-                    logger.error("onFragmentChange error : SEQUENTIAL_CHARGING {}", e.getMessage());
                 }
                 break;
             case OP_STOP:
