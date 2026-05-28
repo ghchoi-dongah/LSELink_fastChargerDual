@@ -40,9 +40,18 @@ public class ChangeConfigurationHandler implements OcppHandler {
 
             if (Objects.equals(key, "MeterValueSampleInterval") && Integer.parseInt(value) == -1) {
                 result = false;
-            }  else if (Objects.equals(key, "SecurityProfile")) {
+            } else if (Objects.equals(key, "SecurityProfile")) {
                 result = Integer.parseInt(GlobalVariables.getSecurityProfile()) <= Integer.parseInt(value);
                 if (result) setConfigurationValue(key, value);
+            } else if (Objects.equals(key, "FullRechgAmt")) {
+                GlobalVariables.setFullRechgAmt(Integer.parseInt(value));
+                result = setConfigurationValue(key, value);
+            } else if (Objects.equals(key, "PersonUtztnLmtYn")) {
+                GlobalVariables.setPersonUtztnLmtYn(value);
+                result = setConfigurationValue(key, value);
+            } else if (Objects.equals(key, "PersonUtztnLmtHr")) {
+                GlobalVariables.setPersonUtztnLmtHr(Integer.parseInt(value));
+                result = setConfigurationValue(key, value);
             } else {
                 result = setConfigurationValue(key, value);
             }

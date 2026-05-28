@@ -5,6 +5,9 @@
     <queries>
         <package android:name="com.dongah.fastcharger" />
     </queries>
+    <queries>
+        <package android:name="service.vcat.smartro.com.vcat" />
+    </queries>
 
     <uses-permission android:name="android.permission.POWER_MANAGER" />
     <uses-permission android:name="android.permission.INTERNET" />

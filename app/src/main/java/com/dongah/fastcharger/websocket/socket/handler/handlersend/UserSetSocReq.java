@@ -66,7 +66,11 @@ public class UserSetSocReq {
         userSetSocData.setConnectorId(getConnectorId());
         userSetSocData.setIdTag(chargingCurrentData.getIdTag());
         userSetSocData.setTransactionId(chargingCurrentData.getTransactionId());
-        userSetSocData.setSetSoc(chargerConfiguration.getTargetSoc());
+        int targetSoc = Math.min(chargingCurrentData.getLimitSoc(), chargingCurrentData.getFullrechgsoc());
+        if (targetSoc == 0) {
+            targetSoc = chargerConfiguration.getTargetSoc();
+        }
+        userSetSocData.setSetSoc(targetSoc);
         ZonedDateTimeConvert zonedDateTimeConvert = new ZonedDateTimeConvert();
         userSetSocData.setTimestamp(zonedDateTimeConvert.doGetKstDatetimeAsString());
 

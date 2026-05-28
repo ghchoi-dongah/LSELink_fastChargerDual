@@ -531,6 +531,9 @@ public class ClassUiProcess implements RfCardReaderListener {
 
             // target soc
             int targetSoc = Math.min(chargingCurrentData.getLimitSoc(), chargingCurrentData.getFullrechgsoc());
+            if (targetSoc == 0) {
+                targetSoc = chargerConfiguration.getTargetSoc();
+            }
             boolean isSocReached = (chargingCurrentData.getSoc() != 0
                     && chargingCurrentData.getSoc() >= targetSoc);
 

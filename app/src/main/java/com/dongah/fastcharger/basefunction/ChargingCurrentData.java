@@ -68,12 +68,12 @@ public class ChargingCurrentData {
     int prePayment = 0;
     int partialCancelPayment = 0;
     int surtax = 0;
-    int tip = 0;
-    int installment = 0;
+    int tip = 0;            // 봉사료 (비과세) 금액
+    int installment = 0;    // 할부 개월
     String approvalNumber = "";
     String approvalDate = "";
     String approvalTime = "";
-    String pgTranSeq = "";
+    String pgTranSeq = "";          // TID(결제승인관리번호)
     String creditCardNumber = "";
     String responseCode = "";       //응답코드
     String responseMessage = "";    //응답메세지

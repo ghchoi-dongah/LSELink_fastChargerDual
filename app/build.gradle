@@ -71,10 +71,18 @@ android {
     }
     buildFeatures {
         compose true
+        aidl true
     }
     externalNativeBuild {
         ndkBuild {
             path file('src/main/jni/Android.mk')
+        }
+    }
+    sourceSets {
+        main {
+            aidl {
+                srcDirs 'src\\main\\aidl'
+            }
         }
     }
 }

@@ -27,7 +27,10 @@ import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.FirmwareSt
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.FullRechgSocHandler;
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.GetLocalListVersionHandler;
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.HeartbeatHandler;
+import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.KeyInRechgInfoHandler;
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.MeterValuesHandler;
+import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.PaymentHandler;
+import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.PrePaymentAmtHandler;
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.RechgrsocscheduleHandler;
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.RemoteStartTransactionHandler;
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.RemoteStopTransactionHandler;
@@ -180,6 +183,11 @@ public class SocketReceiveMessage extends JSONCommunicator implements SocketInte
         handlerMap.put("MeterValues", new MeterValuesHandler());
         handlerMap.put("changemode.req", new ChangeModeHandler());
         handlerMap.put("rechgrsocschedule.req", new RechgrsocscheduleHandler());
+
+        // payment
+        handlerMap.put("payment", new PaymentHandler());
+        handlerMap.put("keyInRechgInfo", new KeyInRechgInfoHandler());
+        handlerMap.put("prePaymentAmt", new PrePaymentAmtHandler());
     }
 
     @Override
