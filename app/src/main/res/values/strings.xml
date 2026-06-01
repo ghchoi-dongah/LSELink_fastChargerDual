@@ -7,6 +7,15 @@
     <string name="sequentialMessage"><font color="#000">커넥터를 꽂아 두시면,\n앞선 차량의 충전이 끝난 뒤\n자동으로 충전이 시작됩니다.</font></string>
     <string name="estimatedChargingTime"><font color="#000">예상 충전 시작: </font></string>
     <string name="authSelectMessage"><font color="#000">회원 유형을 선택해 주세요.</font></string>
+    <string name="memberMessage">회원 충전</string>
+    <string name="memberInfoMessage">회원카드를 태그하여\n간편하게 충전이 가능합니다.</string>
+    <string name="memChargingUnit">충전단가:</string>
+    <string name="nomemberMessage">비회원 충전</string>
+    <string name="creditMessage"><font color="#000">신용 카드 결제</font></string>
+    <string name="creditSubMessage">선결제로 진행되며,\n충전 후 사용한 금액만큼 최종 결제됩니다.\n나머지 금액은 자동 취소됩니다.</string>
+    <string name="prePayment">선결제금액</string>
+    <string name="payUnitMessage">원</string>
+    <string name="nomemberInfoMessage">카드결제를 통해\n간편하게 충전이 가능합니다.</string>
     <string name="memberCardTagMessage"><font color="#000">회원카드 인증</font></string>
     <string name="noMacMessage"><font color="#000">등록되지 않은 차량입니다.\n차량 등록은 관리자에게 문의해 주세요.</font></string>
     <string name="memberCardTagNoMacMessage"><font color="#000">차량이 등록된 회원이 아닙니다.\n회원일 경우 회원카드를 접촉해 주세요.</font></string>
