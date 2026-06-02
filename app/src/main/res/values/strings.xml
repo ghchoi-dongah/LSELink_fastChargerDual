@@ -23,6 +23,8 @@
     <string name="memberCheckWaitMessage"><font color="#000">회원 확인 중</font></string>
     <string name="memberCheckFailedMessage"><font color="#000">회원 인증 실패</font></string>
     <string name="memberRegistMessage"><font color="#000">회원 등록은 관리자에게 문의해 주세요.</font></string>
+    <string name="creditCheckWaitMessage"><font color="#000">결제 확인 중</font></string>
+    <string name="creditCheckFailedMessage"><font color="#000">결제 확인 실패</font></string>
     <string name="chargingWaitMessage"><font color="#000">충전 대기 중</font></string>
     <string name="chargingWaitSubMessage"><font color="#000">앞선 차량의 충전이 끝난 뒤 충전이 시작됩니다.</font></string>
     <string name="chargingMessage"><font color="#000">충전 중</font></string>

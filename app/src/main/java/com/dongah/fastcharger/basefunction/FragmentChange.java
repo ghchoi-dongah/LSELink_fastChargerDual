@@ -18,6 +18,8 @@ import com.dongah.fastcharger.pages.ConfigSettingFragment;
 import com.dongah.fastcharger.pages.ConnectionFailedFragment;
 import com.dongah.fastcharger.pages.ConnectorCheckFragment;
 import com.dongah.fastcharger.pages.ControlDebugFragment;
+import com.dongah.fastcharger.pages.CreditCardFragment;
+import com.dongah.fastcharger.pages.CreditCardWaitFragment;
 import com.dongah.fastcharger.pages.EnvironmentFragment;
 import com.dongah.fastcharger.pages.FaultFragment;
 import com.dongah.fastcharger.pages.HeaderFragment;
@@ -103,6 +105,28 @@ public class FragmentChange {
                     transaction.commit();
                 } catch (Exception e) {
                     logger.error("onFragmentChange error : MEMBER_CHECK_FAILED {}", e.getMessage());
+                }
+                break;
+            case CREDIT_CARD:
+                try {
+                    onFrameLayoutChange(false);
+                    CreditCardFragment creditCardFragment = new CreditCardFragment();
+                    creditCardFragment.setArguments(bundle);
+                    transaction.replace(frameLayoutId, creditCardFragment, "CREDIT_CARD");
+                    transaction.commit();
+                } catch (Exception e) {
+                    logger.error("onFragmentChange error : CREDIT_CARD {}", e.getMessage());
+                }
+                break;
+            case CREDIT_CARD_WAIT:
+                try {
+                    onFrameLayoutChange(false);
+                    CreditCardWaitFragment creditCardWaitFragment = new CreditCardWaitFragment();
+                    creditCardWaitFragment.setArguments(bundle);
+                    transaction.replace(frameLayoutId, creditCardWaitFragment, "CREDIT_CARD_WAIT");
+                    transaction.commit();
+                } catch (Exception e) {
+                    logger.error("onFragmentChange error : CREDIT_CARD_WAIT {}", e.getMessage());
                 }
                 break;
             case PLUG_CHECK:
