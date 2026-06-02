@@ -8,9 +8,12 @@
     tools:context=".pages.ChargingFragment">
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/layer_list_rect" />
+        android:background="@drawable/layer_list_rect"
+        tools:layout_editor_absoluteX="5dp"
+        tools:layout_editor_absoluteY="5dp" />
 
     <TextView
         android:id="@+id/textViewChargingMessage"
@@ -25,20 +28,21 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/textViewCarNum"
+        android:id="@+id/textViewLimitSocValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/carNum"
+        android:text="목표 충전율: 90%"
         android:textSize="20sp"
+        android:textColor="@color/black_500"
         app:layout_constraintTop_toBottomOf="@id/textViewChargingMessage" />
 
     <!-- 1. 배경용 -->
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressBackground"
-        android:layout_width="230dp"
-        android:layout_height="230dp"
-        app:indicatorSize="230dp"
+        android:layout_width="210dp"
+        android:layout_height="210dp"
+        app:indicatorSize="210dp"
         app:trackThickness="15dp"
         app:indicatorColor="#EEEEEE"
         android:progress="100"
@@ -50,16 +54,16 @@
     <!-- 2. 실제 게이지 -->
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressCircular"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
         android:layout_marginTop="10dp"
         android:progress="80"
-        app:indicatorSize="240dp"
+        app:indicatorSize="220dp"
         app:trackThickness="26dp"
         app:indicatorColor="@color/primary"
         app:trackCornerRadius="6dp"
         app:trackColor="@android:color/transparent"
-        app:layout_constraintTop_toBottomOf="@id/textViewCarNum"
+        app:layout_constraintTop_toBottomOf="@id/textViewLimitSocValue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -67,11 +71,12 @@
         android:id="@+id/textViewSocValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="50dp"
         android:gravity="center_horizontal"
         android:text="80%"
-        android:textSize="58sp"
+        android:textSize="48sp"
         android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="@id/progressCircular"
         app:layout_constraintStart_toStartOf="@id/progressCircular"
         app:layout_constraintEnd_toEndOf="@id/progressCircular" />
@@ -102,25 +107,57 @@
         app:layout_constraintEnd_toEndOf="@id/textViewChargingAmt"/>
 
     <View
-        android:id="@+id/viewLine"
+        android:id="@+id/viewLine1"
         android:layout_width="2dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="160dp"
         android:background="#E7E7E7"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progressCircular" />
+
+    <View
+        android:id="@+id/viewLine2"
+        android:layout_width="2dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="160dp"
+        android:background="#E7E7E7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/progressCircular" />
-    
+
+    <TextView
+        android:id="@+id/textViewMoneyContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="@string/chargeAmount"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="@id/viewLine1"
+        app:layout_constraintStart_toStartOf="@id/view" />
+
+    <TextView
+        android:id="@+id/txtChargePay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:text="50,000원"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/textViewMoneyContent"
+        app:layout_constraintStart_toStartOf="@id/textViewMoneyContent" />
+
+
     <TextView
         android:id="@+id/textViewChargingTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="50dp"
         android:text="@string/chargingTime"
-        android:textSize="22sp"
-        app:layout_constraintTop_toTopOf="@id/textViewChargingTimeValue"
-        app:layout_constraintEnd_toStartOf="@id/textViewChargingTimeValue"
-        app:layout_constraintBottom_toBottomOf="@id/textViewChargingTimeValue" />
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="@id/viewLine1"
+        app:layout_constraintStart_toStartOf="@id/viewLine1" />
 
     <TextView
         android:id="@+id/textViewChargingTimeValue"
@@ -131,33 +168,29 @@
         android:textSize="24sp"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="@id/viewLine"
-        app:layout_constraintEnd_toStartOf="@id/viewLine"
-        app:layout_constraintBottom_toBottomOf="@id/viewLine" />
+        app:layout_constraintTop_toBottomOf="@id/textViewChargingTime"
+        app:layout_constraintStart_toStartOf="@id/textViewChargingTime"  />
 
     <TextView
         android:id="@+id/textViewChargingTimeRemain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="32dp"
         android:text="@string/chargingTimeRemain"
-        android:textSize="22sp"
-        app:layout_constraintTop_toTopOf="@id/viewLine"
-        app:layout_constraintStart_toEndOf="@id/viewLine"
-        app:layout_constraintBottom_toBottomOf="@id/viewLine"/>
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="@id/viewLine1"
+        app:layout_constraintStart_toStartOf="@id/viewLine2" />
 
     <TextView
         android:id="@+id/textViewChargingTimeRemainValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:text="00:05:35"
         android:textSize="24sp"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="@id/textViewChargingTimeRemain"
-        app:layout_constraintStart_toEndOf="@id/textViewChargingTimeRemain"
-        app:layout_constraintBottom_toBottomOf="@id/textViewChargingTimeRemain" />
+        app:layout_constraintTop_toBottomOf="@id/textViewChargingTimeRemain"
+        app:layout_constraintStart_toStartOf="@id/textViewChargingTimeRemain" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -178,81 +211,61 @@
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp">
 
-            <TextView
-                android:id="@+id/textViewInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/etcInfo"
-                android:textSize="17sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+<!--            <TextView-->
+<!--                android:id="@+id/textViewInfo"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/etcInfo"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textStyle="bold"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent" />-->
+
+<!--            <View-->
+<!--                android:id="@+id/viewLine3"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="2dp"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:background="#E7E7E7"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/textViewInfo" />-->
 
             <View
-                android:id="@+id/viewLine2"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="5dp"
-                android:background="#E7E7E7"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewInfo" />
-
-            <View
-                android:id="@+id/viewLine3"
+                android:id="@+id/viewLine4"
                 android:layout_width="2dp"
                 android:layout_height="70dp"
                 android:layout_marginTop="5dp"
                 android:background="#E7E7E7"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/viewLine2"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <TextView
-                android:id="@+id/textViewLimitSoc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="@string/limitSoc"
-                android:textSize="17sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/viewLine2"/>
+<!--            <TextView-->
+<!--                android:id="@+id/textViewLimitSoc"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:text="@string/limitSoc"-->
+<!--                android:textSize="16sp"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/viewLine3"/>-->
 
-            <TextView
-                android:id="@+id/textViewLimitSocValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:text="90%"
-                android:textSize="17sp"
-                android:textColor="@color/black_500"
-                app:layout_constraintTop_toTopOf="@id/textViewLimitSoc"
-                app:layout_constraintEnd_toStartOf="@id/viewLine3"
-                app:layout_constraintBottom_toBottomOf="@id/textViewLimitSoc" />
+<!--            <TextView-->
+<!--                android:id="@+id/textViewLimitSocValue"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginEnd="5dp"-->
+<!--                android:text="90%"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textColor="@color/black_500"-->
+<!--                app:layout_constraintTop_toTopOf="@id/textViewLimitSoc"-->
+<!--                app:layout_constraintEnd_toStartOf="@id/viewLine4"-->
+<!--                app:layout_constraintBottom_toBottomOf="@id/textViewLimitSoc" />-->
 
-            <TextView
-                android:id="@+id/textViewLimitKw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="@string/limitKw"
-                android:textSize="17sp"
-                app:layout_constraintTop_toTopOf="@id/textViewLimitSoc"
-                app:layout_constraintBottom_toBottomOf="@id/textViewLimitSoc"
-                app:layout_constraintStart_toEndOf="@id/viewLine3" />
 
-            <TextView
-                android:id="@+id/textViewLimitKwValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="80kW"
-                android:textSize="17sp"
-                android:textColor="@color/black_500"
-                app:layout_constraintTop_toTopOf="@id/textViewLimitKw"
-                app:layout_constraintBottom_toBottomOf="@id/textViewLimitKw"
-                app:layout_constraintEnd_toEndOf="@id/viewLine2" />
 
             <TextView
                 android:id="@+id/textViewChargingVoltage"
@@ -260,20 +273,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="@string/chargingVoltage"
-                android:textSize="17sp"
-                app:layout_constraintTop_toBottomOf="@id/textViewLimitSoc"
-                app:layout_constraintStart_toStartOf="@id/textViewLimitSoc" />
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textViewChargingVoltageValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
                 android:text="384.7V"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 android:textColor="@color/black_500"
                 app:layout_constraintTop_toTopOf="@id/textViewChargingVoltage"
                 app:layout_constraintBottom_toBottomOf="@id/textViewChargingVoltage"
-                app:layout_constraintEnd_toEndOf="@id/textViewLimitSocValue"/>
+                app:layout_constraintEnd_toStartOf="@id/viewLine4"/>
 
             <TextView
                 android:id="@+id/textViewChargingCurrent"
@@ -281,7 +295,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="@string/chargingCurrent"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/textViewChargingVoltage"
                 app:layout_constraintStart_toStartOf="@id/textViewChargingVoltage" />
 
@@ -290,32 +304,34 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="207.94A"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 android:textColor="@color/black_500"
                 app:layout_constraintTop_toTopOf="@id/textViewChargingCurrent"
                 app:layout_constraintBottom_toBottomOf="@id/textViewChargingCurrent"
-                app:layout_constraintEnd_toEndOf="@id/textViewLimitSocValue" />
+                app:layout_constraintEnd_toEndOf="@id/textViewChargingVoltageValue" />
+
+
 
             <TextView
                 android:id="@+id/textViewChargingPower"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
                 android:text="@string/chargingPower"
-                android:textSize="17sp"
-                app:layout_constraintTop_toBottomOf="@id/textViewLimitKw"
-                app:layout_constraintStart_toStartOf="@id/textViewLimitKw" />
+                android:textSize="16sp"
+                app:layout_constraintTop_toTopOf="@id/textViewChargingVoltage"
+                app:layout_constraintStart_toStartOf="@id/viewLine4" />
 
             <TextView
                 android:id="@+id/textViewChargingPowerValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="79.99kW"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 android:textColor="@color/black_500"
                 app:layout_constraintTop_toTopOf="@id/textViewChargingPower"
                 app:layout_constraintBottom_toBottomOf="@id/textViewChargingPower"
-                app:layout_constraintEnd_toEndOf="@id/textViewLimitKwValue" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
                 android:id="@+id/textViewRequestCurrent"
@@ -323,7 +339,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="@string/requestCurrent"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@id/textViewChargingPower"
                 app:layout_constraintTop_toBottomOf="@id/textViewChargingPower"/>
 
@@ -332,11 +348,55 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="218.34A"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 android:textColor="@color/black_500"
                 app:layout_constraintTop_toTopOf="@id/textViewRequestCurrent"
                 app:layout_constraintBottom_toBottomOf="@id/textViewRequestCurrent"
-                app:layout_constraintEnd_toEndOf="@id/textViewLimitKwValue" />
+                app:layout_constraintEnd_toEndOf="@id/textViewChargingPowerValue" />
+
+            <TextView
+                android:id="@+id/textViewUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/chargingUnit"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/textViewChargingCurrent"
+                app:layout_constraintStart_toStartOf="@id/textViewChargingCurrent"/>
+
+            <TextView
+                android:id="@+id/textViewInputUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="0원"
+                android:textSize="16sp"
+                android:textColor="@color/black_500"
+                app:layout_constraintTop_toTopOf="@id/textViewLimitKw"
+                app:layout_constraintBottom_toBottomOf="@id/textViewLimitKw"
+                app:layout_constraintEnd_toEndOf="@id/textViewChargingCurrentValue"/>
+
+            <TextView
+                android:id="@+id/textViewLimitKw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/limitKw"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/textViewRequestCurrent"
+                app:layout_constraintStart_toStartOf="@id/textViewRequestCurrent" />
+
+            <TextView
+                android:id="@+id/textViewLimitKwValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="80kW"
+                android:textSize="16sp"
+                android:textColor="@color/black_500"
+                app:layout_constraintTop_toTopOf="@id/textViewUnit"
+                app:layout_constraintEnd_toEndOf="@id/textViewRequestCurrentValue"
+                app:layout_constraintBottom_toBottomOf="@id/textViewUnit"/>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

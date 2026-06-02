@@ -14,6 +14,7 @@
     <string name="creditMessage"><font color="#000">신용 카드 결제</font></string>
     <string name="creditSubMessage">선결제로 진행되며,\n충전 후 사용한 금액만큼 최종 결제됩니다.\n나머지 금액은 자동 취소됩니다.</string>
     <string name="prePayment">선결제금액</string>
+    <string name="partCancelPay">부분취소금액</string>
     <string name="payUnitMessage">원</string>
     <string name="nomemberInfoMessage">카드결제를 통해\n간편하게 충전이 가능합니다.</string>
     <string name="memberCardTagMessage"><font color="#000">회원카드 인증</font></string>
@@ -30,9 +31,11 @@
     <string name="chargingMessage"><font color="#000">충전 중</font></string>
     <string name="chargingFinishMessage"><font color="#000">충전 완료</font></string>
     <string name="chargingTime">충전시간</string>
+    <string name="chargeAmount">충전금액</string>
+    <string name="chargingUnit">충전단가</string>
     <string name="useYn"><font color="#000">사용가능여부:</font></string>
     <string name="limitSoc">최대 충전량</string>
-    <string name="limitKw">출력 제한</string>
+    <string name="limitKw">출력제한</string>
     <string name="connectionFailedMessage"><font color="#000">차량과 통신 실패</font></string>
     <string name="chargeOfAmount">충전량</string>
     <string name="chargingTimeRemain">남은시간</string>

@@ -126,7 +126,6 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
         textViewLimitSocValue = view.findViewById(R.id.textViewLimitSocValue);
         textViewLimitKwValue = view.findViewById(R.id.textViewLimitKwValue);
         progressCircular = view.findViewById(R.id.progressCircular);
-        textViewCarNum = view.findViewById(R.id.textViewCarNum);
         return view;
     }
 
@@ -138,15 +137,13 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
             sharedModel = new ViewModelProvider(requireActivity()).get(SharedModel.class);
             requestStrings[0] = String.valueOf(mChannel);
             sharedModel.setMutableLiveData(requestStrings);
-//            textViewLimitSocValue.setText(chargerConfiguration.getTargetSoc() + "%");
-//            textViewLimitKwValue.setText(chargerConfiguration.getDr() + "kW");
             progressCircular.isIndeterminate();
             mediaPlayer();      // media player
 
             try {
                 textViewSocValue.setText(chargingCurrentData.getSoc() + "%");
                 textViewLimitKwValue.setText(txData.getOutPowerLimit() + "kW");
-                textViewLimitSocValue.setText(chargingCurrentData.getLimitSoc() + "%");
+                textViewLimitSocValue.setText("목표 충전율: " +chargingCurrentData.getLimitSoc() + "%");
                 progressCircular.setProgress(chargingCurrentData.getSoc(), true);
                 startTime = zonedDateTimeConvert.doStringDateToDate(chargingCurrentData.getChargingStartTime());
 

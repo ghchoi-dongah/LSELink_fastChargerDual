@@ -47,7 +47,8 @@ public class ChargingFinishFragment extends Fragment implements View.OnClickList
     private int mChannel;
 
     Button btnCheck;
-    TextView textViewSocValue, textViewChargingAmtValue, textViewChargingTimeValue, textViewCarNum;
+    TextView textViewSocValue, textViewChargingAmtValue, textViewChargingTimeValue, textViewLimitSocValue;
+    TextView textViewPrePayment, textViewInputPrePayment, textViewPartCancelPay, textViewInputCancelPayment;
     CircularProgressIndicator progressCircular;
 
     MediaPlayer mediaPlayer;
@@ -101,7 +102,11 @@ public class ChargingFinishFragment extends Fragment implements View.OnClickList
         textViewChargingAmtValue = view.findViewById(R.id.textViewChargingAmtValue);
         textViewChargingTimeValue = view.findViewById(R.id.textViewChargingTimeValue);
         progressCircular = view.findViewById(R.id.progressCircular);
-        textViewCarNum = view.findViewById(R.id.textViewCarNum);
+        textViewLimitSocValue = view.findViewById(R.id.textViewLimitSocValue);
+        textViewPrePayment = view.findViewById(R.id.textViewPrePayment);
+        textViewInputPrePayment = view.findViewById(R.id.textViewInputPrePayment);
+        textViewPartCancelPay = view.findViewById(R.id.textViewPartCancelPay);
+        textViewInputCancelPayment = view.findViewById(R.id.textViewInputCancelPayment);
         return view;
     }
 
@@ -132,19 +137,27 @@ public class ChargingFinishFragment extends Fragment implements View.OnClickList
                 public void run() {
                     textViewSocValue.setText(chargingCurrentData.getSoc() + "%");
                     progressCircular.setProgress(chargingCurrentData.getSoc(), true);
+                    textViewLimitSocValue.setText("목표 충전율: " +chargingCurrentData.getLimitSoc() + "%");
                     textViewChargingAmtValue.setText(powerFormatter.format(chargingCurrentData.getPowerMeterUse() * 0.01) + "kWh");
                     textViewChargingTimeValue.setText(chargingCurrentData.getChargingUseTime());
 
-                    if (Objects.equals(chargerConfiguration.getOpMode(), 1)) {
-                        textViewCarNum.setText(getString(R.string.carNum) + chargingCurrentData.getParentIdTag());
-                    } else {
-                        textViewCarNum.setText(getString(R.string.carNum) + "테스트 모드");
+                    // 신용카드 결제
+                    prepaymentInfo(chargingCurrentData.isPrePaymentResult());
+                    if (chargingCurrentData.isPrePaymentResult()) {
+
                     }
                 }
             });
         } catch (Exception e) {
             logger.error("ChargingFinishFragment onViewCreated error : {}", e.getMessage(), e);
         }
+    }
+
+    private void prepaymentInfo(boolean check) {
+        textViewPrePayment.setVisibility(check ? View.VISIBLE : View.GONE);
+        textViewInputPrePayment.setVisibility(check ? View.VISIBLE : View.GONE);
+        textViewPartCancelPay.setVisibility(check ? View.VISIBLE : View.GONE);
+        textViewInputCancelPayment.setVisibility(check ? View.VISIBLE : View.GONE);
     }
 
     @Override
