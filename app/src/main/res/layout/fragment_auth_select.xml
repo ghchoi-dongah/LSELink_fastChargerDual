@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="512dp"
     android:layout_height="662dp"
-    tools:context=".pages.AuthFragment">
+    tools:context=".pages.AuthSelectFragment">
 
     <!-- member info -->
     <View

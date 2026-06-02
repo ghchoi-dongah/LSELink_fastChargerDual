@@ -116,8 +116,8 @@ public class HeaderFragment extends Fragment implements View.OnClickListener {
                             ? activity.getClassUiProcess(1).getUiSeq()
                             : null;
 
-                    boolean chkUiSeq = (ui0 == UiSeq.INIT || ui0 == UiSeq.SEQUENTIAL_CHARGING || ui0 == UiSeq.FAULT || ui0 == UiSeq.OP_STOP) &&
-                                            (ui1 == UiSeq.INIT || ui1 == UiSeq.SEQUENTIAL_CHARGING || ui1 == UiSeq.FAULT || ui1 == UiSeq.OP_STOP);
+                    boolean chkUiSeq = (ui0 == UiSeq.INIT || ui0 == UiSeq.FAULT || ui0 == UiSeq.OP_STOP) &&
+                                            (ui1 == UiSeq.INIT || ui1 == UiSeq.FAULT || ui1 == UiSeq.OP_STOP);
                     System.out.println("clickedCnt > 8, ui0: " + ui0 + ", ui1: " + ui1 + ", chkUiSeq: " + chkUiSeq + ", mChannel:" + mChannel);
                     if (chkUiSeq) {
                         activity.runOnUiThread(new Runnable() {

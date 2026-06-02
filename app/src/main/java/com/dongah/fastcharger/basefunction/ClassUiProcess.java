@@ -277,9 +277,9 @@ public class ClassUiProcess implements RfCardReaderListener {
             UiSeq uiSeq1 = ((MainActivity) MainActivity.mContext).getClassUiProcess(0).getUiSeq();
             UiSeq uiSeq2 = ((MainActivity) MainActivity.mContext).getClassUiProcess(1).getUiSeq();
             result = Objects.equals(UiSeq.REBOOTING, uiSeq1) || Objects.equals(UiSeq.INIT, uiSeq1)
-                        || Objects.equals(UiSeq.OP_STOP, uiSeq1) || Objects.equals(UiSeq.SEQUENTIAL_CHARGING, uiSeq1);
+                        || Objects.equals(UiSeq.OP_STOP, uiSeq1);
             result = result && Objects.equals(UiSeq.REBOOTING, uiSeq2) || Objects.equals(UiSeq.INIT, uiSeq2)
-                        || Objects.equals(UiSeq.OP_STOP, uiSeq2) || Objects.equals(UiSeq.SEQUENTIAL_CHARGING, uiSeq2);
+                        || Objects.equals(UiSeq.OP_STOP, uiSeq2);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
