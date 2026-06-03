@@ -169,10 +169,8 @@ public class ControlDebugFragment extends Fragment implements View.OnClickListen
                         listViewRxAdapter.addItem("RX", "csStart", String.valueOf(rxData[getCurrCh()].isCsStart()));
                         listViewRxAdapter.addItem("RX", "csStop", String.valueOf(rxData[getCurrCh()].isCsStop()));
                         listViewRxAdapter.addItem("RX", "csFault", String.valueOf(rxData[getCurrCh()].isCsFault()));
-                        listViewRxAdapter.addItem("RX", "csReady", String.valueOf(rxData[getCurrCh()].isCsReady()));
-                        listViewRxAdapter.addItem("RX", "otherRemainTime", controlBoardUtil.getRemainTime(rxData[getCurrCh()].getOtherChannelRemainingTimeFullSoc()));
-                        listViewRxAdapter.addItem("RX", "cpVoltage", String.format("%.2f", rxData[getCurrCh()].getCpVoltage() * 0.1));
-                        listViewRxAdapter.addItem("RX", "FW Ver", controlBoardUtil.parseVersion(rxData[getCurrCh()].getFirmwareVersion()));
+                        listViewRxAdapter.addItem("RX", "cpVoltage", String.valueOf(rxData[getCurrCh()].getCpVoltage() * 0.1));
+                        listViewRxAdapter.addItem("RX", "FW Ver", controlBoardUtil.parseVersion(rxData[getCurrCh()].getFirmWareVersion()));
                         listViewRxAdapter.addItem("RX", "RemainTime", controlBoardUtil.getRemainTime(rxData[getCurrCh()].getRemainTime()));
                         listViewRxAdapter.addItem("RX", "SOC", String.valueOf(rxData[getCurrCh()].getSoc()));
                         listViewRxAdapter.addItem("RX", "csMc1Fault", String.valueOf(rxData[getCurrCh()].isCsMc1Fault()));
@@ -186,6 +184,7 @@ public class ControlDebugFragment extends Fragment implements View.OnClickListen
                         listViewRxAdapter.addItem("RX", "powerMeter", String.valueOf(rxData[getCurrCh()].getPowerMeter() * 0.01));
                         listViewRxAdapter.addItem("RX", "outVoltage", String.valueOf(rxData[getCurrCh()].getOutVoltage() * 0.1));
                         listViewRxAdapter.addItem("RX", "outCurrent", String.valueOf(rxData[getCurrCh()].getOutCurrent() * 0.1));
+
                         listViewRxAdapter.addItem("RX", "csEmergency", String.valueOf(rxData[getCurrCh()].isCsEmergency()));
                         listViewRxAdapter.addItem("RX", "csPLCComm", String.valueOf(rxData[getCurrCh()].isCsPLCComm()));
                         listViewRxAdapter.addItem("RX", "csPowerMeterComm", String.valueOf(rxData[getCurrCh()].isCsPowerMeterComm()));
@@ -199,23 +198,19 @@ public class ControlDebugFragment extends Fragment implements View.OnClickListen
                         listViewRxAdapter.addItem("RX", "OCR", String.valueOf(rxData[getCurrCh()].isCsOutOCR()));
                         listViewRxAdapter.addItem("RX", "커플러 온도 센서", String.valueOf(rxData[getCurrCh()].isCsCouplerTempSensor()));
                         listViewRxAdapter.addItem("RX", "커플러 과온도", String.valueOf(rxData[getCurrCh()].isCsCouplerOVT()));
-                        listViewRxAdapter.addItem("RX", "powerBankEmergency", String.valueOf(rxData[getCurrCh()].isPowerBankEmergency()));
                         listViewRxAdapter.addItem("RX", "csModule1Error", String.valueOf(rxData[getCurrCh()].isCsModule1Error()));
                         listViewRxAdapter.addItem("RX", "csModule2Error", String.valueOf(rxData[getCurrCh()].isCsModule2Error()));
                         listViewRxAdapter.addItem("RX", "csModule3Error", String.valueOf(rxData[getCurrCh()].isCsModule3Error()));
                         listViewRxAdapter.addItem("RX", "csModule4Error", String.valueOf(rxData[getCurrCh()].isCsModule4Error()));
                         listViewRxAdapter.addItem("RX", "커플러 온도", String.valueOf(rxData[getCurrCh()].getCouplerTemp()));
-                        listViewRxAdapter.addItem("RX", "EvccId", BitUtilities.toHexString(rxData[getCurrCh()].csmVehicleEvccId));   // 16진수(Hex)
-
                         ///나중에 PLC 모뎀
                         listViewRxAdapter.notifyDataSetChanged();
-
                     }
                 });
             }
         } catch (Exception e) {
             listViewRxAdapter.clearItem();
-            logger.error(" onControlBoardReceive error :  {}", e.getMessage());
+            logger.error("onControlBoardReceive error :  {}", e.getMessage());
         }
     }
 
@@ -232,6 +227,7 @@ public class ControlDebugFragment extends Fragment implements View.OnClickListen
                         listViewTxAdapter.addItem("TX", "IsReset", String.valueOf(txData[currCh].IsReset));
                         listViewTxAdapter.addItem("TX", "uiSequence", txData[currCh].uiSequence == 1 ? "대기" : txData[currCh].uiSequence == 2 ? "충전" : "종료");
                         listViewTxAdapter.addItem("TX", "chargerPointMode", txData[currCh].chargerPointMode == 0 ? "운영" : txData[currCh].uiSequence == 1 ? "부하" : "I/O");
+                        listViewTxAdapter.addItem("TX", "testDualSingle", txData[currCh].testDualSingle == 0 ? "듀얼Test" : "싱글Test");
                         listViewTxAdapter.addItem("TX", "testDrVoltage", String.valueOf(txData[currCh].testDrVoltage));
                         listViewTxAdapter.addItem("TX", "testDrCurrent", String.valueOf(txData[currCh].testDrCurrent));
                         listViewTxAdapter.addItem("TX", "IsRelay1", txData[currCh].IsRelay1 ? "ON" : "OFF");
@@ -259,7 +255,7 @@ public class ControlDebugFragment extends Fragment implements View.OnClickListen
             }
         } catch (Exception e) {
             listViewRxAdapter.clearItem();
-            logger.error(" onControlBoardSend error :  {}", e.getMessage());
+            logger.error("onControlBoardSend error :  {}", e.getMessage());
         }
     }
 
