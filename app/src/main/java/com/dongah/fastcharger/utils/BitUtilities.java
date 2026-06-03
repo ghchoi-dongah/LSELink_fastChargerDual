@@ -60,6 +60,17 @@ public class BitUtilities {
         return newValue;
     }
 
+    public static short ByteArrayToShort(byte value1, byte value2) {
+        short newValue = 0;
+        try {
+            newValue |= (short) (((value1) << 8) & 0xff00);
+            newValue |= (short) (((value2)) & 0xff);
+        } catch (Exception e) {
+            logger.error("ByteArrayToShort_2 :  {}", e.getMessage());
+        }
+        return newValue;
+    }
+
     public static int ShortToInt(short value1, short value2) {
         int newValue = 0;
         try {

@@ -11,42 +11,41 @@ public class TxData {
     private static final int TX_DATA_CNT = 10;
     public short[] rawData = new short[TX_DATA_CNT];
 
-    public boolean IsAuthorizedMac = false;     // 2bit, 사용 안 함
-    public boolean IsStart = false;             // 3bit
-    public boolean IsStop = false;              // 4bit
-    public boolean IsReset = false;             // 7bit
+    public boolean IsStart = false;             //3 bit
+    public boolean IsStop = false;              //4 bit
+    public boolean IsReset = false;             //7 bit
 
-    public short uiSequence = 1;                // 202 ==> 1:대기 2:충전 3:종료
-    public short chargerPointMode = 0;          // 204 ==> 충전(0: 일반, 1: 부하 테스트, 2:IO 테스트) 모드
-    public short testDrVoltage = 0;             // 206 ==> 테스트 모드 전압 지령(1채널)
-    public short testDrCurrent = 0;             // 207 ==> 테스트 모드 전류 지령(1채널)
+    public short uiSequence = 1;                //202 ==> 1: 대기 2: 충전  3: 종료
+    public short chargerPointMode = 0;          //204 ==> 충전(일반:0 , 테스트:1 ,   IO 테스트: 2)모드
+    public short testDualSingle = 0;            //205 ==> 테스트 (0: 왼쪽, 1: 오른쪽, 2: 듀얼)모드
+    public short testDrVoltage = 0;             //206 ==>  테스트 모드 전압 지령(1채널)
+    public short testDrCurrent = 0;             //207 ==>  테스트 모드 전류 지령(1채널)
 
-    public boolean IsRelay1 = false;            // 208[0] RY1 제어
-    public boolean IsRelay2 = false;            // 208[1] RY2 제어
-    public boolean IsRelay3 = false;            // 208[2] RY3 제어
-    public boolean IsRelay4 = false;            // 208[3] RY4 제어
-    public boolean IsRelay5 = false;            // 208[4] RY5 제어
-    public boolean IsRelay6 = false;            // 208[5] RY6 제어
-    public boolean IsMC1 = false;               // 208[6] MC1
-    public boolean IsMC2 = false;               // 208[7] MC2
-    public boolean IsFan1 = false;              // 208[8] FAN1
-    public boolean IsOut1 = false;              // 208[9] OUT1
-    public boolean IsOut2 = false;              // 208[10] OUT2
-    public boolean IsOut3 = false;              // 208[11] OUT3
-    public boolean IsOut4 = false;              // 208[12] OUT4
-    public boolean IsOut5 = false;              // 208[13] OUT5
-    public boolean IsOut6 = false;              // 208[14] OUT6
-    public boolean IsOut7 = false;              // 208[15] OUT7
+    public boolean IsRelay1 = false;            //208[0] RY1 제어
+    public boolean IsRelay2 = false;            //208[1] RY2 제어
+    public boolean IsRelay3 = false;            //208[2] RY3 제어
+    public boolean IsRelay4 = false;            //208[3] RY4 제어
+    public boolean IsRelay5 = false;            //208[4] RY5 제어
+    public boolean IsRelay6 = false;            //208[5] RY6 제어
+    public boolean IsMC1 = false;               //208[6] MC1
+    public boolean IsMC2 = false;               //208[7] MC2
+    public boolean IsFan1 = false;              //208[8] fan
+    public boolean IsOut1 = false;              //208[9] out1
+    public boolean IsOut2 = false;              //208[10] out2
+    public boolean IsOut3 = false;              //208[11] out3
+    public boolean IsOut4 = false;              //208[12] out4
+    public boolean IsOut5 = false;              //208[13] out5
+    public boolean IsOut6 = false;              //208[14] out6
+    public boolean IsOut7 = false;              //208[15] out7
 
-    public short outPowerLimit = 0;             // 209 출력 제한
-
+    public short outPowerLimit = 0;             //209 출략 제한
 
 
     public void setInit() {
         try {
-            IsAuthorizedMac = IsStart = IsStop = IsReset = false;
+            IsStart = IsStop = IsReset = false;
             uiSequence = 1;
-            chargerPointMode = testDrVoltage = testDrCurrent = 0;
+            chargerPointMode = testDualSingle = testDrVoltage = testDrCurrent = 0;
             IsRelay1 = IsRelay2 = IsRelay3 = false;
             IsRelay4 = IsRelay5 = IsRelay6 = false;
             IsMC1 = IsMC2 = IsFan1 = false;
@@ -60,7 +59,6 @@ public class TxData {
 
     public short[] Encode() {
         try {
-            rawData[0] = BitUtilities.setBit(rawData[0], 2, IsAuthorizedMac);
             rawData[0] = BitUtilities.setBit(rawData[0], 3, IsStart);
             rawData[0] = BitUtilities.setBit(rawData[0], 4, IsStop);
             rawData[0] = BitUtilities.setBit(rawData[0], 7, IsReset);
@@ -68,7 +66,7 @@ public class TxData {
             rawData[2] = uiSequence;
             rawData[3] = 0;
             rawData[4] = chargerPointMode;
-            rawData[5] = 0;
+            rawData[5] = testDualSingle;
             rawData[6] = testDrVoltage;
             rawData[7] = testDrCurrent;
             rawData[8] = BitUtilities.setBit(rawData[8], 0, IsRelay1);
@@ -93,14 +91,6 @@ public class TxData {
             logger.error(" tx data encode error : {}", e.getMessage());
         }
         return null;
-    }
-
-    public boolean isAuthorizedMac() {
-        return IsAuthorizedMac;
-    }
-
-    public void setAuthorizedMac(boolean authorizedMac) {
-        IsAuthorizedMac = authorizedMac;
     }
 
     public boolean isStart() {
@@ -141,6 +131,14 @@ public class TxData {
 
     public void setChargerPointMode(short chargerPointMode) {
         this.chargerPointMode = chargerPointMode;
+    }
+
+    public short getTestDualSingle() {
+        return testDualSingle;
+    }
+
+    public void setTestDualSingle(short testDualSingle) {
+        this.testDualSingle = testDualSingle;
     }
 
     public short getTestDrVoltage() {
