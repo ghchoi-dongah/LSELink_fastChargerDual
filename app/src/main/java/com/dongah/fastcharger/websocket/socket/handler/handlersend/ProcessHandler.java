@@ -21,6 +21,7 @@ public class ProcessHandler extends Handler {
     ChangeModeThread changeModeThread;
     ChangeElecModeThread changeElecModeThread;
     RechgrsocscheduleThread rechgrsocscheduleThread;
+    DiagnosticsThread diagnosticsThread;
 
 
     @Override
@@ -143,6 +144,24 @@ public class ProcessHandler extends Handler {
             rechgrsocscheduleThread.interrupt();
             rechgrsocscheduleThread.stopThread();
             rechgrsocscheduleThread = null;
+        }
+    }
+
+    /**
+     * DiagnosticsThread
+     * @param delayTime delay time
+     * */
+    public void onDiagnosticsStart(long delayTime) {
+        onDiagnosticsStop();
+        diagnosticsThread = new DiagnosticsThread(delayTime);
+        diagnosticsThread.start();
+    }
+
+    public void onDiagnosticsStop() {
+        if (diagnosticsThread != null) {
+            diagnosticsThread.interrupt();
+            diagnosticsThread.stopThread();
+            diagnosticsThread = null;
         }
     }
 }

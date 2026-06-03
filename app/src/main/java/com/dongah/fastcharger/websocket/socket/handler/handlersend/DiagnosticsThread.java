@@ -1,4 +1,4 @@
-package com.dongah.fastcharger.handler;
+package com.dongah.fastcharger.websocket.socket.handler.handlersend;
 
 import android.os.Build;
 import android.os.Environment;
@@ -17,36 +17,20 @@ import org.slf4j.LoggerFactory;
 import java.text.DecimalFormat;
 
 public class DiagnosticsThread extends Thread {
-
-    private final static Logger logger = LoggerFactory.getLogger(DiagnosticsThread.class);
+    private static final Logger logger = LoggerFactory.getLogger(DiagnosticsThread.class);
 
     private static final String FILE_PATH = Environment.getExternalStorageDirectory().toString() + "/Download";
     private static final String FILE_NAME = "diagnostics.dongah";
-    boolean stopped;
+    private volatile boolean stopped = false;
     long delayTime;
-
-
     FileManagement fileManagement;
     ZonedDateTimeConvert zonedDateTimeConvert;
     DecimalFormat powerFormatter = new DecimalFormat("######0.00");
 
-
-    public boolean isStopped() {
-        return stopped;
+    public void stopThread() {
+        stopped = true;
+        interrupt();
     }
-
-    public void setStopped(boolean stopped) {
-        this.stopped = stopped;
-    }
-
-    public long getDelayTime() {
-        return delayTime;
-    }
-
-    public void setDelayTime(long delayTime) {
-        this.delayTime = delayTime;
-    }
-
 
     public DiagnosticsThread(long delayTime) {
         this.delayTime = delayTime;
@@ -54,34 +38,39 @@ public class DiagnosticsThread extends Thread {
         zonedDateTimeConvert = new ZonedDateTimeConvert();
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void run() {
-        super.run();
+        logger.info("DiagnosticsThread start");
         int count = 0;
-        while (!stopped) {
+        while (!stopped && !isInterrupted()) {
             try {
                 Thread.sleep(1000);
                 count++;
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-            }
 
-            if (count > delayTime) {
-                try {
-                    count = 0;
-                    String startTime = zonedDateTimeConvert.doGetKstDatetimeAsString();
-                    String powerMeter = powerFormatter.format(((MainActivity) MainActivity.mContext).getControlBoard().getRxData(0).getPowerMeter() * 0.01);
-                    JSONArray data = insertData(startTime, powerMeter);
-                    JSONObject obj = new JSONObject();
-                    obj.put("diagnostics", data);
-                    fileManagement.stringToFileSave(FILE_PATH, FILE_NAME, obj.toString(), true);
-                } catch (Exception e) {
-                    logger.error(e.getMessage());
+                if (count > delayTime) {
+                    try {
+                        count = 0;
+                        String startTime = zonedDateTimeConvert.doGetKstDatetimeAsString();
+                        String powerMeter = powerFormatter.format(((MainActivity) MainActivity.mContext).getControlBoard().getRxData(0).getPowerMeter() * 0.01);
+                        JSONArray data = insertData(startTime, powerMeter);
+                        JSONObject obj = new JSONObject();
+                        obj.put("diagnostics", data);
+                        fileManagement.stringToFileSave(FILE_PATH, FILE_NAME, obj.toString(), true);
+                    } catch (Exception e) {
+                        logger.error(e.getMessage());
+                    }
                 }
+            } catch (InterruptedException e) {
+                // interrupt()로 인해 발생한 예외이므로 종료를 위해 루프를 빠져나가도록 유도
+                logger.info("DiagnosticsThread is interrupted. Stopping...");
+                Thread.currentThread().interrupt(); // Interrupt 플래그를 다시 세팅
+                break;
+            } catch (Exception e) {
+                logger.info("DiagnosticsThread error : {}", e.getMessage(), e);
             }
         }
+        logger.info("DiagnosticsThread terminated");
     }
 
     public JSONArray insertData(String startTime, String powerMeter) {
