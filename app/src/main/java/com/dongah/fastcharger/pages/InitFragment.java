@@ -142,7 +142,7 @@ public class InitFragment extends Fragment implements View.OnClickListener {
                 textViewConnector.setText("2 커넥터");
             }
         } catch (Exception e) {
-            logger.error("InitFragment onCreateView error : {}", e.getMessage(), e);
+            logger.error("onCreateView error : {}", e.getMessage(), e);
         }
 
         return view;
@@ -165,31 +165,30 @@ public class InitFragment extends Fragment implements View.OnClickListener {
             }
 
             // PnC
-            if (Objects.equals(chargerConfiguration.getStartMode(), 1)) {
-                eventHandler = new Handler(Looper.getMainLooper());
-                eventRunnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (rxData.isCsPilot() && rxData.isCsReady() && chargingCurrentData.isConnectUse()
-                                && chargingCurrentData.isAutoStart()) {
-                            chargingCurrentData.setAutoStart(false);
-                            changeFragment();
-                        }
-                        eventHandler.postDelayed(this, 1000);
-                    }
-                };
-                eventHandler.postDelayed(eventRunnable, 1000);
-            }
+//            if (Objects.equals(chargerConfiguration.getStartMode(), 1)) {
+//                eventHandler = new Handler(Looper.getMainLooper());
+//                eventRunnable = new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (rxData.isCsPilot() && rxData.isCsReady() && chargingCurrentData.isConnectUse()
+//                                && chargingCurrentData.isAutoStart()) {
+//                            chargingCurrentData.setAutoStart(false);
+//                            changeFragment();
+//                        }
+//                        eventHandler.postDelayed(this, 1000);
+//                    }
+//                };
+//                eventHandler.postDelayed(eventRunnable, 1000);
+//            }
 
         } catch (Exception e) {
-            logger.error("InitFragment onViewCreated : {}", e.getMessage(), e);
+            logger.error("onViewCreated : {}", e.getMessage(), e);
         }
     }
 
     @Override
     public void onClick(View v) {
-        if (!Objects.equals(chargerConfiguration.getStartMode(), 0)
-                || !chargingCurrentData.isConnectUse()
+        if (!chargingCurrentData.isConnectUse()
                 || (!Objects.equals(v.getId(), R.id.viewCircle) && !rxData.isCsPilot())) {
             return;
         }
@@ -204,7 +203,7 @@ public class InitFragment extends Fragment implements View.OnClickListener {
             activity.getChargingCurrentData(mChannel).setChargerPointType(ChargerPointType.COMBO);
             activity.getChargingCurrentData(mChannel).setConnectorId(mChannel + 1);
         } catch (Exception e) {
-            logger.error("InitFragment initData : {}", e.getMessage());
+            logger.error("initData : {}", e.getMessage());
         }
     }
 
@@ -260,11 +259,11 @@ public class InitFragment extends Fragment implements View.OnClickListener {
 //                    }
                 } catch (Exception e) {
                     activity.getToastPositionMake().onShowToast(mChannel, "서버 연결 DISCONNECT.\n충전을 할 수 없습니다.");
-                    logger.error("InitFragment server disconnect error : {}", e.getMessage());
+                    logger.error("server disconnect error : {}", e.getMessage());
                 }
             }
         } catch (Exception e) {
-            logger.error("InitFragment changeFragment error : {}", e.getMessage());
+            logger.error("changeFragment error : {}", e.getMessage());
         }
     }
 
@@ -285,7 +284,7 @@ public class InitFragment extends Fragment implements View.OnClickListener {
                 eventHandler.removeCallbacks(eventRunnable);
             }
         } catch (Exception e) {
-            logger.error("InitFragment onDetach error : {}", e.getMessage());
+            logger.error("onDetach error : {}", e.getMessage());
         }
     }
 }
