@@ -19,13 +19,11 @@ import android.widget.TextView;
 
 import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
-import com.dongah.fastcharger.basefunction.ChargingCurrentData;
 import com.dongah.fastcharger.utils.SharedModel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,7 +49,6 @@ public class MemberCardFragment extends Fragment {
     TextView textViewTagTimer, textViewMessage;
     ImageView imageViewMemberCard;
     AnimationDrawable animationDrawable;
-    ChargingCurrentData chargingCurrentData;
     Handler countHandler;
     Runnable countRunnable;
 
@@ -96,14 +93,10 @@ public class MemberCardFragment extends Fragment {
         imageViewMemberCard = view.findViewById(R.id.imageViewMemberCard);
         imageViewMemberCard.setBackgroundResource(R.drawable.membercardtagging);
         animationDrawable = (AnimationDrawable) imageViewMemberCard.getBackground();
-        chargingCurrentData = ((MainActivity) MainActivity.mContext).getChargingCurrentData(mChannel);
         String[] requestStrings = new String[1];
         SharedModel sharedModel = new ViewModelProvider(requireActivity()).get(SharedModel.class);
         requestStrings[0] = String.valueOf(mChannel);
         sharedModel.setMutableLiveData(requestStrings);
-
-        textViewMessage.setVisibility(Objects.equals(chargingCurrentData.getAuthType(), "M") ? View.VISIBLE : View.INVISIBLE);
-        chargingCurrentData.setAuthType("C");
 
         // rfCard ready
         ((MainActivity) MainActivity.mContext).getRfCardReaderReceive().rfCardReadRequest(mChannel);
@@ -134,7 +127,7 @@ public class MemberCardFragment extends Fragment {
             };
             countHandler.postDelayed(countRunnable, 1000);
         } catch (Exception e) {
-            logger.error("MemberCardFragment error: {}", e.getMessage());
+            logger.error("onViewCreated error: {}", e.getMessage());
         }
     }
 
@@ -153,7 +146,7 @@ public class MemberCardFragment extends Fragment {
                 imageViewMemberCard.setBackground(null);
             }
         } catch (Exception e) {
-            logger.error("MemberCardFragment onDestroyView : {}", e.getMessage());
+            logger.error("onDestroyView error : {}", e.getMessage());
         }
         super.onDestroyView();
     }
@@ -168,7 +161,7 @@ public class MemberCardFragment extends Fragment {
                 countHandler.removeMessages(0);
             }
         } catch (Exception e) {
-            logger.error("MemberCardFragment onDetach : {}", e.getMessage());
+            logger.error("onDetach error : {}", e.getMessage());
         }
     }
 }
