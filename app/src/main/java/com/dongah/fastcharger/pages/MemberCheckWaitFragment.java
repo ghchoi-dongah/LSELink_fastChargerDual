@@ -220,9 +220,10 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
                         authorizeReq.sendAuthorize(chargingCurrentData.getIdTag());
                     } else {
                         // 인증 실패
+                        authorizeFailed();
                         activity.getChargingCurrentData(mChannel).setAuthorizeResult(false);
-                        classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
-                        fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
+//                        classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
+//                        fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
                         RxData rxData = activity.getControlBoard().getRxData(mChannel);
                         if (!rxData.isCsPilot() && Objects.equals(chargerConfiguration.getOpMode(), 1)) {
                             chargingCurrentData.setChargePointStatus(ChargePointStatus.Available);
@@ -283,8 +284,9 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
                                 activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.PLUG_CHECK, "PLUG_CHECK", null);
                             } else {
                                 // 인증 실패
-                                classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
-                                fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
+                                authorizeFailed();
+//                                classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
+//                                fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
                             }
                         }
                     } else {
@@ -293,8 +295,9 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
                             activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.CHARGING);
                             activity.getFragmentChange().onFragmentChange(mChannel,UiSeq.CHARGING, "CHARGING", null);
                         } else {
-                            classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
-                            fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
+                            authorizeFailed();
+//                            classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
+//                            fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
                         }
                     }
                 }
