@@ -168,13 +168,14 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
                                     countHandler.removeCallbacks(countRunnable);
 
                                     // 회원 인증 실패
-                                    classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
-                                    fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
+                                    authorizeFailed();
+//                                    classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
+//                                    fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
                                 } else {
                                     countHandler.postDelayed(countRunnable, 1000);
                                 }
                             } catch (Exception e) {
-                                logger.error("MemberCheckWaitFragment run error : {}", e.getMessage());
+                                logger.error("onViewCreated run error : {}", e.getMessage());
                             }
                         }
                     };
@@ -186,10 +187,6 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
             String[] idTagInfo;
             UiSeq uiSeq = classUiProcess.getUiSeq();
             SocketReceiveMessage socketReceiveMessage = activity.getSocketReceiveMessage();
-
-            if (!chargingCurrentData.getIdTag().startsWith("C")) {
-                chargingCurrentData.setIdTag("C" + chargingCurrentData.getIdTag());
-            }
 
             // isLocalPreAuthorize == true : local authorization list 에서 사용자 인증
             // isLocalPreAuthorize: 사전 로컬 인증 모드
@@ -303,18 +300,17 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
                 }
             }
         } catch (Exception e) {
-            logger.error("MemberCheckWaitFragment onViewCreated error : {}", e.getMessage());
+            logger.error("onViewCreated error : {}", e.getMessage());
         }
     }
 
     @Override
     public void onClick(View v) {
         try {
-            return;
-//            if (!isAdded() && !isFlag) return;
-//            activity.getClassUiProcess(mChannel).onHome();
+            if (!isAdded() && !isFlag) return;
+            activity.getClassUiProcess(mChannel).onHome();
         } catch (Exception e) {
-            logger.error("MemberCheckWaitFragment onClick error : {}", e.getMessage());
+            logger.error("onClick error : {}", e.getMessage());
         }
     }
 
@@ -326,7 +322,7 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
             mediaPlayer.setOnCompletionListener(me -> releasePlayer());
             mediaPlayer.start();
         } catch (Exception e) {
-            logger.error("MemberCheckWaitFragment mediaPlayer error : {}", e.getMessage());
+            logger.error("mediaPlayer error : {}", e.getMessage());
         }
     }
 
@@ -335,28 +331,27 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
             try {
                 mediaPlayer.release();
             } catch (Exception e) {
-                logger.error("MemberCheckWaitFragment releasePlayer error : {}", e.getMessage());
+                logger.error("releasePlayer error : {}", e.getMessage());
             }
             mediaPlayer = null;
         }
     }
 
-//    private void authorizeFailed() {
-//        try {
-//            if (isFlag) return;
-//            textViewMemberWaitMessage.setText(R.string.memberCheckFailedMessage);
-//            animationDrawable.stop();
-//            imageViewLoading.setVisibility(View.INVISIBLE);
-//            imageViewMemberFailed.setVisibility(View.VISIBLE);
-//            textViewFailed.setVisibility(View.VISIBLE);
-//            textViewConnectorRetryMessage.setVisibility(View.VISIBLE);
-//            textViewMemberRegistMessage.setVisibility(View.VISIBLE);
-//            fadeAnimator.start();
-//            isFlag = true;
-//        } catch (Exception e) {
-//            logger.error("MemberCheckWaitFragment authorizeFailed : {}", e.getMessage());
-//        }
-//    }
+    private void authorizeFailed() {
+        try {
+            textViewMemberWaitMessage.setText(R.string.memberCheckFailedMessage);
+            animationDrawable.stop();
+            imageViewLoading.setVisibility(View.INVISIBLE);
+            imageViewMemberFailed.setVisibility(View.VISIBLE);
+            textViewFailed.setVisibility(View.VISIBLE);
+            textViewConnectorRetryMessage.setVisibility(View.VISIBLE);
+            textViewMemberRegistMessage.setVisibility(View.VISIBLE);
+            fadeAnimator.start();
+            isFlag = true;
+        } catch (Exception e) {
+            logger.error("authorizeFailed : {}", e.getMessage());
+        }
+    }
 
     @Override
     public void onDestroyView() {
@@ -385,7 +380,7 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
             countRunnable = null;
 
         } catch (Exception e) {
-            logger.error("MemberCheckWaitFragment onDestroyView error : {}", e.getMessage());
+            logger.error("onDestroyView error : {}", e.getMessage());
         }
         super.onDestroyView();
     }
@@ -400,7 +395,7 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
                 countHandler.removeMessages(0);
             }
         } catch (Exception e) {
-            logger.error("MemberCheckWaitFragment onDetach error : {}", e.getMessage());
+            logger.error("onDetach error : {}", e.getMessage());
         }
     }
 }
