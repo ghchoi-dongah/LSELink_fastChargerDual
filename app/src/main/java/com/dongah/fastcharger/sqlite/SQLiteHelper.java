@@ -50,10 +50,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CpChgElecmode.CREATE_SQL);
         sqLiteDatabase.execSQL(CpChangeMode.CREATE_SQL);
         sqLiteDatabase.execSQL(CpRechgSoc.CREATE_SQL);
+        sqLiteDatabase.execSQL(CpUnitPrice.CREATE_SQL);
 
 //        sqLiteDatabase.execSQL(CpSettings.CREATE_SQL);
 //        sqLiteDatabase.execSQL(CpOcppConfigKeys.CREATE_SQL);
-//        sqLiteDatabase.execSQL(CpUnitPrice.CREATE_SQL);
 //        sqLiteDatabase.execSQL(CpNonTransmit.CREATE_SQL);
 //        sqLiteDatabase.execSQL(CpChargingHist.CREATE_SQL);
     }
@@ -68,6 +68,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 break;
             case "CP_RECHG_SOC":
                 sqLiteDatabase.execSQL(CpRechgSoc.CREATE_SQL);
+                break;
+            case "CP_UNIT_PRICE":
+                sqLiteDatabase.execSQL(CpUnitPrice.CREATE_SQL);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown table: " + tableName);

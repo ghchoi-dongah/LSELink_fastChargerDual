@@ -162,7 +162,7 @@ public class RechgrsocscheduleHandler implements OcppHandler {
             FileManagement fileManagement = new FileManagement();
             JSONObject rootJson;
 
-            File file = new File(GlobalVariables.getRootPath() + File.separator + "rechgrsocschedule");
+            File file = new File(GlobalVariables.getRootPath() + File.separator + GlobalVariables.FILE_RECHGR_SOC_SCHEDULE);
 
             if (!file.exists()) {
                 rootJson = new JSONObject();
@@ -200,7 +200,7 @@ public class RechgrsocscheduleHandler implements OcppHandler {
 
             fileManagement.stringToFileSave(
                     GlobalVariables.getRootPath(),
-                    "rechgrsocschedule",
+                    GlobalVariables.FILE_RECHGR_SOC_SCHEDULE,
                     rootJson.toString(),
                     false);
         } catch (Exception e) {

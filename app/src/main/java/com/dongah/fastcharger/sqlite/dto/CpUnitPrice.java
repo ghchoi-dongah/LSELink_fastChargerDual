@@ -5,6 +5,7 @@ import android.content.ContentValues;
 public class CpUnitPrice implements DbEntity {
     private static final String tableName = "CP_UNIT_PRICE";
     private static final String ID = "ID";
+    private static final String CONNECTOR_ID = "CONNECTOR_ID";
     private static final String UNIT_PRICE = "UNIT_PRICE";
     private static final String USER_TYPE_CD = "USER_TYPE_CD";
     private static final String CRTR_UNIT_PRICE = "CRTR_UNIT_PRICE";
@@ -13,16 +14,18 @@ public class CpUnitPrice implements DbEntity {
     public static final String CREATE_SQL =
             "CREATE TABLE IF NOT EXISTS " + tableName + " (" +
                     ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    USER_TYPE_CD + " TEXT NOT NULL UNIQUE," +
-                    RE_CHG_TYPE + " TEXT NOT NULL," +
+                    CONNECTOR_ID + " TEXT NOT NULL," +
                     UNIT_PRICE + " REAL NOT NULL," +
+                    USER_TYPE_CD + " TEXT NOT NULL UNIQUE," +
                     CRTR_UNIT_PRICE + " REAL NOT NULL," +
+                    RE_CHG_TYPE + " TEXT NOT NULL," +
                     REG_DT + " TEXT NOT NULL" +
                     ");";
 
-    public Float unitPrice;
+    public Integer connectorId;
+    public Double unitPrice;
     public String userTypeCd;
-    public Float crtrUnitPrice;
+    public Double crtrUnitPrice;
     public String reChgType;
     public String regDt;
 
@@ -36,6 +39,7 @@ public class CpUnitPrice implements DbEntity {
     @Override
     public ContentValues toContentValues() {
         ContentValues values = new ContentValues();
+        values.put(CONNECTOR_ID, connectorId);
         values.put(UNIT_PRICE, unitPrice);
         values.put(USER_TYPE_CD, userTypeCd);
         values.put(CRTR_UNIT_PRICE, crtrUnitPrice);

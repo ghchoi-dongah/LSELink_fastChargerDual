@@ -154,7 +154,7 @@ public class ChangeElecModeHandler implements OcppHandler {
             FileManagement fileManagement = new FileManagement();
             JSONObject rootJson;
 
-            File file = new File(GlobalVariables.getRootPath() + File.separator + "changeElecMode");
+            File file = new File(GlobalVariables.getRootPath() + File.separator + GlobalVariables.FILE_CHANGE_ELEC_MODE);
 
             if (!file.exists()) {
                 rootJson = new JSONObject();
@@ -172,7 +172,7 @@ public class ChangeElecModeHandler implements OcppHandler {
 
             fileManagement.stringToFileSave(
                     GlobalVariables.getRootPath(),
-                    "changeElecMode",
+                    GlobalVariables.FILE_CHANGE_ELEC_MODE,
                     rootJson.toString(),
                     false);
         } catch (Exception e) {

@@ -22,6 +22,12 @@ public class GlobalVariables {
     public static final String FILE_FULL_RECHG_SOC = "fullRechgSoc";
     public static final String FILE_RECHGR_SOC_SCHEDULE = "rechgrsocschedule";
 
+    // unitPrice
+    public static double userTypeC = 0;    // 법인 단가
+    public static double userTypeK = 0;    // 환경부 단가
+    public static double userTypeM = 0;    // 회원 단가
+    public static double userTypeN = 0;    // 비회원 단가
+
 
     /**
      * Max plug count

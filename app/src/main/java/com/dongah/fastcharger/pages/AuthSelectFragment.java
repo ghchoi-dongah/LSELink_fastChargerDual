@@ -107,4 +107,9 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
             logger.error("onClick error : {}", e.getMessage(), e);
         }
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
 }
