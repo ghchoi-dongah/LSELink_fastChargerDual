@@ -1,16 +1,21 @@
 package com.dongah.fastcharger.pages;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
 import com.dongah.fastcharger.basefunction.ChargingCurrentData;
+import com.dongah.fastcharger.basefunction.GlobalVariables;
 import com.dongah.fastcharger.basefunction.PaymentType;
 import com.dongah.fastcharger.basefunction.UiSeq;
 
@@ -40,6 +45,7 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
     private int mChannel;
 
     View viewMember, viewNoMember;
+    TextView textViewMemberUnitInput, textViewNoMemberUnitInput;
 
     MainActivity activity;
     ChargingCurrentData chargingCurrentData;
@@ -84,10 +90,24 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
         viewMember.setOnClickListener(this);
         viewNoMember = view.findViewById(R.id.viewNoMember);
         viewNoMember.setOnClickListener(this);
+        textViewMemberUnitInput = view.findViewById(R.id.textViewMemberUnitInput);
+        textViewNoMemberUnitInput = view.findViewById(R.id.textViewNoMemberUnitInput);
 
         activity = (MainActivity) MainActivity.mContext;
         chargingCurrentData = activity.getChargingCurrentData(mChannel);
         return view;
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        try {
+            textViewMemberUnitInput.setText("충전단가: " + GlobalVariables.userTypeM);
+            textViewNoMemberUnitInput.setText("충전단가: " + GlobalVariables.userTypeN);
+        } catch (Exception e) {
+            logger.error("onViewCreated error : {}", e.getMessage(), e);
+        }
     }
 
     @Override
