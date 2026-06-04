@@ -97,13 +97,8 @@ public class AuthorizeHandler implements OcppHandler {
                     }
 
                     activity.getChargingCurrentData(connectorId-1).setAuthorizeResult(true);
-
-                    // authType = 'C' : 회원 카드 인증 완료 → PLUG_CHECK
-                    // authType = 'M' : Mac 인증 완료 → CHARGING
-                    if (Objects.equals(chargingCurrentData.getAuthType(), "C")) {
-                        activity.getClassUiProcess(connectorId-1).setUiSeq(UiSeq.PLUG_CHECK);
-                        fragmentChange.onFragmentChange(connectorId-1, UiSeq.PLUG_CHECK, "PLUG_CHECK", null);
-                    }
+                    activity.getClassUiProcess(connectorId-1).setUiSeq(UiSeq.PLUG_CHECK);
+                    fragmentChange.onFragmentChange(connectorId-1, UiSeq.PLUG_CHECK, "PLUG_CHECK", null);
                 }
             } else {
                 String certificationReason = status.name();
@@ -114,25 +109,10 @@ public class AuthorizeHandler implements OcppHandler {
                     fragmentChange.onFragmentChange(connectorId-1, UiSeq.CHARGING, "CHARGING", null);
                     toastPositionMake.onShowToast(connectorId-1, "충전 중지 인증 실패 : " + certificationReason);
                 } else {
-                    // MAC Address 인증 실패
-                    if (Objects.equals(chargingCurrentData.authType, "M")) {
-                        // 충전 중지
-                        activity.getControlBoard().getTxData(connectorId-1).setStart(false);
-                        activity.getControlBoard().getTxData(connectorId-1).setStop(true);
-                        activity.getControlBoard().getTxData(connectorId-1).setUiSequence((short) 3);
-
-                        if (Objects.equals(chargerConfiguration.getAuthMode(), 0)) {
-                            activity.getClassUiProcess(connectorId-1).setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
-                            fragmentChange.onFragmentChange(connectorId-1, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
-                        } else if (Objects.equals(chargerConfiguration.getAuthMode(), 2)) {
-                            activity.getClassUiProcess(connectorId-1).setUiSeq(UiSeq.MEMBER_CARD);
-                            fragmentChange.onFragmentChange(connectorId-1, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
-                        }
-                    } else {
-                        // 회원 카드 인증 실패
-                        activity.getClassUiProcess(connectorId-1).setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
-                        fragmentChange.onFragmentChange(connectorId-1, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
-                    }
+                    // 회원 인증 실패
+                    activity.getChargingCurrentData(connectorId-1).setAuthorizeResult(false);
+                    activity.getClassUiProcess(connectorId-1).setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
+                    fragmentChange.onFragmentChange(connectorId-1, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
                 }
             }
         } catch (Exception e) {

@@ -168,9 +168,8 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
                                     countHandler.removeCallbacks(countRunnable);
 
                                     // 회원 인증 실패
-                                    authorizeFailed();
-//                                    classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
-//                                    fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
+                                    classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
+                                    fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
                                 } else {
                                     countHandler.postDelayed(countRunnable, 1000);
                                 }
@@ -220,10 +219,9 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
                         authorizeReq.sendAuthorize(chargingCurrentData.getIdTag());
                     } else {
                         // 인증 실패
-                        authorizeFailed();
                         activity.getChargingCurrentData(mChannel).setAuthorizeResult(false);
-//                        classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
-//                        fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
+                        classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
+                        fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
                         RxData rxData = activity.getControlBoard().getRxData(mChannel);
                         if (!rxData.isCsPilot() && Objects.equals(chargerConfiguration.getOpMode(), 1)) {
                             chargingCurrentData.setChargePointStatus(ChargePointStatus.Available);
@@ -284,9 +282,8 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
                                 activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.PLUG_CHECK, "PLUG_CHECK", null);
                             } else {
                                 // 인증 실패
-                                authorizeFailed();
-//                                classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
-//                                fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
+                                classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
+                                fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
                             }
                         }
                     } else {
@@ -295,9 +292,8 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
                             activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.CHARGING);
                             activity.getFragmentChange().onFragmentChange(mChannel,UiSeq.CHARGING, "CHARGING", null);
                         } else {
-                            authorizeFailed();
-//                            classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
-//                            fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
+                            classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
+                            fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
                         }
                     }
                 }
@@ -310,8 +306,9 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         try {
-            if (!isAdded() && !isFlag) return;
-            activity.getClassUiProcess(mChannel).onHome();
+            return;
+//            if (!isAdded() && !isFlag) return;
+//            activity.getClassUiProcess(mChannel).onHome();
         } catch (Exception e) {
             logger.error("onClick error : {}", e.getMessage());
         }
@@ -340,21 +337,21 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
         }
     }
 
-    private void authorizeFailed() {
-        try {
-            textViewMemberWaitMessage.setText(R.string.memberCheckFailedMessage);
-            animationDrawable.stop();
-            imageViewLoading.setVisibility(View.INVISIBLE);
-            imageViewMemberFailed.setVisibility(View.VISIBLE);
-            textViewFailed.setVisibility(View.VISIBLE);
-            textViewConnectorRetryMessage.setVisibility(View.VISIBLE);
-            textViewMemberRegistMessage.setVisibility(View.VISIBLE);
-            fadeAnimator.start();
-            isFlag = true;
-        } catch (Exception e) {
-            logger.error("authorizeFailed : {}", e.getMessage());
-        }
-    }
+//    private void authorizeFailed() {
+//        try {
+//            textViewMemberWaitMessage.setText(R.string.memberCheckFailedMessage);
+//            animationDrawable.stop();
+//            imageViewLoading.setVisibility(View.INVISIBLE);
+//            imageViewMemberFailed.setVisibility(View.VISIBLE);
+//            textViewFailed.setVisibility(View.VISIBLE);
+//            textViewConnectorRetryMessage.setVisibility(View.VISIBLE);
+//            textViewMemberRegistMessage.setVisibility(View.VISIBLE);
+//            fadeAnimator.start();
+//            isFlag = true;
+//        } catch (Exception e) {
+//            logger.error("authorizeFailed : {}", e.getMessage());
+//        }
+//    }
 
     @Override
     public void onDestroyView() {
