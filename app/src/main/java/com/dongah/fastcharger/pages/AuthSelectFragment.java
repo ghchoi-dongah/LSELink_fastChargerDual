@@ -116,10 +116,12 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
             int getId = v.getId();
             if (Objects.equals(getId, R.id.viewMember)) {
                 chargingCurrentData.setPaymentType(PaymentType.MEMBER);
+                chargingCurrentData.setUnitPrice(GlobalVariables.userTypeM);
                 activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.MEMBER_CARD);
                 activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
             } else if (Objects.equals(getId, R.id.viewNoMember)) {
                 chargingCurrentData.setPaymentType(PaymentType.CREDIT);
+                chargingCurrentData.setUnitPrice(GlobalVariables.userTypeN);
                 activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.CREDIT_CARD);
                 activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.CREDIT_CARD, "CREDIT_CARD", null);
             }

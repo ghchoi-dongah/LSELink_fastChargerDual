@@ -58,6 +58,7 @@ public class ChargingCurrentData {
     int soc = 0;
     int targetSoc = 80;
     long chargingRemainTime = 0;
+    double unitPrice = 0f;
 
 
     /**
@@ -227,6 +228,7 @@ public class ChargingCurrentData {
             setTargetCurrent(0);
             setAuthType("M");
             setFullrechgsoc(100);
+            setUnitPrice(0);
         } catch (Exception e) {
             logger.error("ChargingCurrentData onCurrentDataClear error : {}", e.getMessage(), e);
         }
@@ -902,5 +904,13 @@ public class ChargingCurrentData {
 
     public void setFullrechgsoc(int fullrechgsoc) {
         this.fullrechgsoc = fullrechgsoc;
+    }
+
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
     }
 }
