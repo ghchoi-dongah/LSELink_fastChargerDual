@@ -16,6 +16,7 @@ public class GlobalVariables {
 
     // file names
     public static final String UNIT_FILE_NAME = "unitPrice.dongah";
+    public static final String FILE_UNIT = "unitPrice";
     public static final String FILE_CHANGE_MODE = "changeMode";
     public static final String FILE_CHANGE_ELEC_MODE = "changeElecMode";
     public static final String FILE_FULL_RECHG_SOC = "fullRechgSoc";

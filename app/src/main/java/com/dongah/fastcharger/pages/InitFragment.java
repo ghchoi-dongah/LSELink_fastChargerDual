@@ -17,12 +17,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
 import com.dongah.fastcharger.basefunction.ChargerConfiguration;
 import com.dongah.fastcharger.basefunction.ChargerPointType;
 import com.dongah.fastcharger.basefunction.ChargingCurrentData;
+import com.dongah.fastcharger.basefunction.GlobalVariables;
 import com.dongah.fastcharger.basefunction.UiSeq;
 import com.dongah.fastcharger.controlboard.RxData;
 import com.dongah.fastcharger.controlboard.TxData;
@@ -32,6 +34,7 @@ import com.dongah.fastcharger.websocket.socket.SocketState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.Objects;
 
 /**
@@ -163,26 +166,8 @@ public class InitFragment extends Fragment implements View.OnClickListener {
             } else {
                 textViewInfo.setVisibility(View.INVISIBLE);
             }
-
-            // PnC
-//            if (Objects.equals(chargerConfiguration.getStartMode(), 1)) {
-//                eventHandler = new Handler(Looper.getMainLooper());
-//                eventRunnable = new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (rxData.isCsPilot() && rxData.isCsReady() && chargingCurrentData.isConnectUse()
-//                                && chargingCurrentData.isAutoStart()) {
-//                            chargingCurrentData.setAutoStart(false);
-//                            changeFragment();
-//                        }
-//                        eventHandler.postDelayed(this, 1000);
-//                    }
-//                };
-//                eventHandler.postDelayed(eventRunnable, 1000);
-//            }
-
         } catch (Exception e) {
-            logger.error("onViewCreated : {}", e.getMessage(), e);
+            logger.error("onViewCreated error : {}", e.getMessage(), e);
         }
     }
 
@@ -203,7 +188,7 @@ public class InitFragment extends Fragment implements View.OnClickListener {
             activity.getChargingCurrentData(mChannel).setChargerPointType(ChargerPointType.COMBO);
             activity.getChargingCurrentData(mChannel).setConnectorId(mChannel + 1);
         } catch (Exception e) {
-            logger.error("initData : {}", e.getMessage());
+            logger.error("initData error : {}", e.getMessage());
         }
     }
 
@@ -219,51 +204,35 @@ public class InitFragment extends Fragment implements View.OnClickListener {
                 activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.PLUG_CHECK, "PLUG_CHECK", null);
             } else if (Objects.equals(chargerConfiguration.getOpMode(), 1)) {
                 // server mode
+                if (!onUnitPrice()) {
+                    Toast.makeText(getActivity(), "단가 정보가 없습니다. \n잠시 후, 충전하세요!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 try {
-                    switch (chargerConfiguration.getAuthMode()) {
-                        case 0:
-                        case 2:
-                            activity.getChargingCurrentData(mChannel).setAuthType("M");
-                            activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.PLUG_CHECK);
-                            activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.PLUG_CHECK, "PLUG_CHECK", null);
-                            break;
-                        case 1:
-                            activity.getChargingCurrentData(mChannel).setAuthType("C");
-                            activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.MEMBER_CARD);
-                            activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
-                            break;
-                        default:
-                            logger.error("InitFragment changeFragment error >> Invalid value");
-                            break;
-                    }
                     SocketState socketState = activity.getSocketReceiveMessage().getSocket().getState();
-//                    if (Objects.equals(socketState, SocketState.OPEN)) {
-//                        switch (chargerConfiguration.getAuthMode()) {
-//                            case 0:
-//                            case 2:
-//                                activity.getChargingCurrentData(mChannel).setAuthType("M");
-//                                activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.PLUG_CHECK);
-//                                activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.PLUG_CHECK, "PLUG_CHECK", null);
-//                                break;
-//                            case 1:
-//                                activity.getChargingCurrentData(mChannel).setAuthType("C");
-//                                activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.MEMBER_CARD);
-//                                activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
-//                                break;
-//                            default:
-//                                logger.error("InitFragment changeFragment error >> Invalid value");
-//                                break;
-//                        }
-//                    } else {
-//                        activity.getToastPositionMake().onShowToast(mChannel, "서버 연결 DISCONNECT.\n충전을 할 수 없습니다.");
-//                    }
-                } catch (Exception e) {
-                    activity.getToastPositionMake().onShowToast(mChannel, "서버 연결 DISCONNECT.\n충전을 할 수 없습니다.");
-                    logger.error("server disconnect error : {}", e.getMessage());
+                    if (Objects.equals(socketState, SocketState.OPEN)) {
+                        activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.AUTH_SELECT);
+                        activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.AUTH_SELECT, "AUTH_SELECT", null);
+                    } else {
+                        activity.getToastPositionMake().onShowToast(mChannel, "서버 연결 DISCONNECT. \n충전을 할 수 없습니다.");
+                    }
+                } catch (Exception e){
+                    activity.getToastPositionMake().onShowToast(mChannel, "서버 연결 DISCONNECT. \n충전을 할 수 없습니다.");
+                    logger.error("server disconnect error : {}", e.getMessage(), e);
                 }
             }
         } catch (Exception e) {
             logger.error("changeFragment error : {}", e.getMessage());
+        }
+    }
+
+    private boolean onUnitPrice() {
+        try {
+            File file = new File(GlobalVariables.getRootPath() + File.separator + GlobalVariables.FILE_UNIT);
+            return file.exists();
+        } catch (Exception e){
+            logger.error("onUnitPrice error : {}", e.getMessage(), e);
+            return false;
         }
     }
 
