@@ -57,6 +57,7 @@ public class ClassUiProcess implements RfCardReaderListener {
     int powerMeterCheck = 0;
     boolean chargingAlarm = true;
     boolean startCheck = true;
+    boolean finishWaitScheduled = false;
 
     /** OCPP     */
     StatusNotificationReq statusNotificationReq;
@@ -278,8 +279,8 @@ public class ClassUiProcess implements RfCardReaderListener {
             UiSeq uiSeq2 = ((MainActivity) MainActivity.mContext).getClassUiProcess(1).getUiSeq();
             result = Objects.equals(UiSeq.REBOOTING, uiSeq1) || Objects.equals(UiSeq.INIT, uiSeq1)
                         || Objects.equals(UiSeq.OP_STOP, uiSeq1);
-            result = result && Objects.equals(UiSeq.REBOOTING, uiSeq2) || Objects.equals(UiSeq.INIT, uiSeq2)
-                        || Objects.equals(UiSeq.OP_STOP, uiSeq2);
+            result = result && (Objects.equals(UiSeq.REBOOTING, uiSeq2) || Objects.equals(UiSeq.INIT, uiSeq2)
+                        || Objects.equals(UiSeq.OP_STOP, uiSeq2));
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -442,7 +443,8 @@ public class ClassUiProcess implements RfCardReaderListener {
     private void handleInit() {
         setoSeq(UiSeq.INIT);
         setPowerMeterCheck(0);
-        chargingAlarm = startCheck = true;;
+        chargingAlarm = startCheck = true;
+        finishWaitScheduled = false;
         onMeterValueStop();
         if (controlBoard.getTxData(channel).getChargerPointMode() == 0) {
             controlBoard.getTxData(getCh()).setUiSequence((short) 1);
@@ -582,6 +584,9 @@ public class ClassUiProcess implements RfCardReaderListener {
     // finish wait
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleFinishWait(RxData rxData) {
+        if (finishWaitScheduled) return;   // 이미 처리 중이면 즉시 리턴
+        finishWaitScheduled = true;        // 첫 진입 시 잠금
+
         try {
             controlBoard.getTxData(getCh()).setStop(true);
             controlBoard.getTxData(getCh()).setUiSequence((short) 3);
@@ -598,23 +603,26 @@ public class ClassUiProcess implements RfCardReaderListener {
             }
             onMeterValueStop();
 
-            Thread.sleep(3000);
+            handler.postDelayed(() -> {
+                finishWaitScheduled = false;   // 완료 후 해제
 
-            if (Objects.equals(chargerConfiguration.getOpMode(), 1)) {
-                // StopTransaction
-                StopTransactionReq stopTransactionReq = new StopTransactionReq(chargingCurrentData.getConnectorId());
-                stopTransactionReq.sendStopTransactionReq();
-            }
+                if (Objects.equals(chargerConfiguration.getOpMode(), 1)) {
+                    // StopTransaction
+                    StopTransactionReq stopTransactionReq = new StopTransactionReq(chargingCurrentData.getConnectorId());
+                    stopTransactionReq.sendStopTransactionReq();
+                }
 
-            if (!GlobalVariables.ChargerOperation[getCh()+1]) {
-                setUiSeq(UiSeq.INIT);
-                fragmentChange.onFragmentChange(getCh(), UiSeq.INIT, "INIT", null);
-            } else {
-                setUiSeq(UiSeq.FINISH);
-                fragmentChange.onFragmentChange(getCh(), UiSeq.FINISH, "FINISH", null);
-            }
+                if (!GlobalVariables.ChargerOperation[getCh()+1]) {
+                    setUiSeq(UiSeq.INIT);
+                    fragmentChange.onFragmentChange(getCh(), UiSeq.INIT, "INIT", null);
+                } else {
+                    setUiSeq(UiSeq.FINISH);
+                    fragmentChange.onFragmentChange(getCh(), UiSeq.FINISH, "FINISH", null);
+                }
 
+            }, 3000);
         } catch (Exception e) {
+            finishWaitScheduled = false;
             logger.error("ClassUiProcess - FINISH_WAIT error : {} ", e.getMessage());
         }
     }
@@ -639,16 +647,17 @@ public class ClassUiProcess implements RfCardReaderListener {
                     // meter values stop
                     meterValuesReq.sendMeterValues(chargingCurrentData.getConnectorId());
                     onMeterValueStop();
-                    Thread.sleep(3000);
 
-                    // socket receive message get instance
-                    socketReceiveMessage = ((MainActivity) MainActivity.mContext).getSocketReceiveMessage();
-                    SocketState state = socketReceiveMessage.getSocket().getState();
-                    if (Objects.equals(state.getValue(), 7) && Objects.equals(chargerConfiguration.getOpMode(), 1)) {
-                        // server send
-                        StopTransactionReq stopTransactionReq = new StopTransactionReq(chargingCurrentData.getConnectorId());
-                        stopTransactionReq.sendStopTransactionReq();
-                    }
+                    handler.postDelayed(() -> {
+                        // socket receive message get instance
+                        socketReceiveMessage = ((MainActivity) MainActivity.mContext).getSocketReceiveMessage();
+                        SocketState state = socketReceiveMessage.getSocket().getState();
+                        if (Objects.equals(state.getValue(), 7) && Objects.equals(chargerConfiguration.getOpMode(), 1)) {
+                            // server send
+                            StopTransactionReq stopTransactionReq = new StopTransactionReq(chargingCurrentData.getConnectorId());
+                            stopTransactionReq.sendStopTransactionReq();
+                        }
+                    }, 3000);
                 }
                 fragmentChange.onFragmentChange(getCh(), UiSeq.FAULT, "FAULT", null);
             }

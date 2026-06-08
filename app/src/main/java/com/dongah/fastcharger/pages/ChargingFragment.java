@@ -137,7 +137,7 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
             sharedModel = new ViewModelProvider(requireActivity()).get(SharedModel.class);
             requestStrings[0] = String.valueOf(mChannel);
             sharedModel.setMutableLiveData(requestStrings);
-            progressCircular.isIndeterminate();
+            progressCircular.setIndeterminate(false);
             mediaPlayer();      // media player
 
             try {
@@ -157,7 +157,7 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
             }
             onCharging();
         } catch (Exception e) {
-            logger.error("ChargingFragment onViewCreated error : {}", e.getMessage());
+            logger.error("onViewCreated error : {}", e.getMessage());
         }
     }
 
@@ -208,7 +208,7 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
                                  textViewRequestCurrentValue.setText(powerFormatter.format(chargingCurrentData.getTargetCurrent() * 0.1) + "A");
                              }
                          } catch (Exception e) {
-                             logger.error("ChargingFragment onCharging error : {}", e.getMessage());
+                             logger.error("onCharging error : {}", e.getMessage());
                          }
                      }
                  });
@@ -225,7 +225,7 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
             mediaPlayer.setOnCompletionListener(me -> releasePlayer());
             mediaPlayer.start();
         } catch (Exception e) {
-            logger.error("ChargingFragment mediaPlayer error : {}", e.getMessage());
+            logger.error("mediaPlayer error : {}", e.getMessage());
         }
     }
     
@@ -234,9 +234,22 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
             try {
                 mediaPlayer.release();
             } catch (Exception e) {
-                logger.error("ChargingFragment releasePlayer error : {}", e.getMessage());
+                logger.error("releasePlayer error : {}", e.getMessage());
             }
             mediaPlayer = null;
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        try {
+            if (uiUpdateHandler != null) {
+                uiUpdateHandler.removeCallbacksAndMessages(null);
+                uiUpdateHandler = null;
+            }
+        } catch (Exception e) {
+            logger.error("onDestroyView error : {}", e.getMessage(), e);
         }
     }
 
@@ -246,13 +259,8 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
         try {
             requestStrings[0] = String.valueOf(mChannel);
             sharedModel.setMutableLiveData(requestStrings);
-            if (uiUpdateHandler != null) {
-                uiUpdateHandler.removeCallbacksAndMessages(null);
-                uiUpdateHandler.removeMessages(0);
-                uiUpdateHandler = null;
-            }
         } catch (Exception e) {
-            logger.error("ChargingFragment onDetach error : {}", e.getMessage());
+            logger.error("onDetach error : {}", e.getMessage());
         }
     }
 }

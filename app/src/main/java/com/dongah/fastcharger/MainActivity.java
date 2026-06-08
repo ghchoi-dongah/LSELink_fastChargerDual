@@ -243,7 +243,10 @@ public class MainActivity extends AppCompatActivity {
          */
         chargerConfiguration.setSigned(false);
 
-        // 5. socket
+        // 5. handler
+        processHandler = new ProcessHandler();
+
+        // 6. socket
 //        String baseUrl = "ws://dongahtest.p-e.kr:5000/v2/DAE000202";
         String baseUrl =  chargerConfiguration.getServerConnectingString() + chargerConfiguration.getChargeBoxSerialNumber() + chargerConfiguration.getChargerId();
         socketReceiveMessage = new SocketReceiveMessage(baseUrl);
@@ -266,16 +269,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // 6. classUiProcess
+        // 7. classUiProcess
         classUiProcess = new ClassUiProcess[GlobalVariables.maxChannel];
         for (int i = 0; i < GlobalVariables.maxChannel; i++) {
             classUiProcess[i] = new ClassUiProcess(i);
             classUiProcess[i].setUiSeq(UiSeq.INIT);
 
         }
-
-        // 7. handler
-        processHandler = new ProcessHandler();
 
         // 8. PLC modem
         clientSocket = new ClientSocket("192.168.39.1", 9999, new ClientSocket.TcpClientListener() {

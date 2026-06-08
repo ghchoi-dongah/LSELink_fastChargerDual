@@ -115,11 +115,10 @@ public class BootNotificationThread extends Thread {
             while ((line = br.readLine()) != null) {
                 processFirmwareLine(line);
             }
-
-            boolean deleted = firmwareFile.delete();
         } catch (Exception e) {
             logger.error("FirmwareStatus file error", e);
         }
+        boolean deleted = firmwareFile.delete();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -145,13 +144,6 @@ public class BootNotificationThread extends Thread {
                 socketReceiveMessage.onSend(100, req.getActionName(), req);
                 chargerConfiguration.setSignedFirmwareStatus(status);
             } else if ("Firmware".equals(resultStatus[0])) {
-
-//                FirmwareStatus status = FirmwareStatus.valueOf(resultStatus[1]);
-//                FirmwareStatusNotificationRequest req =
-//                        new FirmwareStatusNotificationRequest(status);
-//                socketReceiveMessage.onSend(100, req.getActionName(), req);
-//                chargerConfiguration.setFirmwareStatus(status);
-
                 Arrays.fill(GlobalVariables.ChargerOperation, true);
                 onChargerOperateSave();
                 chargerConfiguration.setFirmwareStatus(FirmwareStatus.Idle);
@@ -169,7 +161,8 @@ public class BootNotificationThread extends Thread {
 
         if (!file.exists()) return "0";
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            return br.readLine();
+            String id = br.readLine();
+            return (id != null) ? id : "0";
         } catch (Exception e) {
             logger.error("getSignedRequestId error", e);
         }

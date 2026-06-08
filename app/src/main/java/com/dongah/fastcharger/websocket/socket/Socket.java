@@ -17,6 +17,7 @@ import com.dongah.fastcharger.utils.FileManagement;
 import com.dongah.fastcharger.utils.LogDataSave;
 import com.dongah.fastcharger.websocket.ocpp.utilities.Base64Util;
 import com.dongah.fastcharger.websocket.ocpp.utilities.ZonedDateTimeConvert;
+import com.dongah.fastcharger.websocket.socket.handler.handlersend.ProcessHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -119,8 +120,13 @@ public class Socket extends WebSocketListener {
             setState(SocketState.OPEN);
             reconnectingAttempts = 0;
             socketInterface.onOpen(webSocket);
-            ((MainActivity) MainActivity.mContext)
-                    .getProcessHandler().onBootNotificationStart(5);
+
+            ProcessHandler ph = ((MainActivity) MainActivity.mContext).getProcessHandler();
+            if (ph != null) {
+                ph.onBootNotificationStart(5);
+            } else {
+                logger.warn("onOpen: ProcessHandler not ready yet");
+            }
 
             // dump data 전송은 BootNotification Accepted 이후 BootNotificationHandler에서 처리
             // (여기서 호출하면 BootNotificationHandler와 이중 실행되어 중복 전송 발생)

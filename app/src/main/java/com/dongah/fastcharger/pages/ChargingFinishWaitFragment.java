@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,26 +101,21 @@ public class ChargingFinishWaitFragment extends Fragment {
             cnt = 0;
             animationDrawable.start();
 
-            ((MainActivity) MainActivity.mContext).runOnUiThread(new Runnable() {
+            countHandler = new Handler(Looper.getMainLooper());
+            countRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    countHandler = new Handler();
-                    countRunnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            cnt++;
-                            if (Objects.equals(cnt, TIME_OUT)) {
-                                chargingCurrentData.setChgFinishWait(true);
-                            } else {
-                                countHandler.postDelayed(countRunnable, 1000);
-                            }
-                        }
-                    };
-                    countHandler.postDelayed(countRunnable, 1000);
+                    cnt++;
+                    if (Objects.equals(cnt, TIME_OUT)) {
+                        chargingCurrentData.setChgFinishWait(true);
+                    } else {
+                        countHandler.postDelayed(countRunnable, 1000);
+                    }
                 }
-            });
+            };
+            countHandler.postDelayed(countRunnable, 1000);
         } catch (Exception e) {
-            logger.error("ChargingFinishWaitFragment onViewCreated error : {}", e.getMessage());
+            logger.error("onViewCreated error : {}", e.getMessage());
         }
     }
 
@@ -145,7 +141,7 @@ public class ChargingFinishWaitFragment extends Fragment {
             countRunnable = null;
 
         } catch (Exception e) {
-            logger.error("ChargingFinishWaitFragment onDestroyView error : {}", e.getMessage());
+            logger.error("onDestroyView error : {}", e.getMessage());
         }
         super.onDestroyView();
     }
@@ -160,7 +156,7 @@ public class ChargingFinishWaitFragment extends Fragment {
                 countHandler.removeMessages(0);
             }
         } catch (Exception e) {
-            logger.error("ChargingFinishWaitFragment onDetach error : {}", e.getMessage());
+            logger.error("onDetach error : {}", e.getMessage());
         }
     }
 }
