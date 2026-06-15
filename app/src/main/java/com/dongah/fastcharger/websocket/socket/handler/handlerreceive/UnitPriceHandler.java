@@ -55,8 +55,7 @@ public class UnitPriceHandler implements OcppHandler  {
             String tableName = new CpUnitPrice().getTableName();
 
             JSONArray dataArr = new JSONArray(dataStr);
-
-            helper.dropTable(sqLiteDatabase, tableName);
+            
             // 테이블이 없으면 테이블 생성 후 insertUnitPrice
             if (!helper.isTableExists(helper, tableName)) {
                 logger.warn("updateUnitPrice table not exists : {}", tableName);
