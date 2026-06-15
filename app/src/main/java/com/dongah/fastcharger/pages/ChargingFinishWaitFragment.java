@@ -101,19 +101,19 @@ public class ChargingFinishWaitFragment extends Fragment {
             cnt = 0;
             animationDrawable.start();
 
-            countHandler = new Handler(Looper.getMainLooper());
-            countRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    cnt++;
-                    if (Objects.equals(cnt, TIME_OUT)) {
-                        chargingCurrentData.setChgFinishWait(true);
-                    } else {
-                        countHandler.postDelayed(countRunnable, 1000);
-                    }
-                }
-            };
-            countHandler.postDelayed(countRunnable, 1000);
+//            countHandler = new Handler(Looper.getMainLooper());
+//            countRunnable = new Runnable() {
+//                @Override
+//                public void run() {
+//                    cnt++;
+//                    if (Objects.equals(cnt, TIME_OUT)) {
+//
+//                    } else {
+//                        countHandler.postDelayed(countRunnable, 1000);
+//                    }
+//                }
+//            };
+//            countHandler.postDelayed(countRunnable, 1000);
         } catch (Exception e) {
             logger.error("onViewCreated error : {}", e.getMessage());
         }

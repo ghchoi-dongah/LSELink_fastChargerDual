@@ -46,7 +46,7 @@ public class MemberCardFragment extends Fragment {
     private int mChannel;
 
     int timer = 20;
-    TextView textViewTagTimer, textViewMessage;
+    TextView textViewTagTimer;
     ImageView imageViewMemberCard;
     AnimationDrawable animationDrawable;
     Handler countHandler;
@@ -89,7 +89,6 @@ public class MemberCardFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_member_card, container, false);
         textViewTagTimer = view.findViewById(R.id.textViewTagTimer);
-        textViewMessage = view.findViewById(R.id.textViewMessage);
         imageViewMemberCard = view.findViewById(R.id.imageViewMemberCard);
         imageViewMemberCard.setBackgroundResource(R.drawable.membercardtagging);
         animationDrawable = (AnimationDrawable) imageViewMemberCard.getBackground();

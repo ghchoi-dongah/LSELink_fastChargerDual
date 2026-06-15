@@ -58,15 +58,4 @@
         app:layout_constraintEnd_toEndOf="@id/imageViewMemberCardReader"
         app:layout_constraintTop_toBottomOf="@id/imageViewMemberCardReader" />
 
-    <TextView
-        android:id="@+id/textViewMessage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
-        android:gravity="center"
-        android:visibility="invisible"
-        android:text="@string/noMacMessage"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -130,14 +130,6 @@ public class ChargingCurrentData {
     public JSONArray remoteSmartChargingJsonArray;
 
     /**
-     * 테스트 모드 dot drawing 강제 이벤트 변수
-     * true: 기다림없이 다음 화면으로 전환
-     * false: 10초 기다림 주고 다음 화면으로 전환
-     * */
-    public boolean chgWait = false;
-    public boolean chgFinishWait = false;
-
-    /**
      * 인증타입(MAC Address or Membership Card)
      * M: MAC Address
      * C: Membership Card
@@ -157,12 +149,6 @@ public class ChargingCurrentData {
      * true: 사용, false: 미사용
      * */
     public boolean connectUse = true;
-
-    /** 자동 충전 상태
-     * true: 자동 충전 가능 상태
-     * false: 충전 불가능 상태
-     * */
-    public boolean autoStart = true;
 
     public int limitSoc = 0;
     public int fullrechgsoc = 100;
@@ -842,22 +828,6 @@ public class ChargingCurrentData {
         this.remainTimeStr = remainTimeStr;
     }
 
-    public boolean isChgWait() {
-        return chgWait;
-    }
-
-    public void setChgWait(boolean chgWait) {
-        this.chgWait = chgWait;
-    }
-
-    public boolean isChgFinishWait() {
-        return chgFinishWait;
-    }
-
-    public void setChgFinishWait(boolean chgFinishWait) {
-        this.chgFinishWait = chgFinishWait;
-    }
-
     public String getAuthType() {
         return authType;
     }
@@ -880,14 +850,6 @@ public class ChargingCurrentData {
 
     public void setConnectUse(boolean connectUse) {
         this.connectUse = connectUse;
-    }
-
-    public boolean isAutoStart() {
-        return autoStart;
-    }
-
-    public void setAutoStart(boolean autoStart) {
-        this.autoStart = autoStart;
     }
 
     public int getLimitSoc() {

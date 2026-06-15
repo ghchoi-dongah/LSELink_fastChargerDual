@@ -36,9 +36,9 @@ public class UnitPriceHandler implements OcppHandler  {
             fileManagement.stringToFileSave(GlobalVariables.getRootPath(), "unitPrice", dataStr, false);
 
             /* DB update */
-            if (connectorId == 0) {
+            if (connectorId == 0 || connectorId == 100) {
                 for (int i = 1; i <= GlobalVariables.maxChannel; i++) {
-                    updateUnitPrice(dataStr, connectorId);
+                    updateUnitPrice(dataStr, i);
                 }
             } else {
                 updateUnitPrice(dataStr, connectorId);
@@ -56,6 +56,7 @@ public class UnitPriceHandler implements OcppHandler  {
 
             JSONArray dataArr = new JSONArray(dataStr);
 
+            helper.dropTable(sqLiteDatabase, tableName);
             // 테이블이 없으면 테이블 생성 후 insertUnitPrice
             if (!helper.isTableExists(helper, tableName)) {
                 logger.warn("updateUnitPrice table not exists : {}", tableName);
@@ -124,7 +125,7 @@ public class UnitPriceHandler implements OcppHandler  {
 
                 ContentValues cv = new ContentValues();
                 cv.put("CONNECTOR_ID", connectorId);
-                cv.put("UnitPrice",     row.getDouble("UnitPrice"));
+                cv.put("UNIT_PRICE",     row.getDouble("UnitPrice"));
                 cv.put("USER_TYPE_CD",    row.getString("UserTypeCd"));
                 cv.put("CRTR_UNIT_PRICE", row.getDouble("CrtrUnitPrice"));
                 cv.put("RE_CHG_TYPE",     row.getString("RechgType"));
