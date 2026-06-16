@@ -201,14 +201,6 @@ public class ConnectorCheckFragment extends Fragment implements View.OnClickList
                                     textViewConnectorCheckMessage.setText(R.string.EVCheckMessage);
                                     textViewConnectorCheckMessage.setTag(true);
                                 }
-
-                                // 서버 모드 && MAC Address 인증 모드(authType = 'M')
-                                // Authorize(Mac Address) send, 1회 시도
-                                if (Objects.equals(chargerConfiguration.getOpMode(), 1) &&
-                                        Objects.equals(chargingCurrentData.getAuthType(), "M") &&
-                                        isFlagAuthorize) {
-                                    macAuthorize(); // Authorize(MAC Address)
-                                }
                             }
                         }
                     };
@@ -216,7 +208,7 @@ public class ConnectorCheckFragment extends Fragment implements View.OnClickList
                 }
             });
         } catch (Exception e) {
-            logger.error("ConnectorCheckFragment onViewCreated error : {}", e.getMessage());
+            logger.error("onViewCreated error : {}", e.getMessage());
         }
     }
 
@@ -225,145 +217,7 @@ public class ConnectorCheckFragment extends Fragment implements View.OnClickList
         try {
             return;
         } catch (Exception e) {
-            logger.error("ConnectorCheckFragment onClick error : {}", e.getMessage());
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void macAuthorize() {
-        String[] idTagInfo;
-        UiSeq uiSeq = classUiProcess.getUiSeq();
-        SocketReceiveMessage socketReceiveMessage = ((MainActivity) MainActivity.mContext).getSocketReceiveMessage();
-
-        String evccId = BitUtilities.toHexString(rxData.getCsmVehicleEvccId());
-        Log.d("ConnectorCheckFragment", "mac address : " + evccId);
-        chargingCurrentData.setIdTag(evccId);
-//        chargingCurrentData.setIdTag("1364747EE708"); // failed
-//        chargingCurrentData.setIdTag("1364747EE704"); // success
-
-        if (chargingCurrentData.getIdTag().equals("000000000000")) return;
-        isFlagAuthorize = false; // MAC Authorize 1회 시도
-        chargingCurrentData.setIdTag("C" + chargingCurrentData.getIdTag());
-
-        // isLocalPreAuthorize == true : local authorization list 에서 사용자 인증
-        // isLocalPreAuthorize: 사전 로컬 인증 모드
-        if (GlobalVariables.isLocalPreAuthorize()) {
-            // local authorization enabled --> local 인증
-            idTagInfo = socketReceiveMessage.getLocalAuthorizationListStrings(uiSeq == UiSeq.CHARGING ? chargingCurrentData.getIdTagStop() : chargingCurrentData.getIdTag());
-            if (Objects.equals(UiSeq.CHARGING, uiSeq)) {
-                if (Objects.equals(chargingCurrentData.getParentIdTag(), idTagInfo[1]) ||
-                        Objects.equals(chargingCurrentData.getIdTag(), chargingCurrentData.getIdTagStop())) {
-                    classUiProcess.setUiSeq(UiSeq.FINISH_WAIT);
-                    ((MainActivity) MainActivity.mContext).getFragmentChange().onFragmentChange(mChannel, UiSeq.FINISH_WAIT, "FINISH_WAIT", null);
-                } else  {
-                    classUiProcess.setUiSeq(UiSeq.CHARGING);
-                    fragmentChange.onFragmentChange(mChannel, UiSeq.CHARGING, "CHARGING", null);
-                }
-            } else {
-                if (!Objects.equals(chargingCurrentData.getChargePointStatus(), ChargePointStatus.Preparing) &&
-                        Objects.equals(chargerConfiguration.getOpMode(), 1)) {
-                    chargingCurrentData.setChargePointStatus(ChargePointStatus.Preparing);
-                    StatusNotificationReq statusNotificationReq = new StatusNotificationReq(chargingCurrentData.getConnectorId());
-                    statusNotificationReq.sendStatusNotification();
-                }
-
-                if (Objects.equals(idTagInfo[0], chargingCurrentData.getIdTag())) {
-                    chargingCurrentData.setAuthorizeResult(true);
-                    chargingCurrentData.setParentIdTag(idTagInfo[1]);
-                } else if (Objects.equals(idTagInfo[0], "notFound")) {
-                    AuthorizeReq authorizeReq = new AuthorizeReq(chargingCurrentData.getConnectorId());
-                    authorizeReq.sendAuthorize(chargingCurrentData.getIdTag());
-                } else {
-                    // 인증 실패
-                    ((MainActivity) MainActivity.mContext).getChargingCurrentData(mChannel).setAuthorizeResult(false);
-                    authorizedFailed();
-                    RxData rxData = ((MainActivity) MainActivity.mContext).getControlBoard().getRxData(mChannel);
-                    if (!rxData.isCsPilot() && Objects.equals(chargerConfiguration.getOpMode(), 1)) {
-                        chargingCurrentData.setChargePointStatus(ChargePointStatus.Available);
-                        StatusNotificationReq statusNotificationReq = new StatusNotificationReq(chargingCurrentData.getConnectorId());
-                        statusNotificationReq.sendStatusNotification();
-                    }
-                }
-            }
-        } else {
-            // central system send
-            SocketState state = socketReceiveMessage.getSocket().getState();
-            if (state == SocketState.OPEN) {
-                if (Objects.equals(UiSeq.CHARGING, uiSeq) && Objects.equals(chargingCurrentData.getIdTag(), chargingCurrentData.getIdTagStop())) {
-                    fragmentChange.onFragmentChange(mChannel, UiSeq.FINISH_WAIT, "FINISH_WAIT", null);
-                } else {
-                    if (chargingCurrentData.getChargePointStatus() == ChargePointStatus.Reserved) {
-                        if (!Objects.equals(chargingCurrentData.getResIdTag(), chargingCurrentData.getIdTag())) {
-                            Toast.makeText(getActivity(), "예약한 IdTag가 틀립니다. ", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                    }
-                    AuthorizeReq authorizeReq = new AuthorizeReq(chargingCurrentData.getConnectorId());
-                    authorizeReq.sendAuthorize(chargingCurrentData.getIdTag());
-                }
-            } else {
-                // 서버와 연결이 안된 경우
-                // isLocalAuthorizeOffline: 서버 연결이 끊겼을 때 오프라인 로컬 인증 허용 여부
-                if (GlobalVariables.isLocalAuthorizeOffline()) {
-                    // local authorization enabled --> local 인증
-                    idTagInfo = socketReceiveMessage.getLocalAuthorizationListStrings(uiSeq == UiSeq.CHARGING ? chargingCurrentData.getIdTagStop() : chargingCurrentData.getIdTag());
-                    if (Objects.equals(UiSeq.CHARGING, uiSeq)) {
-                        if (Objects.equals(chargingCurrentData.getParentIdTag(), idTagInfo[1]) ||
-                                Objects.equals(chargingCurrentData.getIdTag(), chargingCurrentData.getIdTagStop())) {
-                            classUiProcess.setUiSeq(UiSeq.FINISH_WAIT);
-                            fragmentChange.onFragmentChange(mChannel, UiSeq.FINISH_WAIT, "FINISH_WAIT", null);
-                        } else {
-                            classUiProcess.setUiSeq(UiSeq.CHARGING);
-                            fragmentChange.onFragmentChange(mChannel, UiSeq.CHARGING, "CHARGING", null);
-                        }
-                    } else {
-                        // isAllowOfflineTxForUnknownId: 오프라인에서 미등록 IdTag도 거래 허용
-                        if (Objects.equals(idTagInfo[0], chargingCurrentData.getIdTag()) || GlobalVariables.isAllowOfflineTxForUnknownId() ||
-                                GlobalVariables.isStopTransactionOnInvalidId()) {
-                            chargingCurrentData.setAuthorizeResult(true);
-                            chargingCurrentData.setParentIdTag(Objects.equals(idTagInfo[1], "") ? "미지원" : idTagInfo[1]);
-
-                            AuthorizeReq authorizeReq = new AuthorizeReq(chargingCurrentData.getConnectorId());
-                            authorizeReq.sendAuthorize(chargingCurrentData.getIdTag());
-                            
-                            chargingCurrentData.setChargePointStatus(ChargePointStatus.Preparing);
-                            StatusNotificationReq statusNotificationReq = new StatusNotificationReq(chargingCurrentData.getConnectorId());
-                            statusNotificationReq.sendStatusNotification();
-
-                            // isStopTransactionOnInvalidId: 미등록 IdTag로 시작했으면 나중에 중단 사유 세팅
-                            chargingCurrentData.setStopReason(!Objects.equals(idTagInfo[0], chargingCurrentData.getIdTag()) &&
-                                    GlobalVariables.isStopTransactionOnInvalidId() ? Reason.DeAuthorized : chargingCurrentData.getStopReason());
-                        } else {
-                            // 인증 실패
-                            authorizedFailed();
-                        }
-                    }
-                } else {
-                    Toast.makeText(getActivity(), "서버와 통신 DISCONNECT!!! 인증 실패. ", Toast.LENGTH_SHORT).show();
-                    if (Objects.equals(UiSeq.CHARGING, uiSeq)) {
-                        classUiProcess.setUiSeq(UiSeq.CHARGING);
-                        fragmentChange.onFragmentChange(mChannel,UiSeq.CHARGING, "CHARGING", null);
-                    } else {
-                        authorizedFailed();
-                    }
-                }
-            }
-        }
-    }
-
-    private void authorizedFailed() {
-        try {
-            // charging stop
-            activity.getControlBoard().getTxData(mChannel).setStop(true);
-            activity.getControlBoard().getTxData(mChannel).setStart(false);
-            activity.getControlBoard().getTxData(mChannel).setUiSequence((short) 3);
-
-            // member check failed fragment
-            countHandler.removeCallbacks(countRunnable);
-            classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
-            fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
-        } catch (Exception e) {
-            logger.error("ConnectorCheckFragment authorizedFailed error : {}", e.getMessage());
+            logger.error("onClick error : {}", e.getMessage());
         }
     }
 
@@ -388,13 +242,14 @@ public class ConnectorCheckFragment extends Fragment implements View.OnClickList
             }
 
             if (countHandler != null) {
+                countHandler.removeCallbacks(countRunnable);
                 countHandler.removeCallbacksAndMessages(null);
-                countHandler = null;
+                countHandler.removeMessages(0);
             }
             countRunnable = null;
 
         } catch (Exception e) {
-            logger.error("ConnectorCheckFragment onDestroyView error : {}", e.getMessage());
+            logger.error("onDestroyView error : {}", e.getMessage());
         }
         super.onDestroyView();
     }
@@ -402,14 +257,5 @@ public class ConnectorCheckFragment extends Fragment implements View.OnClickList
     @Override
     public void onDetach() {
         super.onDetach();
-        try {
-            if (countHandler != null) {
-                countHandler.removeCallbacks(countRunnable);
-                countHandler.removeCallbacksAndMessages(null);
-                countHandler.removeMessages(0);
-            }
-        } catch (Exception e) {
-            logger.error("ConnectorCheckFragment onDetach error : {}", e.getMessage());
-        }
     }
 }

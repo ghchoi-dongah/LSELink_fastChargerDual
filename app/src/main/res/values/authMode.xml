@@ -2,7 +2,6 @@
 <resources>
     <string-array name="authMode">
         <item>1. 회원카드</item>
-        <item>2. 신용카드</item>
-        <item>3. 회원카드 + 신용카드</item>
+        <item>2. 회원카드 + 신용카드</item>
     </string-array>
 </resources>

@@ -489,12 +489,6 @@ public class ClassUiProcess implements RfCardReaderListener {
     // connect check
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleConnectCheck(RxData rxData) {
-        // 서버 모드 && MAC 인증 모드 : 회원 인증이 완료 돼야 충전 시작
-        if (Objects.equals(chargerConfiguration.getOpMode(), 1) && Objects.equals(chargingCurrentData.getAuthType(), "M")
-                && !chargingCurrentData.isAuthorizeResult()) {
-            return;
-        }
-
         if (rxData.isCsStart() && startCheck) {
             chargingCurrentData.setChargePointStatus(ChargePointStatus.Charging);
             chargingCurrentData.setPowerMeterStart(rxData.getPowerMeter()*10);

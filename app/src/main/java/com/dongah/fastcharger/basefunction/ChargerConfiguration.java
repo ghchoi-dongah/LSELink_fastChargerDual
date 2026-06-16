@@ -41,11 +41,10 @@ public class ChargerConfiguration {
     public int serverPort = 4000;
 
     /** 회원 인증 모드
-     * 0: mac
-     * 1: member
-     * 2: mac + member
+     * 0: 회원카드
+     * 1: 회원카드 + 신용카드
      * */
-    public int authMode = 2;
+    public int authMode = 1;
     public int authModeId;
 
     /** 운영모드
@@ -105,9 +104,6 @@ public class ChargerConfiguration {
             String configurationString;
             if (!targetFile.exists()) onSaveConfiguration();
 
-//            targetFile.setReadable(true, false);
-//            targetFile.setWritable(true, false);
-
             // get file context json string
             configurationString = fileManagement.getStringFromFile(GlobalVariables.ROOT_PATH  + File.separator + CONFIG_FILE_NAME);
             if (!TextUtils.isEmpty(configurationString)) {
@@ -138,7 +134,7 @@ public class ChargerConfiguration {
                 setStopConfirm(obj.getBoolean("STOP_CONFIRM"));
                 setTargetSoc(obj.getInt("TARGET_SOC"));
                 setDr(obj.getInt("DR"));
-                setStartMode(obj.getInt("START_MODE"));
+//                setStartMode(obj.getInt("START_MODE"));
                 setSigned(obj.getBoolean("SIGNED"));
                 setControlMonitor(obj.getBoolean("CONTROL_MONITOR"));
                 setInitInfo(obj.getBoolean("INIT_INFO"));
@@ -177,7 +173,7 @@ public class ChargerConfiguration {
             obj.put("STOP_CONFIRM", isStopConfirm());
             obj.put("TARGET_SOC", getTargetSoc());
             obj.put("DR", getDr());
-            obj.put("START_MODE", getStartMode());
+//            obj.put("START_MODE", getStartMode());
             obj.put("SIGNED", isSigned());
             obj.put("CONTROL_MONITOR", isControlMonitor());
             obj.put("INIT_INFO", isInitInfo());

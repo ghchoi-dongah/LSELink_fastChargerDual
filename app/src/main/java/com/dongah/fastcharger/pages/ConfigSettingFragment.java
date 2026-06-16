@@ -54,8 +54,8 @@ public class ConfigSettingFragment extends Fragment implements View.OnClickListe
 
     ChargerConfiguration chargerConfiguration;
     InputMethodManager imm;
-    Spinner spinnerChargePointType, spinnerChargePointModel, spinnerAuthMode, spinnerOpMode, spinnerStartMode;
-    int spPosition = 0, spChargerPointModelCode = 0, spAuthMode = 0, spOpMode = 0, spStartMode = 0;
+    Spinner spinnerChargePointType, spinnerChargePointModel, spinnerAuthMode, spinnerOpMode;
+    int spPosition = 0, spChargerPointModelCode = 0, spAuthMode = 0, spOpMode = 0;
     EditText editChargeBoxSerialNumber, editChargerId;
     EditText editServerUrl, editServerPort, editControlPort, editRfPort, editCreditCardPort;
     EditText editTestPrice, editConnectorPriority;
@@ -186,25 +186,6 @@ public class ConfigSettingFragment extends Fragment implements View.OnClickListe
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     spOpMode = position;
                     chargerConfiguration.setOpMode(spOpMode);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-
-            // startMode
-            spinnerStartMode = view.findViewById(R.id.spinnerStartMode);
-            ArrayAdapter<CharSequence> startAdapter = ArrayAdapter.createFromResource(MainActivity.mContext, R.array.startMode, R.layout.spinner_item);
-            startAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerStartMode.setAdapter(startAdapter);
-            spinnerStartMode.setSelection(chargerConfiguration.getStartMode());
-            spinnerStartMode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    spStartMode = position;
-                    chargerConfiguration.setStartMode(spStartMode);
                 }
 
                 @Override
@@ -373,7 +354,6 @@ public class ConfigSettingFragment extends Fragment implements View.OnClickListe
             spChargerPointModelCode = chargerConfiguration.getChargerPointModelCode();
             spAuthMode = chargerConfiguration.getAuthMode();
             spOpMode = chargerConfiguration.getOpMode();
-            spStartMode = chargerConfiguration.getStartMode();
 
             editChargeBoxSerialNumber = v.findViewById(R.id.editChargeBoxSerialNumber);
             editChargeBoxSerialNumber.setText(chargerConfiguration.getChargeBoxSerialNumber());
@@ -442,7 +422,6 @@ public class ConfigSettingFragment extends Fragment implements View.OnClickListe
             chargerConfiguration.setChargerPointModelCode(spChargerPointModelCode);
             chargerConfiguration.setAuthMode(spAuthMode);
             chargerConfiguration.setOpMode(spOpMode);
-            chargerConfiguration.setStartMode(spStartMode);
 
             chargerConfiguration.setChargeBoxSerialNumber(editChargeBoxSerialNumber.getText().toString());
             chargerConfiguration.setChargerId(editChargerId.getText().toString());

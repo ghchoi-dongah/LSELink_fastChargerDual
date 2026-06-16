@@ -374,8 +374,9 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
             }
 
             if (countHandler != null) {
+                countHandler.removeCallbacks(countRunnable);
                 countHandler.removeCallbacksAndMessages(null);
-                countHandler = null;
+                countHandler.removeMessages(0);
             }
             countRunnable = null;
 
@@ -388,14 +389,5 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
     @Override
     public void onDetach() {
         super.onDetach();
-        try {
-            if (countHandler != null) {
-                countHandler.removeCallbacks(countRunnable);
-                countHandler.removeCallbacksAndMessages(null);
-                countHandler.removeMessages(0);
-            }
-        } catch (Exception e) {
-            logger.error("onDetach error : {}", e.getMessage());
-        }
     }
 }
