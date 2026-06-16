@@ -1,6 +1,7 @@
 package com.dongah.fastcharger.pages;
 
 import android.annotation.SuppressLint;
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,6 +29,7 @@ import com.dongah.fastcharger.basefunction.GlobalVariables;
 import com.dongah.fastcharger.basefunction.UiSeq;
 import com.dongah.fastcharger.controlboard.RxData;
 import com.dongah.fastcharger.controlboard.TxData;
+import com.dongah.fastcharger.sqlite.SQLiteHelper;
 import com.dongah.fastcharger.utils.SharedModel;
 import com.dongah.fastcharger.websocket.socket.SocketState;
 
@@ -184,9 +186,7 @@ public class InitFragment extends Fragment implements View.OnClickListener {
         try {
             chargingCurrentData.onCurrentDataClear();   // clear
             chargingCurrentData.setConnectorId(mChannel + 1);
-
-            activity.getChargingCurrentData(mChannel).setChargerPointType(ChargerPointType.COMBO);
-            activity.getChargingCurrentData(mChannel).setConnectorId(mChannel + 1);
+            chargingCurrentData.setChargerPointType(ChargerPointType.COMBO);
         } catch (Exception e) {
             logger.error("initData error : {}", e.getMessage());
         }
@@ -198,8 +198,8 @@ public class InitFragment extends Fragment implements View.OnClickListener {
 
             if (Objects.equals(chargerConfiguration.getOpMode(), 0)) {
                 // test mode
-                double testPrice = Double.parseDouble(activity.getChargerConfiguration().getTestPrice());
-                activity.getChargingCurrentData(mChannel).setPowerUnitPrice(testPrice);
+                double testPrice = Double.parseDouble(chargerConfiguration.getTestPrice());
+                chargingCurrentData.setPowerUnitPrice(testPrice);
                 activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.PLUG_CHECK);
                 activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.PLUG_CHECK, "PLUG_CHECK", null);
             } else if (Objects.equals(chargerConfiguration.getOpMode(), 1)) {
@@ -211,8 +211,16 @@ public class InitFragment extends Fragment implements View.OnClickListener {
                 try {
                     SocketState socketState = activity.getSocketReceiveMessage().getSocket().getState();
                     if (Objects.equals(socketState, SocketState.OPEN)) {
-                        activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.AUTH_SELECT);
-                        activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.AUTH_SELECT, "AUTH_SELECT", null);
+                        switch (chargerConfiguration.getAuthMode()) {
+                            case 0:
+                                activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.MEMBER_CARD);
+                                activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
+                                break;
+                            case 1:
+                                activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.AUTH_SELECT);
+                                activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.AUTH_SELECT, "AUTH_SELECT", null);
+                                break;
+                        }
                     } else {
                         activity.getToastPositionMake().onShowToast(mChannel, "서버 연결 DISCONNECT. \n충전을 할 수 없습니다.");
                     }
@@ -228,8 +236,13 @@ public class InitFragment extends Fragment implements View.OnClickListener {
 
     private boolean onUnitPrice() {
         try {
-            File file = new File(GlobalVariables.getRootPath() + File.separator + GlobalVariables.FILE_UNIT);
-            return file.exists();
+            SQLiteHelper helper = SQLiteHelper.getInstance(activity);
+            if (!helper.isTableExists(helper, "CP_UNIT_PRICE")) {
+                return false;
+            }
+
+            Cursor cursor = helper.selectAll("CP_UNIT_PRICE");
+            return cursor != null && cursor.moveToFirst();
         } catch (Exception e){
             logger.error("onUnitPrice error : {}", e.getMessage(), e);
             return false;
