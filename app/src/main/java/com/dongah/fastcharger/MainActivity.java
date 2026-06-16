@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
         chargerConfiguration = new ChargerConfiguration();
         chargerConfiguration.onLoadConfiguration();
         chargerConfiguration.setSigned(true);
-        textViewVersion.setText("VER-DEVD " + GlobalVariables.VERSION + " | ");
+        textViewVersion.setText("VER-DEVS " + GlobalVariables.VERSION + " | ");
 
         // 2. fragment change management
         fragmentChange = new FragmentChange();

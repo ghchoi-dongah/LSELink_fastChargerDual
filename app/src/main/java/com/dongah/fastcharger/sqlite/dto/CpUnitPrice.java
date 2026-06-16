@@ -16,10 +16,11 @@ public class CpUnitPrice implements DbEntity {
                     ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     CONNECTOR_ID + " TEXT NOT NULL," +
                     UNIT_PRICE + " REAL NOT NULL," +
-                    USER_TYPE_CD + " TEXT NOT NULL UNIQUE," +
+                    USER_TYPE_CD + " TEXT NOT NULL," +
                     CRTR_UNIT_PRICE + " REAL NOT NULL," +
                     RE_CHG_TYPE + " TEXT NOT NULL," +
-                    REG_DT + " TEXT NOT NULL" +
+                    REG_DT + " TEXT NOT NULL," +
+                    "UNIQUE(" + CONNECTOR_ID + ", " + USER_TYPE_CD + ")" +
                     ");";
 
     public Integer connectorId;

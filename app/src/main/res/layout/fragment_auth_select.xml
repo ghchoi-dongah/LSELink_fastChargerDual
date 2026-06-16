@@ -6,6 +6,14 @@
     android:layout_height="662dp"
     tools:context=".pages.AuthSelectFragment">
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/layer_list_rect"
+        tools:layout_editor_absoluteX="5dp"
+        tools:layout_editor_absoluteY="5dp" />
+
     <!-- member info -->
     <View
         android:id="@+id/viewMember"

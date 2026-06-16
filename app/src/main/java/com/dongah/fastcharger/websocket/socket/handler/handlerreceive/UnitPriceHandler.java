@@ -35,6 +35,11 @@ public class UnitPriceHandler implements OcppHandler  {
             FileManagement fileManagement = new FileManagement();
             fileManagement.stringToFileSave(GlobalVariables.getRootPath(), "unitPrice", dataStr, false);
 
+            MainActivity activity = (MainActivity) MainActivity.mContext;
+            SQLiteHelper helper = SQLiteHelper.getInstance(activity);
+            SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
+            helper.dropTable(sqLiteDatabase, "CP_UNIT_PRICE");
+
             /* DB update */
             if (connectorId == 0 || connectorId == 100) {
                 for (int i = 1; i <= GlobalVariables.maxChannel; i++) {
@@ -77,7 +82,7 @@ public class UnitPriceHandler implements OcppHandler  {
                 try {
                     cursor = sqLiteDatabase.rawQuery(
                             "SELECT 1 FROM " + tableName +
-                                    " WHERE connector_id = ? AND USER_TYPE_CD = ?",
+                                    " WHERE CONNECTOR_ID = ? AND USER_TYPE_CD = ?",
                             new String[]{ String.valueOf(connectorId), userTypeCd });
                     exists = (cursor != null && cursor.moveToFirst());
                 } finally {
@@ -85,9 +90,9 @@ public class UnitPriceHandler implements OcppHandler  {
                 }
 
                 ContentValues cv = new ContentValues();
-                cv.put("UnitPrice", unitPrice);
-                cv.put("CrtrUnitPrice", crtrUnitPrice);
-                cv.put("RechgType", rechgType);
+                cv.put("UNIT_PRICE", unitPrice);
+                cv.put("CRTR_UNIT_PRICE", crtrUnitPrice);
+                cv.put("RE_CHG_TYPE", rechgType);
                 ZonedDateTimeConvert convert = new ZonedDateTimeConvert();
                 cv.put("REG_DT", convert.doGetKstDatetimeAsString());
 
