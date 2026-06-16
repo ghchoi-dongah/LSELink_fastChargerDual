@@ -130,9 +130,11 @@ public class ChargingCurrentData {
     public JSONArray remoteSmartChargingJsonArray;
 
     /**
-     * 인증타입(MAC Address or Membership Card)
-     * M: MAC Address
-     * C: Membership Card
+     * 인증타입
+     * C: 법인
+     * K: 환경부
+     * M: 회원카드
+     * N: 신용카드
      * */
     public String authType = "M";
 

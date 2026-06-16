@@ -54,9 +54,10 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
     private int mChannel;
 
     Button btnChargingStop;
-    TextView textViewSocValue, textViewLimitSocValue, textViewLimitKwValue, textViewCarNum;
+    TextView textViewSocValue, textViewLimitSocValue, textViewLimitKwValue;
     TextView textViewChargingAmtValue, textViewChargingTimeRemainValue, textViewChargingTimeValue;
     TextView textViewChargingVoltageValue, textViewChargingPowerValue, textViewChargingCurrentValue, textViewRequestCurrentValue;
+    TextView txtChargePay, textViewInputUnit;
     CircularProgressIndicator progressCircular;
 
     MediaPlayer mediaPlayer;
@@ -69,6 +70,7 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
     TxData txData;
 
     Date startTime = null, useTime = null;
+    DecimalFormat payFormatter = new DecimalFormat("#,###,##0");
     DecimalFormat powerFormatter = new DecimalFormat("#,###,##0.00");
     DecimalFormat voltageFormatter = new DecimalFormat("#,###,##0.0");
     ZonedDateTimeConvert zonedDateTimeConvert = new ZonedDateTimeConvert();
@@ -126,6 +128,9 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
         textViewLimitSocValue = view.findViewById(R.id.textViewLimitSocValue);
         textViewLimitKwValue = view.findViewById(R.id.textViewLimitKwValue);
         progressCircular = view.findViewById(R.id.progressCircular);
+
+        txtChargePay = view.findViewById(R.id.txtChargePay);
+        textViewInputUnit = view.findViewById(R.id.textViewInputUnit);
         return view;
     }
 
@@ -141,17 +146,12 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
             mediaPlayer();      // media player
 
             try {
-                textViewSocValue.setText(chargingCurrentData.getSoc() + "%");
-                textViewLimitKwValue.setText(txData.getOutPowerLimit() + "kW");
-                textViewLimitSocValue.setText("목표 충전율: " +chargingCurrentData.getLimitSoc() + "%");
-                progressCircular.setProgress(chargingCurrentData.getSoc(), true);
-                startTime = zonedDateTimeConvert.doStringDateToDate(chargingCurrentData.getChargingStartTime());
-
-                if (Objects.equals(chargerConfiguration.getOpMode(), 1)) {
-                    textViewCarNum.setText(getString(R.string.carNum) + chargingCurrentData.getParentIdTag());
-                } else {
-                    textViewCarNum.setText(getString(R.string.carNum) + "테스트 모드");
-                }
+                textViewSocValue.setText(chargingCurrentData.getSoc() + "%");   // soc
+                textViewLimitKwValue.setText(txData.getOutPowerLimit() + "kW"); // 출력제한
+                progressCircular.setProgress(chargingCurrentData.getSoc(), true); // progress
+                textViewLimitSocValue.setText("목표 충전율: " +chargingCurrentData.getLimitSoc() + "%"); // 목표 충전율
+                startTime = zonedDateTimeConvert.doStringDateToDate(chargingCurrentData.getChargingStartTime());    // 충전시간
+                textViewInputUnit.setText(payFormatter.format((long) chargingCurrentData.getUnitPrice()) + "원");    // 충전단가
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

@@ -42,7 +42,6 @@ public class AuthorizeHandler implements OcppHandler {
         MainActivity activity = (MainActivity) MainActivity.mContext;
         ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(connectorId-1);
         UiSeq uiSeq = activity.getClassUiProcess(connectorId-1).getUiSeq();
-        ChargerConfiguration chargerConfiguration = activity.getChargerConfiguration();
 
         try {
             JSONObject idTagInfo = payload.getJSONObject("idTagInfo");
@@ -110,7 +109,6 @@ public class AuthorizeHandler implements OcppHandler {
                     toastPositionMake.onShowToast(connectorId-1, "충전 중지 인증 실패 : " + certificationReason);
                 } else {
                     // 회원 인증 실패
-                    activity.getChargingCurrentData(connectorId-1).setAuthorizeResult(false);
                     activity.getClassUiProcess(connectorId-1).setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
                     fragmentChange.onFragmentChange(connectorId-1, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
                 }

@@ -407,7 +407,7 @@ public class ClassUiProcess implements RfCardReaderListener {
                     MainActivity activity = ((MainActivity) MainActivity.mContext);
                     ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(ch);
 
-                    chargingCurrentData.setAuthType("C");
+                    chargingCurrentData.setAuthType("M");
                     chargingCurrentData.setIdTag(cardNum);
 
                     activity.getClassUiProcess(ch).setUiSeq(UiSeq.MEMBER_CHECK_WAIT);
@@ -511,7 +511,7 @@ public class ClassUiProcess implements RfCardReaderListener {
                 startMeterValuesWithDelay();
                 startCheck = false;
             }
-        } else if (rxData.isCsStop() || rxData.getCsmStatusCode() == (byte) 0x10) {
+        } else if (rxData.isCsStop() || rxData.getCsmSeccStatusCode() == (byte) 0x10) {
             controlBoard.getTxData(getCh()).setStop(true);
             controlBoard.getTxData(getCh()).setStart(false);
         }

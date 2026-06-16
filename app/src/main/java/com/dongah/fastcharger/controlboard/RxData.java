@@ -24,9 +24,6 @@ public class RxData {
     public boolean csMC1Status = false;     // 14bit
     public boolean csMC2Status = false;     // 15bit
 
-
-    // 401 address
-    public short reserved0 = 0;              // reserve addresss
     // 402 address
     public short cpVoltage = 0;             // cp 전압 (ex) 1198 => 119.8
     // 403 address
@@ -54,6 +51,10 @@ public class RxData {
     public boolean csEmergency = false;         // 411[0] Emergency
     public boolean csPLCComm = false;           // 411[1] PLC 통신 오류
     public boolean csPowerMeterComm = false;    // 411[2] power meter 통신 오루
+    public boolean csModule1Comm = false;       // 411[3] 모듈1 통신 오류
+    public boolean csModule2Comm = false;       // 411[4] 모듈2 통신 오류
+    public boolean csModule3Comm = false;       // 411[5] 모듈3 통신 오류
+    public boolean csModule4Comm = false;       // 411[6] 모듈4 통신 오류
     public boolean csChargerLeak = false;       // 411[7] 충전기 누설 감지
     public boolean csCarLeak = false;           // 411[8] 차량 누설 감지
     public boolean csOutOVR = false;            // 411[9] 출력 과전압(정격의 110%)
@@ -61,93 +62,99 @@ public class RxData {
     public boolean csCouplerTempSensor = false; // 411[11] 커플러 온도 센서 이상
     public boolean csCouplerOVT = false;        // 411[12] 커플러 과온도
     //412 address
-    public boolean csModule1Error = false;      // 412[1] 모듈1 에러
-    public boolean csModule2Error = false;      // 412[2] 모듈2 에러
-    public boolean csModule3Error = false;      // 412[3] 모듈3 에러
-    public boolean csModule4Error = false;      // 412[4] 모듈4 에러
-    public boolean csModule1Comm = false;       // 411[3] 모듈1 통신 오류
-    public boolean csModule2Comm = false;       // 411[4] 모듈2 통신 오류
-    public boolean csModule3Comm = false;       // 411[5] 모듈3 통신 오류
-    public boolean csModule4Comm = false;       // 411[6] 모듈4 통신 오류
-
-    //413 address
-    public short reserved1 = 0;
+    public boolean csModule1Error = false;      // 412[0] 모듈1 에러
+    public boolean csModule2Error = false;      // 412[1] 모듈2 에러
+    public boolean csModule3Error = false;      // 412[2] 모듈3 에러
+    public boolean csModule4Error = false;      // 412[3] 모듈4 에러
     // 414 address
     public short couplerTemp = 0;               // 커플러 온도 1 => 1℃
 
 
     /**
-     * 415 ~ 418 (CSM Status)
+     * 415 ~ 418 (CSM_Status)
      */
-    public byte csmReady = 0x00;  // CSM Ready => 0: false / 1:true
-    public byte csmStatusCode = 0x00; // CSM_STATUS_NONE = 0             CSM_STATUS_READY = 1
+    public byte csmSeccReady = 0x00;
+    public byte csmSeccStatusCode = 0x00;
+    // CSM_STATUS_NONE = 0             CSM_STATUS_READY = 1
     // CSM_STATUS_WAIT_HANDSHAKE = 2   CSM_STATUS_SESSION_READY = 3
     // CSM_STATUS_AUTH_CHECK = 4       CSM_STATUS_CHARGE_PARAM_CHECK = 5
     // CSM_STATUS_CABLE_CHECK = 6      CSM_STATUS_PRE_CHARGE = 7
     // CSM_STATUS_CHARGING = 8         CSM_STATUS_STOP_CHARGING = 9
-    // CSM_STATUS_FAULT_STOPPED = 10   CSM_STATUS_NORMAL_STOPPED = 11
-    public byte csmErrorCode = 0x00;  // refer to Annex A
-    public short csmReserved0 = 0;
-    public short csmPwmDutyCycle = 0; // IEC 61851 PWM duty(%) value
-    public byte csmPwmVoltage = 0x00; // IEC 61851 PWM voltage(v)
+    // CSM_STATUS_FAILURE_STOPPED = 10 CSM_STATUS_NORMAL_STOPPED = 11
+    public byte csmSeccErrorCode = 0x00;
+    public byte csmSeccSWVersion = 0x00;
+    public byte csmProximityVoltage = 0x00;
+    public short csmPwmDutyCycle = 0;
+    public byte csmSeccProtocol = 0x0;
+    public byte csmPwmVoltage = 0x00;
+
+
     /**
-     * 419 ~ 422 (Vehicle EvccId)
+     * 419 ~ 422 (Vehicle_EvccId)
      */
-    public long csmVehicleEvccId = 0L;    // Specifies the EV’s identification in a readable format
+    public long csmVehicleEvccId = 0L;
+
+
     /**
-     * 423 ~ 426 (Vehicle Charging Service)
-     */
-    public byte csmSelectedPaymentOption = 0x00;  // 0x00: Using EIM / 0x01: Using PnC
-    public byte csmRequestedEnergy = 0x00; //Available charging types or methods,Supported by the EVSE
+     * 423 ~ 426 (Vehicle_Charging_Service)
+     * */
+    public byte csmSelectedPaymentOption = 0x00;
+    public byte csmIso20ControlMode = 0x00;
+    public byte csmBPTChannelSelection = 0x00;
+    public byte csmRequestedEnergyTransferType = 0x00;
     //0x00: AC_SINGLE_PHASE_CORE  0x01: AC_THREE_PHASE_CORE
     //0x02: DC_CORE               0x03: DC_EXTENDED
     //0x04: DC_COMBO_CORE         0x05: DC_DUAL
-    public short csmMaxEntriesSAScheduleTuple = 0; // [Optional] Indicates the maximal number of entries in the SAScheduleTuple
-    public int csmDepartureTime = 0; // [Optional] This element is used to indicate when the vehicle intends to finish the charging process.
-    //            Offset in seconds from the point in time of sending this message.
+    public short csmMaxSupportPoint = 0;
+    public int csmDepartureTime = 0;
+
 
     /**
      * 427 ~ 430 (Vehicle_DC_Charging_Status)
-     */
-    public byte csmReserved1 = 0x00;
-    public boolean csBulkChargingComplete = false;      //[0]
-    public boolean csFullChargingComplete = false;      //[1]
-    public boolean csEVReady = false;                   //[2]
-    public boolean csEVCabinConditioning = false;       //[3]
-    public boolean csEVRessConditioning = false;        //[4]
-    public byte csEvErrorCode = 0x00;   // EV internal status
-    // 1: FAILED_RESSTemperatureLeInhibit    2: FAILED_EVShiftPosition
-    //3: FAILED_ChargerConnectorLockFault    4: FAILED_EVRESSMalfunction
-    //5: FAILED_ChargingCurrentDifferential  6: FAILED_ChargingVoltageOutOfRange
-    //7: Reserved_A    8: Reserved_B    9: Reserved_C
-    //10: FAILED_ChargingSystem Incompatibility   11: NoData
-    public byte csmRessSoc = 0x00;            // State of charge of the EV’s battery (SOC)
-    public short csmRemainingTimeFullSoc = 0; // [Optional]  Estimated or calculated time until full charge (100 % SOC) is complete
-    public short csmRemainingTimeBulkSoc = 0; // [Optional] Estimated or calculated time until bulk charge (approx.. 80 % SOC) is complete
+     * */
+    public boolean csmBulkChargingComplete = false;
+    public boolean csmFullChargingComplete = false;
+    public boolean csmEvReady = false;
+    public boolean csmEvCabinConditioning = false;
+    public boolean csmEvRessConditioning = false;
+    public byte csmEvErrorCode = 0x00;
+    public byte csmRessSoc = 0x00;
+    public short csmRemainingTimeFullSoc = 0;
+    public short csmRemainingTimeBulkSoc = 0;
+
+
     /**
-     * 431 ~ 434 ( Vehicle_DC_Charging_Variable)
-     */
-    public short csmEVTargetCurrent = 0;        // Instantaneous current requested by the EV
-    public short csmEVTargetVoltage = 0;        // Target voltage requested by the EV
-    public short csmEVSEMaximumCurrentLimit = 0;    //Maximum current allowed by the EV
-    public short csmEVSEMaximumVoltageLimit = 0;    //Maximum voltage allowed by the EV
+     * 431 ~ 434 (Vehicle_DC_Charging_Variable)
+     * */
+    public short csmEVTargetCurrent = 0;
+    public short csmEVTargetVoltage = 0;
+    public short csmEVMaximumCurrentLimit = 0;
+    public short csmEVMaximumVoltageLimit = 0;
+
     /**
-     * 435 ~ 439 (Vehicle_DC_Charge_Parameter)
-     */
-    public short csmEVEnergyCapacity = 0;   //[Optional] Maximum energy capacity supported by the EV
-    public short csmEVEnergyRequest = 0;    //[Optional] Amount of energy the EV requests from the EVSE
-    public short csmEVMaximumPowerLimit = 0; // [Optional] Maximum power supported by the EV
-    public short csmFullSOC = 0;            // [Optional] SOC at which EV considers the battery to be fully charged
-    public short csmBulkSOC = 0;            //[Optional] SOC at which EV considers a fast charging process to end
+     * 435 ~ 438 (Vehicle_DC_Charge_Parameter)
+     * */
+    public short csmEVEnergyCapacity = 0;
+    public short csmEVEnergyRequest = 0;
+    public short csmEVMaximumPowerLimit = 0;
+    public byte csmFullSOC = 0x00;
+    public byte csmBulkSOC = 0x00;
+
     /**
-     * 440 ~ 442 (Vehicle_AC_Charge_Parameter)
+     * 439 ~ 442 (Vehicle_AC_Charge_Parameter)
      */
     public short csmEVmount = 0;
     public short csmEVMaxVoltage = 0;
     public short csmEVMaxCurrent = 0;
     public short csmEVMinCurrent = 0;
-    public short csmReserved2 = 0;
-    public short csmReserved3 = 0;
+
+
+    // 443 address
+    public short reserved0 = 0;
+    // 444 address
+    public short reserved1 = 0;
+    // 445 address
+    public short reserved2 = 0;
 
 
     public void Decode(short[] data) {
@@ -166,12 +173,12 @@ public class RxData {
             csMC1Status = BitUtilities.getBitBoolean(data[0], 14);
             csMC2Status = BitUtilities.getBitBoolean(data[0], 15);
 
+            cpVoltage = data[2];        // 402 address
+            firmWareVersion = data[3];  // 403 address
+            remainTime = data[4];       // 404 address
+            soc = data[5];              // 405 address
 
-            reserved0 = data[1];
-            cpVoltage = data[2];
-            firmWareVersion = data[3];
-            remainTime = data[4];
-            soc = data[5];
+            // 406 address
             csMc1Fault = BitUtilities.getBitBoolean(data[6], 0);
             csMc2Fault = BitUtilities.getBitBoolean(data[6], 1);
             csRelay1 = BitUtilities.getBitBoolean(data[6], 2);
@@ -181,14 +188,18 @@ public class RxData {
             csRelay5 = BitUtilities.getBitBoolean(data[6], 6);
             csRelay6 = BitUtilities.getBitBoolean(data[6], 7);
 
-            powerMeter = (data[7] << 16) | (data[8] & 0xffff);      //1w
-            outVoltage = data[9];                                   //0.1V
-            outCurrent = data[10];                                  //0.1A
+            powerMeter = (data[7] << 16) | (data[8] & 0xffff);      // 407 address(1w)
+            outVoltage = data[9];                                   // 408 address(0.1V)
+            outCurrent = data[10];                                  // 409 address(0.1A)
 
+            // 411 address
             csEmergency = BitUtilities.getBitBoolean(data[11], 0);
             csPLCComm = BitUtilities.getBitBoolean(data[11], 1);
             csPowerMeterComm = BitUtilities.getBitBoolean(data[11], 2);
-
+            csModule1Comm = BitUtilities.getBitBoolean(data[11], 3);
+            csModule2Comm = BitUtilities.getBitBoolean(data[11], 4);
+            csModule3Comm = BitUtilities.getBitBoolean(data[11], 5);
+            csModule4Comm = BitUtilities.getBitBoolean(data[11], 6);
             csChargerLeak = BitUtilities.getBitBoolean(data[11], 7);
             csCarLeak = BitUtilities.getBitBoolean(data[11], 8);
             csOutOVR = BitUtilities.getBitBoolean(data[11], 9);
@@ -196,75 +207,83 @@ public class RxData {
             csCouplerTempSensor = BitUtilities.getBitBoolean(data[11], 11);
             csCouplerOVT = BitUtilities.getBitBoolean(data[11], 12);
 
+            // 412 address
             csModule1Error = BitUtilities.getBitBoolean(data[12], 0);
             csModule2Error = BitUtilities.getBitBoolean(data[12], 1);
             csModule3Error = BitUtilities.getBitBoolean(data[12], 2);
             csModule4Error = BitUtilities.getBitBoolean(data[12], 3);
-            csModule1Comm = BitUtilities.getBitBoolean(data[12], 4);
-            csModule2Comm = BitUtilities.getBitBoolean(data[12], 5);
-            csModule3Comm = BitUtilities.getBitBoolean(data[12], 6);
-            csModule4Comm = BitUtilities.getBitBoolean(data[12], 7);
-            reserved1 = data[13];
-            couplerTemp = data[14];                 //커플러 온도 1 => 1℃
+
+            couplerTemp = data[14];                 // 414 address(커플러 온도 1 => 1℃)
 
             /** plc model information */
             //CAN ID : 0x30001 CSM Status
-            byte[] parsData, parseNext;
-            parsData = BitUtilities.ShortToByteArray(data[15]);
-            csmReady = parsData[0];
-            csmStatusCode = parsData[1];
-            parsData = BitUtilities.ShortToByteArray(data[16]);
-            csmErrorCode = parsData[0];
+            byte[] parseData, parseNext;
+            parseData = BitUtilities.ShortToByteArray(data[15]);
+            csmSeccReady = parseData[0];
+            csmSeccStatusCode = parseData[1];
 
-            parseNext = BitUtilities.ShortToByteArray(data[17]);
-            csmReserved0 = BitUtilities.ByteArrayToShort(parsData[1], parseNext[0]);
+            parseData = BitUtilities.ShortToByteArray(data[16]);
+            csmSeccErrorCode = parseData[0];
+            csmSeccSWVersion = parseData[1];
 
-            parsData = BitUtilities.ShortToByteArray(data[18]);
-            csmPwmDutyCycle = BitUtilities.ByteArrayToShort(parseNext[1], parsData[0]);
-            csmPwmVoltage = parsData[1];
+            parseData = BitUtilities.ShortToByteArray(data[17]);
+            csmProximityVoltage = parseData[0];
+            parseNext = BitUtilities.ShortToByteArray(data[18]);
+            csmPwmDutyCycle = BitUtilities.ByteArrayToShort(BitUtilities.SplitArrayToConcatByteArray(parseData[1], 0, 8, parseNext[0], 0, 2));
+
+            parseData = BitUtilities.ShortToByteArray(data[18]);
+            csmSeccProtocol = BitUtilities.toByte_XOR(parseData[0], 4, 4);
+            csmPwmVoltage = parseData[1];
 
             //CAN ID : 0x30002 Vehicle EvccId
             csmVehicleEvccId = (((long) data[19] << 32) | ((long) data[20] << 24) | (data[21] << 16) | (data[22] & 0xffff));
 
             //CAN ID : 0x30003 Vehicle Charging Service
-            parsData = BitUtilities.ShortToByteArray(data[23]);
-            csmSelectedPaymentOption = parsData[0];
-            csmRequestedEnergy = parsData[1];
-            csmMaxEntriesSAScheduleTuple = data[24];
-            csmDepartureTime = (data[25] << 16) | (data[26] & 0xffff);
+            parseData = BitUtilities.ShortToByteArray(data[23]);
+            csmSelectedPaymentOption = BitUtilities.toByte_XOR(parseData[0], 0, 2);
+            csmIso20ControlMode = BitUtilities.toByte_XOR(parseData[0], 2,2);
+            csmBPTChannelSelection = BitUtilities.toByte_XOR(parseData[0], 4,4);
+            csmRequestedEnergyTransferType = parseData[1];
+            csmMaxSupportPoint = data[24];
+            csmDepartureTime = BitUtilities.ShortToInt(data[25], data[26]);
 
             //CAN ID : 0x30004 Vehicle DC Charging Status
-            parsData = BitUtilities.ShortToByteArray(data[27]);
-            csmReserved1 = parsData[0];
-            csBulkChargingComplete = BitUtilities.getBitBoolean(parsData[1], 0);
-            csFullChargingComplete = BitUtilities.getBitBoolean(parsData[1], 1);
-            csEVReady = BitUtilities.getBitBoolean(parsData[1], 2);
-            csEVCabinConditioning = BitUtilities.getBitBoolean(parsData[1], 3);
-            csEVRessConditioning = BitUtilities.getBitBoolean(parsData[1], 4);
-            parsData = BitUtilities.ShortToByteArray(data[28]);
-            csEvErrorCode = parsData[0];
-            csmRessSoc = parsData[1];
+            parseData = BitUtilities.ShortToByteArray(data[27]);
+            csmBulkChargingComplete = BitUtilities.getBitBoolean(parseData[1], 0);
+            csmFullChargingComplete = BitUtilities.getBitBoolean(parseData[1], 1);
+            csmEvReady = BitUtilities.getBitBoolean(parseData[1], 2);
+            csmEvCabinConditioning = BitUtilities.getBitBoolean(parseData[1], 3);
+            csmEvRessConditioning = BitUtilities.getBitBoolean(parseData[1], 4);
+            parseData = BitUtilities.ShortToByteArray(data[28]);
+            csmEvErrorCode = parseData[0];
+            csmRessSoc = parseData[1];
             csmRemainingTimeFullSoc = data[29];
             csmRemainingTimeBulkSoc = data[30];
+
             //CAN ID : 0x30005 Vehicle DC Charging Variable
             csmEVTargetCurrent = data[31];
             csmEVTargetVoltage = data[32];
-            csmEVSEMaximumCurrentLimit = data[33];
-            csmEVSEMaximumVoltageLimit = data[34];
+            csmEVMaximumCurrentLimit = data[33];
+            csmEVMaximumVoltageLimit = data[34];
+
             //CAN ID : 0x30006 Vehicle DC Charging Parameter
             csmEVEnergyCapacity = data[35];
             csmEVEnergyRequest = data[36];
             csmEVMaximumPowerLimit = data[37];
-            csmFullSOC = data[38];
-            csmBulkSOC = data[39];
+            parseData = BitUtilities.ShortToByteArray(data[38]);
+            csmFullSOC = parseData[0];
+            csmBulkSOC = parseData[1];
+
             //CAN ID : 0x30009 Vehicle AC Charging Parameter
-            csmEVmount = data[40];
-            csmEVMaxVoltage = data[41];
-            csmEVMaxCurrent = data[42];
-            csmEVMinCurrent = data[43];
+            csmEVmount = data[39];
+            csmEVMaxVoltage = data[40];
+            csmEVMaxCurrent = data[41];
+            csmEVMinCurrent = data[42];
+
             //reserved
-            csmReserved2 = data[44];
-            csmReserved3 = data[45];
+            reserved0 = data[44];
+            reserved1 = data[44];
+            reserved2 = data[45];
         } catch (Exception e) {
             logger.error("rx dara decode error : {}", e.getMessage());
         }
@@ -364,14 +383,6 @@ public class RxData {
 
     public void setCsMC2Status(boolean csMC2Status) {
         this.csMC2Status = csMC2Status;
-    }
-
-    public short getReserved0() {
-        return reserved0;
-    }
-
-    public void setReserved0(short reserved0) {
-        this.reserved0 = reserved0;
     }
 
     public short getCpVoltage() {
@@ -630,13 +641,6 @@ public class RxData {
         this.csModule4Error = csModule4Error;
     }
 
-    public short getReserved1() {
-        return reserved1;
-    }
-
-    public void setReserved1(short reserved1) {
-        this.reserved1 = reserved1;
-    }
 
     public short getCouplerTemp() {
         return couplerTemp;
@@ -646,36 +650,43 @@ public class RxData {
         this.couplerTemp = couplerTemp;
     }
 
-    public byte getCsmReady() {
-        return csmReady;
+    public byte getCsmSeccReady() {
+        return csmSeccReady;
     }
 
-    public void setCsmReady(byte csmReady) {
-        this.csmReady = csmReady;
+    public void setCsmSeccReady(byte csmSeccReady) {
+        this.csmSeccReady = csmSeccReady;
     }
 
-    public byte getCsmStatusCode() {
-        return csmStatusCode;
+    public byte getCsmSeccStatusCode() {
+        return csmSeccStatusCode;
     }
 
-    public void setCsmStatusCode(byte csmStatusCode) {
-        this.csmStatusCode = csmStatusCode;
+    public void setCsmSeccStatusCode(byte csmSeccStatusCode) {
+        this.csmSeccStatusCode = csmSeccStatusCode;
     }
 
-    public byte getCsmErrorCode() {
-        return csmErrorCode;
+    public byte getCsmSeccErrorCode() {
+        return csmSeccErrorCode;
     }
 
-    public void setCsmErrorCode(byte csmErrorCode) {
-        this.csmErrorCode = csmErrorCode;
+    public void setCsmSeccErrorCode(byte csmSeccErrorCode) {
+        this.csmSeccErrorCode = csmSeccErrorCode;
     }
 
-    public short getCsmReserved0() {
-        return csmReserved0;
+    public byte getCsmSeccSWVersion() {
+        return csmSeccSWVersion;
+    }
+    public void setCsmSeccSWVersion(byte csmSeccSWVersion) {
+        this.csmSeccSWVersion = csmSeccSWVersion;
     }
 
-    public void setCsmReserved0(short csmReserved0) {
-        this.csmReserved0 = csmReserved0;
+    public byte getCsmProximityVoltage() {
+        return csmProximityVoltage;
+    }
+
+    public void setCsmProximityVoltage(byte csmProximityVoltage) {
+        this.csmProximityVoltage = csmProximityVoltage;
     }
 
     public short getCsmPwmDutyCycle() {
@@ -684,6 +695,14 @@ public class RxData {
 
     public void setCsmPwmDutyCycle(short csmPwmDutyCycle) {
         this.csmPwmDutyCycle = csmPwmDutyCycle;
+    }
+
+    public byte getCsmSeccProtocol() {
+        return csmSeccProtocol;
+    }
+
+    public void setCsmSeccProtocol(byte csmSeccProtocol) {
+        this.csmSeccProtocol = csmSeccProtocol;
     }
 
     public byte getCsmPwmVoltage() {
@@ -710,20 +729,36 @@ public class RxData {
         this.csmSelectedPaymentOption = csmSelectedPaymentOption;
     }
 
-    public byte getCsmRequestedEnergy() {
-        return csmRequestedEnergy;
+    public byte getCsmIso20ControlMode() {
+        return csmIso20ControlMode;
     }
 
-    public void setCsmRequestedEnergy(byte csmRequestedEnergy) {
-        this.csmRequestedEnergy = csmRequestedEnergy;
+    public void setCsmIso20ControlMode(byte csmIso20ControlMode) {
+        this.csmIso20ControlMode = csmIso20ControlMode;
     }
 
-    public short getCsmMaxEntriesSAScheduleTuple() {
-        return csmMaxEntriesSAScheduleTuple;
+    public byte getCsmBPTChannelSelection() {
+        return csmBPTChannelSelection;
     }
 
-    public void setCsmMaxEntriesSAScheduleTuple(short csmMaxEntriesSAScheduleTuple) {
-        this.csmMaxEntriesSAScheduleTuple = csmMaxEntriesSAScheduleTuple;
+    public void setCsmBPTChannelSelection(byte csmBPTChannelSelection) {
+        this.csmBPTChannelSelection = csmBPTChannelSelection;
+    }
+
+    public byte getCsmRequestedEnergyTransferType() {
+        return csmRequestedEnergyTransferType;
+    }
+
+    public void setCsmRequestedEnergyTransferType(byte csmRequestedEnergyTransferType) {
+        this.csmRequestedEnergyTransferType = csmRequestedEnergyTransferType;
+    }
+
+    public short getCsmMaxSupportPoint() {
+        return csmMaxSupportPoint;
+    }
+
+    public void setCsmMaxSupportPoint(short csmMaxSupportPoint) {
+        this.csmMaxSupportPoint = csmMaxSupportPoint;
     }
 
     public int getCsmDepartureTime() {
@@ -734,60 +769,52 @@ public class RxData {
         this.csmDepartureTime = csmDepartureTime;
     }
 
-    public byte getCsmReserved1() {
-        return csmReserved1;
+    public boolean isCsmBulkChargingComplete() {
+        return csmBulkChargingComplete;
     }
 
-    public void setCsmReserved1(byte csmReserved1) {
-        this.csmReserved1 = csmReserved1;
+    public void setCsmBulkChargingComplete(boolean csmBulkChargingComplete) {
+        this.csmBulkChargingComplete = csmBulkChargingComplete;
     }
 
-    public boolean isCsBulkChargingComplete() {
-        return csBulkChargingComplete;
+    public boolean isCsmFullChargingComplete() {
+        return csmFullChargingComplete;
     }
 
-    public void setCsBulkChargingComplete(boolean csBulkChargingComplete) {
-        this.csBulkChargingComplete = csBulkChargingComplete;
+    public void setCsmFullChargingComplete(boolean csmFullChargingComplete) {
+        this.csmFullChargingComplete = csmFullChargingComplete;
     }
 
-    public boolean isCsFullChargingComplete() {
-        return csFullChargingComplete;
+    public boolean isCsmEvReady() {
+        return csmEvReady;
     }
 
-    public void setCsFullChargingComplete(boolean csFullChargingComplete) {
-        this.csFullChargingComplete = csFullChargingComplete;
+    public void setCsmEvReady(boolean csmEvReady) {
+        this.csmEvReady = csmEvReady;
     }
 
-    public boolean isCsEVReady() {
-        return csEVReady;
+    public boolean isCsmEvCabinConditioning() {
+        return csmEvCabinConditioning;
     }
 
-    public void setCsEVReady(boolean csEVReady) {
-        this.csEVReady = csEVReady;
+    public void setCsmEvCabinConditioning(boolean csmEvCabinConditioning) {
+        this.csmEvCabinConditioning = csmEvCabinConditioning;
     }
 
-    public boolean isCsEVCabinConditioning() {
-        return csEVCabinConditioning;
+    public boolean isCsmEvRessConditioning() {
+        return csmEvRessConditioning;
     }
 
-    public void setCsEVCabinConditioning(boolean csEVCabinConditioning) {
-        this.csEVCabinConditioning = csEVCabinConditioning;
+    public void setCsmEvRessConditioning(boolean csmEvRessConditioning) {
+        this.csmEvRessConditioning = csmEvRessConditioning;
     }
 
-    public boolean isCsEVRessConditioning() {
-        return csEVRessConditioning;
+    public byte getCsmEvErrorCode() {
+        return csmEvErrorCode;
     }
 
-    public void setCsEVRessConditioning(boolean csEVRessConditioning) {
-        this.csEVRessConditioning = csEVRessConditioning;
-    }
-
-    public byte getCsEvErrorCode() {
-        return csEvErrorCode;
-    }
-
-    public void setCsEvErrorCode(byte csEvErrorCode) {
-        this.csEvErrorCode = csEvErrorCode;
+    public void setCsmEvErrorCode(byte csmEvErrorCode) {
+        this.csmEvErrorCode = csmEvErrorCode;
     }
 
     public byte getCsmRessSoc() {
@@ -830,20 +857,20 @@ public class RxData {
         this.csmEVTargetVoltage = csmEVTargetVoltage;
     }
 
-    public short getCsmEVSEMaximumCurrentLimit() {
-        return csmEVSEMaximumCurrentLimit;
+    public short getCsmEVMaximumCurrentLimit() {
+        return csmEVMaximumCurrentLimit;
     }
 
-    public void setCsmEVSEMaximumCurrentLimit(short csmEVSEMaximumCurrentLimit) {
-        this.csmEVSEMaximumCurrentLimit = csmEVSEMaximumCurrentLimit;
+    public void setCsmEVMaximumCurrentLimit(short csmEVMaximumCurrentLimit) {
+        this.csmEVMaximumCurrentLimit = csmEVMaximumCurrentLimit;
     }
 
-    public short getCsmEVSEMaximumVoltageLimit() {
-        return csmEVSEMaximumVoltageLimit;
+    public short getCsmEVMaximumVoltageLimit() {
+        return csmEVMaximumVoltageLimit;
     }
 
-    public void setCsmEVSEMaximumVoltageLimit(short csmEVSEMaximumVoltageLimit) {
-        this.csmEVSEMaximumVoltageLimit = csmEVSEMaximumVoltageLimit;
+    public void setCsmEVMaximumVoltageLimit(short csmEVMaximumVoltageLimit) {
+        this.csmEVMaximumVoltageLimit = csmEVMaximumVoltageLimit;
     }
 
     public short getCsmEVEnergyCapacity() {
@@ -870,67 +897,43 @@ public class RxData {
         this.csmEVMaximumPowerLimit = csmEVMaximumPowerLimit;
     }
 
-    public short getCsmFullSOC() {
+    public byte getCsmFullSOC() {
         return csmFullSOC;
     }
 
-    public void setCsmFullSOC(short csmFullSOC) {
+    public void setCsmFullSOC(byte csmFullSOC) {
         this.csmFullSOC = csmFullSOC;
     }
 
-    public short getCsmBulkSOC() {
+    public byte getCsmBulkSOC() {
         return csmBulkSOC;
     }
 
-    public void setCsmBulkSOC(short csmBulkSOC) {
+    public void setCsmBulkSOC(byte csmBulkSOC) {
         this.csmBulkSOC = csmBulkSOC;
     }
 
-    public short getCsmEVmount() {
-        return csmEVmount;
+    public short getReserved0() {
+        return reserved0;
     }
 
-    public void setCsmEVmount(short csmEVmount) {
-        this.csmEVmount = csmEVmount;
+    public void setReserved0(short reserved0) {
+        this.reserved0 = reserved0;
     }
 
-    public short getCsmEVMaxVoltage() {
-        return csmEVMaxVoltage;
+    public short getReserved1() {
+        return reserved1;
     }
 
-    public void setCsmEVMaxVoltage(short csmEVMaxVoltage) {
-        this.csmEVMaxVoltage = csmEVMaxVoltage;
+    public void setReserved1(short reserved1) {
+        this.reserved1 = reserved1;
     }
 
-    public short getCsmEVMaxCurrent() {
-        return csmEVMaxCurrent;
+    public short getReserved2() {
+        return reserved2;
     }
 
-    public void setCsmEVMaxCurrent(short csmEVMaxCurrent) {
-        this.csmEVMaxCurrent = csmEVMaxCurrent;
-    }
-
-    public short getCsmEVMinCurrent() {
-        return csmEVMinCurrent;
-    }
-
-    public void setCsmEVMinCurrent(short csmEVMinCurrent) {
-        this.csmEVMinCurrent = csmEVMinCurrent;
-    }
-
-    public short getCsmReserved2() {
-        return csmReserved2;
-    }
-
-    public void setCsmReserved2(short csmReserved2) {
-        this.csmReserved2 = csmReserved2;
-    }
-
-    public short getCsmReserved3() {
-        return csmReserved3;
-    }
-
-    public void setCsmReserved3(short csmReserved3) {
-        this.csmReserved3 = csmReserved3;
+    public void setReserved2(short reserved2) {
+        this.reserved2 = reserved2;
     }
 }
