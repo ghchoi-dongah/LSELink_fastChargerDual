@@ -103,8 +103,8 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         try {
-            textViewMemberUnitInput.setText("충전단가: " + GlobalVariables.userTypeM);
-            textViewNoMemberUnitInput.setText("충전단가: " + GlobalVariables.userTypeN);
+            textViewMemberUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeM));
+            textViewNoMemberUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeN));
         } catch (Exception e) {
             logger.error("onViewCreated error : {}", e.getMessage(), e);
         }
