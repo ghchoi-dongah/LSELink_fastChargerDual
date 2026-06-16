@@ -97,6 +97,7 @@ public class CreditCardFragment extends Fragment {
         activity= (MainActivity) MainActivity.mContext;
         chargingCurrentData = activity.getChargingCurrentData(mChannel);
 
+        textViewTagTimer = view.findViewById(R.id.textViewTagTimer);
         txtInputAmt = view.findViewById(R.id.txtInputAmt);
         imageViewCreditCard = view.findViewById(R.id.imageViewCreditCard);
         imageViewCreditCard.setBackgroundResource(R.drawable.creditcardtagging);
@@ -114,7 +115,13 @@ public class CreditCardFragment extends Fragment {
         try {
             animationDrawable.start();
             textViewTagTimer.setText(timer + "초");
-            txtInputAmt.setText(amountFormatter.format(GlobalVariables.FullRechgAmt)); // 완충기준 충전금액
+
+            try {
+                txtInputAmt.setText(amountFormatter.format(GlobalVariables.FullRechgAmt)); // 완충기준 충전금액=
+            } catch (Exception e) {
+                txtInputAmt.setText(amountFormatter.format(1500));
+                logger.error("onViewCreated fullRechgAmt error", e);
+            }
 
             countHandler = new Handler();
             countRunnable = new Runnable() {
@@ -159,6 +166,12 @@ public class CreditCardFragment extends Fragment {
                 }
                 imageViewCreditCard.setBackground(null);
             }
+
+            if (countHandler != null) {
+                countHandler.removeCallbacks(countRunnable);
+                countHandler.removeCallbacksAndMessages(null);
+                countHandler.removeMessages(0);
+            }
         } catch (Exception e) {
             logger.error("onDestroyView error : {}", e.getMessage());
         }
@@ -168,14 +181,5 @@ public class CreditCardFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        try {
-            if (countHandler != null) {
-                countHandler.removeCallbacks(countRunnable);
-                countHandler.removeCallbacksAndMessages(null);
-                countHandler.removeMessages(0);
-            }
-        } catch (Exception e) {
-            logger.error("onDetach error : {}", e.getMessage());
-        }
     }
 }

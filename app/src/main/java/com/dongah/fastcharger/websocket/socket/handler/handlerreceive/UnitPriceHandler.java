@@ -33,12 +33,12 @@ public class UnitPriceHandler implements OcppHandler  {
         if (status.equals(DataTransferStatus.Accepted)) {
             // 저장
             FileManagement fileManagement = new FileManagement();
-            fileManagement.stringToFileSave(GlobalVariables.getRootPath(), "unitPrice", dataStr, false);
+            fileManagement.stringToFileSave(GlobalVariables.getRootPath(), GlobalVariables.FILE_UNIT, dataStr, false);
 
-            MainActivity activity = (MainActivity) MainActivity.mContext;
-            SQLiteHelper helper = SQLiteHelper.getInstance(activity);
-            SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
-            helper.dropTable(sqLiteDatabase, "CP_UNIT_PRICE");
+//            MainActivity activity = (MainActivity) MainActivity.mContext;
+//            SQLiteHelper helper = SQLiteHelper.getInstance(activity);
+//            SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
+//            helper.dropTable(sqLiteDatabase, "CP_UNIT_PRICE");
 
             /* DB update */
             if (connectorId == 0 || connectorId == 100) {
