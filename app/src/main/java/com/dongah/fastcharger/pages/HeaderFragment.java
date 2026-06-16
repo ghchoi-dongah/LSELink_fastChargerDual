@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
 import com.dongah.fastcharger.basefunction.ChargerConfiguration;
+import com.dongah.fastcharger.basefunction.GlobalVariables;
 import com.dongah.fastcharger.basefunction.UiSeq;
 
 import org.slf4j.Logger;
@@ -44,8 +45,9 @@ public class HeaderFragment extends Fragment implements View.OnClickListener {
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     int clickedCnt = 0;
-    ImageButton btnLogo;
+    ImageButton btnLogo, btnHome;
     TextView textViewChargerId;
+    MainActivity activity;
     ChargerConfiguration chargerConfiguration;
 
     public HeaderFragment() {
@@ -84,15 +86,19 @@ public class HeaderFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_header, container, false);
+        activity = (MainActivity) MainActivity.mContext;
+        chargerConfiguration = activity.getChargerConfiguration();
+
         btnLogo = view.findViewById(R.id.btnLogo);
         btnLogo.setOnClickListener(this);
+        btnHome = view.findViewById(R.id.btnHome);
+        btnHome.setOnClickListener(this);
         textViewChargerId = view.findViewById(R.id.textViewChargerId);
 
         try {
-            chargerConfiguration = ((MainActivity) MainActivity.mContext).getChargerConfiguration();
             textViewChargerId.setText("| ID-" + chargerConfiguration.getChargerId());
         } catch (Exception e) {
-            logger.error("HeaderFragment onCreateView error : {}", e.getMessage());
+            logger.error("onCreateView error : {}", e.getMessage(), e);
         }
         return view;
     }
@@ -129,10 +135,18 @@ public class HeaderFragment extends Fragment implements View.OnClickListener {
                     }
                     clickedCnt = 0;
                 } catch (Exception e) {
-                    logger.error("HeaderFragment btnLogo error : {}", e.getMessage());
+                    logger.error("btnLogo error : {}", e.getMessage(), e);
                 }
             }
             clickedCnt++;
+        } else if (Objects.equals(v.getId(), R.id.btnHome)) {
+            for (int i = 0; i < GlobalVariables.maxChannel; i++) {
+                UiSeq uiSeq = activity.getClassUiProcess(i).getUiSeq();
+                if (uiSeq.getValue() < 7) {
+                    activity.getClassUiProcess(i).setUiSeq(UiSeq.INIT);
+                    activity.getClassUiProcess(i).onHome();
+                }
+            }
         }
     }
 }
