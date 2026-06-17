@@ -38,6 +38,7 @@ import com.dongah.fastcharger.basefunction.FragmentChange;
 import com.dongah.fastcharger.basefunction.FragmentCurrent;
 import com.dongah.fastcharger.basefunction.GlobalVariables;
 import com.dongah.fastcharger.basefunction.UiSeq;
+import com.dongah.fastcharger.utils.DatabaseHttpServer;
 import com.dongah.fastcharger.utils.ToastPositionMake;
 import com.dongah.fastcharger.websocket.ocpp.core.ChargePointStatus;
 import com.dongah.fastcharger.websocket.ocpp.core.Reason;
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
     ToastPositionMake toastPositionMake;
     ClientSocket clientSocket;
     MonitorHttpServer monitorHttpServer;
+    DatabaseHttpServer databaseHttpServer;
 
 
     public UiSeq getFragmentSeq(int ch)  {
@@ -232,6 +234,9 @@ public class MainActivity extends AppCompatActivity {
             monitorHttpServer.start();
         }
 
+        // Database Inspector Server
+        databaseHttpServer = new DatabaseHttpServer();
+        databaseHttpServer.start();
 
         /**
          *  개발 ocpp 서버 url :

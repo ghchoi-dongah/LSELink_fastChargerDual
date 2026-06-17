@@ -21,6 +21,7 @@ import com.dongah.fastcharger.pages.ConnectorCheckFragment;
 import com.dongah.fastcharger.pages.ControlDebugFragment;
 import com.dongah.fastcharger.pages.CreditCardFragment;
 import com.dongah.fastcharger.pages.CreditCardWaitFragment;
+import com.dongah.fastcharger.pages.DatabaseFragment;
 import com.dongah.fastcharger.pages.EnvironmentFragment;
 import com.dongah.fastcharger.pages.FaultFragment;
 import com.dongah.fastcharger.pages.HeaderFragment;
@@ -296,6 +297,17 @@ public class FragmentChange {
                     transaction.commit();
                 } catch (Exception e) {
                     logger.error("onFragmentChange error : REMOTE_TEST {}", e.getMessage());
+                }
+                break;
+            case DATABASE:
+                try {
+                    onFrameLayoutChange(true);
+                    DatabaseFragment databaseFragment = new DatabaseFragment();
+                    databaseFragment.setArguments(bundle);
+                    transaction.replace(R.id.frameFull, databaseFragment, "DATABASE");
+                    transaction.commit();
+                } catch (Exception e) {
+                    logger.error("onFragmentChange error : DATABASE {}", e.getMessage());
                 }
                 break;
             default:

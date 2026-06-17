@@ -104,7 +104,7 @@ public class EnvironmentFragment extends Fragment implements View.OnClickListene
         } else if (Objects.equals(getId, R.id.btnControl)) {
             ((MainActivity) MainActivity.mContext).getFragmentChange().onFragmentChange(mChannel,UiSeq.CONTROL_BOARD_DEBUGGING, "CONTROL_BOARD_DEBUGGING", null);
         } else if (Objects.equals(getId, R.id.btnDbControl)) {
-            // TODO: database control fragment change
+            ((MainActivity) MainActivity.mContext).getFragmentChange().onFragmentChange(mChannel, UiSeq.DATABASE, "DATABASE", null);
         } else if (Objects.equals(getId, R.id.btnLoadTest)) {
             transaction = ((MainActivity) MainActivity.mContext).getSupportFragmentManager().beginTransaction();
             ProductTestFragment productTestFragment = new ProductTestFragment();
