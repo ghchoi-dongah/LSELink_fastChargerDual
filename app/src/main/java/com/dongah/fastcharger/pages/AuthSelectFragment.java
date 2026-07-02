@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -14,7 +15,10 @@ import android.widget.TextView;
 
 import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
+import com.dongah.fastcharger.basefunction.ChargerConfiguration;
 import com.dongah.fastcharger.basefunction.ChargingCurrentData;
+import com.dongah.fastcharger.basefunction.ClassUiProcess;
+import com.dongah.fastcharger.basefunction.FragmentChange;
 import com.dongah.fastcharger.basefunction.GlobalVariables;
 import com.dongah.fastcharger.basefunction.PaymentType;
 import com.dongah.fastcharger.basefunction.UiSeq;
@@ -44,11 +48,14 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
     private String mParam2;
     private int mChannel;
 
-    View viewMember, viewNoMember;
-    TextView textViewMemberUnitInput, textViewNoMemberUnitInput;
+    CardView cardViewMember, cardViewNoMember, cardViewCorp, cardViewKeco;
+    TextView textViewMemberUnitInput, textViewNoMemberUnitInput, textViewCorpUnitInput, textViewKecoUnitInput;
 
     MainActivity activity;
+    ClassUiProcess classUiProcess;
+    FragmentChange fragmentChange;
     ChargingCurrentData chargingCurrentData;
+    ChargerConfiguration chargerConfiguration;
 
     public AuthSelectFragment() {
         // Required empty public constructor
@@ -86,15 +93,25 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_auth_select, container, false);
-        viewMember = view.findViewById(R.id.viewMember);
-        viewMember.setOnClickListener(this);
-        viewNoMember = view.findViewById(R.id.viewNoMember);
-        viewNoMember.setOnClickListener(this);
+        activity = (MainActivity) MainActivity.mContext;
+        classUiProcess = activity.getClassUiProcess(mChannel);
+        fragmentChange = activity.getFragmentChange();
+        chargingCurrentData = activity.getChargingCurrentData(mChannel);
+        chargerConfiguration = activity.getChargerConfiguration();
+
+        cardViewMember = view.findViewById(R.id.cardViewMember);
+        cardViewMember.setOnClickListener(this);
+        cardViewNoMember = view.findViewById(R.id.cardViewNoMember);
+        cardViewNoMember.setOnClickListener(this);
+        cardViewCorp = view.findViewById(R.id.cardViewCorp);
+        cardViewCorp.setOnClickListener(this);
+        cardViewKeco = view.findViewById(R.id.cardViewKeco);
+        cardViewKeco.setOnClickListener(this);
         textViewMemberUnitInput = view.findViewById(R.id.textViewMemberUnitInput);
         textViewNoMemberUnitInput = view.findViewById(R.id.textViewNoMemberUnitInput);
+        textViewCorpUnitInput = view.findViewById(R.id.textViewCorpUnitInput);
+        textViewKecoUnitInput = view.findViewById(R.id.textViewKecoUnitInput);
 
-        activity = (MainActivity) MainActivity.mContext;
-        chargingCurrentData = activity.getChargingCurrentData(mChannel);
         return view;
     }
 
@@ -103,8 +120,19 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         try {
+            if (Objects.equals(chargerConfiguration.getAuthMode(), 1)) {
+                // member + nomember
+                cardViewCorp.setVisibility(View.INVISIBLE);
+                cardViewKeco.setVisibility(View.INVISIBLE);
+            } else if (Objects.equals(chargerConfiguration.getAuthMode(), 2)) {
+                // member + nomember + corp + keco
+                cardViewCorp.setVisibility(View.VISIBLE);
+                cardViewKeco.setVisibility(View.VISIBLE);
+            }
             textViewMemberUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeM));
             textViewNoMemberUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeN));
+            textViewCorpUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeC));
+            textViewKecoUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeK));
         } catch (Exception e) {
             logger.error("onViewCreated error : {}", e.getMessage(), e);
         }
@@ -114,18 +142,30 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         try {
             int getId = v.getId();
-            if (Objects.equals(getId, R.id.viewMember)) {
+            if (Objects.equals(getId, R.id.cardViewMember)) {
                 chargingCurrentData.setAuthType("M");
                 chargingCurrentData.setPaymentType(PaymentType.MEMBER);
                 chargingCurrentData.setUnitPrice(GlobalVariables.userTypeM);
-                activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.MEMBER_CARD);
-                activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
-            } else if (Objects.equals(getId, R.id.viewNoMember)) {
+                classUiProcess.setUiSeq(UiSeq.MEMBER_CARD);
+                fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
+            } else if (Objects.equals(getId, R.id.cardViewNoMember)) {
                 chargingCurrentData.setAuthType("N");
                 chargingCurrentData.setPaymentType(PaymentType.CREDIT);
                 chargingCurrentData.setUnitPrice(GlobalVariables.userTypeN);
-                activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.CREDIT_CARD);
-                activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.CREDIT_CARD, "CREDIT_CARD", null);
+                classUiProcess.setUiSeq(UiSeq.CREDIT_CARD);
+                fragmentChange.onFragmentChange(mChannel, UiSeq.CREDIT_CARD, "CREDIT_CARD", null);
+            } else if (Objects.equals(getId, R.id.cardViewCorp)) {
+                chargingCurrentData.setAuthType("C");
+                chargingCurrentData.setPaymentType(PaymentType.CORP);
+                chargingCurrentData.setUnitPrice(GlobalVariables.userTypeC);
+                classUiProcess.setUiSeq(UiSeq.MEMBER_CARD);
+                fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
+            } else if (Objects.equals(getId, R.id.cardViewKeco)) {
+                chargingCurrentData.setAuthType("K");
+                chargingCurrentData.setPaymentType(PaymentType.KECO);
+                chargingCurrentData.setUnitPrice(GlobalVariables.userTypeK);
+                classUiProcess.setUiSeq(UiSeq.MEMBER_CARD);
+                fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
             }
         } catch (Exception e) {
             logger.error("onClick error : {}", e.getMessage(), e);

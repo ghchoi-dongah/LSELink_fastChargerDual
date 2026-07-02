@@ -114,12 +114,13 @@ public class InitFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_init, container, false);
-        view.setOnClickListener(this);
         animBlink = AnimationUtils.loadAnimation(getActivity(), R.anim.blink_animation);
         activity = ((MainActivity) MainActivity.mContext);
         chargerConfiguration = activity.getChargerConfiguration();
         chargingCurrentData = activity.getChargingCurrentData(mChannel);
         txData = activity.getControlBoard().getTxData(mChannel);
+        rxData = activity.getControlBoard().getRxData(mChannel);
+
         textViewInitMessage = view.findViewById(R.id.textViewInitMessage);
         textViewInitMessage.startAnimation(animBlink);
         textViewConnector = view.findViewById(R.id.textViewConnector);
@@ -128,7 +129,6 @@ public class InitFragment extends Fragment implements View.OnClickListener {
         viewCircle.setOnClickListener(this);
         imageViewFault = view.findViewById(R.id.imageViewFault);
         textViewInfo = view.findViewById(R.id.textViewInfo);
-        rxData = activity.getControlBoard().getRxData(mChannel);
 
         try {
             if (chargingCurrentData.isConnectUse()) {
@@ -211,15 +211,12 @@ public class InitFragment extends Fragment implements View.OnClickListener {
                 try {
                     SocketState socketState = activity.getSocketReceiveMessage().getSocket().getState();
                     if (Objects.equals(socketState, SocketState.OPEN)) {
-                        switch (chargerConfiguration.getAuthMode()) {
-                            case 0:
-                                activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.MEMBER_CARD);
-                                activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
-                                break;
-                            case 1:
-                                activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.AUTH_SELECT);
-                                activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.AUTH_SELECT, "AUTH_SELECT", null);
-                                break;
+                        if (chargerConfiguration.getAuthMode() == 0) {
+                            activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.MEMBER_CARD);
+                            activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
+                        } else {
+                            activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.AUTH_SELECT);
+                            activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.AUTH_SELECT, "AUTH_SELECT", null);
                         }
                     } else {
                         activity.getToastPositionMake().onShowToast(mChannel, "서버 연결 DISCONNECT. \n충전을 할 수 없습니다.");
