@@ -141,7 +141,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
-        android:text="50,000원"
+        android:text="0원"
         android:textSize="24sp"
         android:textColor="@color/black"
         android:textStyle="bold"

@@ -185,7 +185,7 @@
                 android:id="@+id/txtChargePay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="19,200원"
+                android:text="0원"
                 android:textSize="17sp"
                 android:textColor="@color/black_500"
                 app:layout_constraintTop_toTopOf="@id/textViewMoneyContent"

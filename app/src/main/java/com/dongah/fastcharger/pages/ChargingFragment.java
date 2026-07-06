@@ -115,6 +115,7 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
         chargerConfiguration = activity.getChargerConfiguration();
         chargingCurrentData = activity.getChargingCurrentData(mChannel);
         txData = activity.getControlBoard().getTxData(mChannel);
+
         btnChargingStop = view.findViewById(R.id.btnChargingStop);
         btnChargingStop.setOnClickListener(this);
         textViewSocValue = view.findViewById(R.id.textViewSocValue);
@@ -151,7 +152,7 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
                 progressCircular.setProgress(chargingCurrentData.getSoc(), true); // progress
                 textViewLimitSocValue.setText("목표 충전율: " +chargingCurrentData.getLimitSoc() + "%"); // 목표 충전율
                 startTime = zonedDateTimeConvert.doStringDateToDate(chargingCurrentData.getChargingStartTime());    // 충전시간
-                textViewInputUnit.setText(payFormatter.format((long) chargingCurrentData.getUnitPrice()) + "원");    // 충전단가
+                textViewInputUnit.setText(payFormatter.format((long) chargingCurrentData.getPowerUnitPrice()) + "원");    // 충전단가
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -164,7 +165,7 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (Objects.equals(v.getId(), R.id.btnChargingStop)) {
-            ((MainActivity) MainActivity.mContext).getChargingCurrentData(mChannel).setUserStop(true);
+            chargingCurrentData.setUserStop(true);
         }
     }
     
@@ -173,7 +174,7 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
         uiUpdateHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                ((MainActivity) MainActivity.mContext).runOnUiThread(new Runnable() {
+                activity.runOnUiThread(new Runnable() {
                      @SuppressLint({"SetTextI18n", "DefaultLocale"})
                      @RequiresApi(api = Build.VERSION_CODES.O)
                      @Override

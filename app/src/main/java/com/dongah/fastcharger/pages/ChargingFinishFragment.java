@@ -142,10 +142,12 @@ public class ChargingFinishFragment extends Fragment implements View.OnClickList
     }
 
     private void prepaymentInfo(boolean check) {
-        textViewPrePayment.setVisibility(check ? View.VISIBLE : View.GONE);
-        textViewInputPrePayment.setVisibility(check ? View.VISIBLE : View.GONE);
-        textViewPartCancelPay.setVisibility(check ? View.VISIBLE : View.GONE);
-        textViewInputCancelPayment.setVisibility(check ? View.VISIBLE : View.GONE);
+        int visibility = check ? View.VISIBLE : View.GONE;
+
+        textViewPrePayment.setVisibility(visibility);
+        textViewInputPrePayment.setVisibility(visibility);
+        textViewPartCancelPay.setVisibility(visibility);
+        textViewInputCancelPayment.setVisibility(visibility);
     }
 
     @Override

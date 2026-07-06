@@ -145,25 +145,25 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
             if (Objects.equals(getId, R.id.cardViewMember)) {
                 chargingCurrentData.setAuthType("M");
                 chargingCurrentData.setPaymentType(PaymentType.MEMBER);
-                chargingCurrentData.setUnitPrice(GlobalVariables.userTypeM);
+                chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeM);
                 classUiProcess.setUiSeq(UiSeq.MEMBER_CARD);
                 fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
             } else if (Objects.equals(getId, R.id.cardViewNoMember)) {
                 chargingCurrentData.setAuthType("N");
                 chargingCurrentData.setPaymentType(PaymentType.CREDIT);
-                chargingCurrentData.setUnitPrice(GlobalVariables.userTypeN);
+                chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeN);
                 classUiProcess.setUiSeq(UiSeq.CREDIT_CARD);
                 fragmentChange.onFragmentChange(mChannel, UiSeq.CREDIT_CARD, "CREDIT_CARD", null);
             } else if (Objects.equals(getId, R.id.cardViewCorp)) {
                 chargingCurrentData.setAuthType("C");
                 chargingCurrentData.setPaymentType(PaymentType.CORP);
-                chargingCurrentData.setUnitPrice(GlobalVariables.userTypeC);
+                chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeC);
                 classUiProcess.setUiSeq(UiSeq.MEMBER_CARD);
                 fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
             } else if (Objects.equals(getId, R.id.cardViewKeco)) {
                 chargingCurrentData.setAuthType("K");
                 chargingCurrentData.setPaymentType(PaymentType.KECO);
-                chargingCurrentData.setUnitPrice(GlobalVariables.userTypeK);
+                chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeK);
                 classUiProcess.setUiSeq(UiSeq.MEMBER_CARD);
                 fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
             }
