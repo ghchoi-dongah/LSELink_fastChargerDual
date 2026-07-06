@@ -9,8 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +23,6 @@ import com.dongah.fastcharger.R;
 import com.dongah.fastcharger.basefunction.ChargerConfiguration;
 import com.dongah.fastcharger.basefunction.ChargerPointType;
 import com.dongah.fastcharger.basefunction.ChargingCurrentData;
-import com.dongah.fastcharger.basefunction.GlobalVariables;
 import com.dongah.fastcharger.basefunction.UiSeq;
 import com.dongah.fastcharger.controlboard.RxData;
 import com.dongah.fastcharger.controlboard.TxData;
@@ -36,7 +33,6 @@ import com.dongah.fastcharger.websocket.socket.SocketState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.util.Objects;
 
 /**
@@ -66,16 +62,10 @@ public class InitFragment extends Fragment implements View.OnClickListener {
     MainActivity activity;
     ChargerConfiguration chargerConfiguration;
     ChargingCurrentData chargingCurrentData;
+    RxData rxData;
     TxData txData;
     SharedModel sharedModel;
     String[] requestStrings = new String[1];
-
-    Handler handler;
-    Runnable runnable;
-    RxData rxData;
-
-    Handler eventHandler;
-    Runnable eventRunnable;
 
     public InitFragment() {
         // Required empty public constructor
@@ -141,10 +131,10 @@ public class InitFragment extends Fragment implements View.OnClickListener {
 
             if (mChannel == 0) {
                 imageViewBus.setScaleX(1f);
-                textViewConnector.setText("1 커넥터");
+                textViewConnector.setText(R.string.leftConnector);
             } else {
                 imageViewBus.setScaleX(-1f);
-                textViewConnector.setText("2 커넥터");
+                textViewConnector.setText(R.string.rightConnector);
             }
         } catch (Exception e) {
             logger.error("onCreateView error : {}", e.getMessage(), e);
@@ -252,16 +242,6 @@ public class InitFragment extends Fragment implements View.OnClickListener {
         try {
             requestStrings[0] = String.valueOf(mChannel);
             sharedModel.setMutableLiveData(requestStrings);
-
-            if (handler != null) {
-                handler.removeCallbacks(runnable);
-                handler.removeCallbacksAndMessages(null);
-                handler.removeMessages(0);
-            }
-
-            if (eventHandler != null) {
-                eventHandler.removeCallbacks(eventRunnable);
-            }
         } catch (Exception e) {
             logger.error("onDetach error : {}", e.getMessage());
         }

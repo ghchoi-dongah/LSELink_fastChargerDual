@@ -2,6 +2,8 @@
     <string name="app_name">FastCharger</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="initMessage"><font color="#000">차량에 커넥터 연결 후 충전 시작</font></string>
+    <string name="leftConnector">좌측 커넥터</string>
+    <string name="rightConnector">우측 커넥터</string>
     <string name="changeModeMessage"><font color="#BB000C">커넥터 제어로 인해 사용 불가</font></string>
     <string name="seqTime"><font color="#EE282828">예상 충전 시간 : 약 %1$s분 후</font></string>
     <string name="sequentialMessage"><font color="#000">커넥터를 꽂아 두시면,\n앞선 차량의 충전이 끝난 뒤\n자동으로 충전이 시작됩니다.</font></string>
