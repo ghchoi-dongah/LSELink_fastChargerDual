@@ -117,7 +117,7 @@ public class CreditCardFragment extends Fragment {
             textViewTagTimer.setText(timer + "초");
 
             try {
-                txtInputAmt.setText(amountFormatter.format(GlobalVariables.FullRechgAmt)); // 완충기준 충전금액=
+                txtInputAmt.setText(amountFormatter.format(GlobalVariables.FullRechgAmt)); // 완충기준 충전금액
             } catch (Exception e) {
                 txtInputAmt.setText(amountFormatter.format(1500));
                 logger.error("onViewCreated fullRechgAmt error", e);
@@ -137,7 +137,7 @@ public class CreditCardFragment extends Fragment {
                             //TODO: 선 결제에 의한 무카드 취소
                         }
 
-                        ((MainActivity) MainActivity.mContext).getClassUiProcess(mChannel).onHome();
+                        activity.getClassUiProcess(mChannel).onHome();
                     } else {
                         countHandler.postDelayed(countRunnable, 1000);
                         textViewTagTimer.setText(timer + "초");

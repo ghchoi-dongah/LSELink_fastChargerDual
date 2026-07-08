@@ -23,7 +23,7 @@
     <string name="partCancelPay">부분취소금액</string>
     <string name="payUnitMessage">원</string>
     <string name="nomemberInfoMessage">신용카드 결제로 충전</string>
-    <string name="memberCardTagMessage"><font color="#000">카드 태깅 인증</font></string>
+    <string name="memberCardTagMessage"><font color="#000">인증 카드 태깅</font></string>
     <string name="noMacMessage"><font color="#000">등록되지 않은 차량입니다.\n차량 등록은 관리자에게 문의해 주세요.</font></string>
     <string name="memberCardTagNoMacMessage"><font color="#000">차량이 등록된 회원이 아닙니다.\n회원일 경우 회원카드를 접촉해 주세요.</font></string>
     <string name="vehicleRegistMessage"><font color="#000">차량 등록은 관리자에게 문의해 주세요.</font></string>

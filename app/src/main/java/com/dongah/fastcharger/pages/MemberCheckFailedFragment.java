@@ -106,7 +106,7 @@ public class MemberCheckFailedFragment extends Fragment implements View.OnClickL
                 fadeAnimator = null;
             }
         } catch (Exception e) {
-            logger.error("ConnectionFailedFragment onDestroyView error : {}", e.getMessage());
+            logger.error("onDestroyView error : {}", e.getMessage());
 
         }
     }

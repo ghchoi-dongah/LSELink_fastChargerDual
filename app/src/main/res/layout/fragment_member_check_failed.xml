@@ -56,18 +56,9 @@
         android:layout_marginTop="50dp"
         android:gravity="center"
         android:text="@string/connectorRetryMessage"
-        android:textSize="20sp"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageViewMemberFailed" />
-
-    <TextView
-        android:id="@+id/textViewMemberRegistMessage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/memberRegistMessage"
-        android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@id/textViewConnectorRetryMessage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

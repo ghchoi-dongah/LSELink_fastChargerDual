@@ -46,7 +46,6 @@ public class AuthorizeReq {
                 String uuid = UUID.randomUUID().toString();
                 saveFullAuthorize(getConnectorId(), uuid, authorizeRequest);
             }
-//            activity.getChargingCurrentData(getConnectorId()-1).setIdTag(idTag);
         } catch (Exception e) {
             logger.error("sendAuthorize error : {}", e.getMessage());
         }
@@ -81,13 +80,19 @@ public class AuthorizeReq {
             ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(getConnectorId()-1);
             int userType = chargingCurrentData.getPaymentType().value();
 
-            /** pay type : MEMBER(1) CREDIT(2) */
+            /** pay type : MEMBER(1) CREDIT(2) CORP(7) KECO(8) */
             switch (userType) {
                 case 1:
                     chargingCurrentData.setIdTag("M" + chargingCurrentData.getIdTag());
                     break;
                 case 2:
                     chargingCurrentData.setIdTag("N" + chargingCurrentData.getIdTag());
+                    break;
+                case 7:
+                    chargingCurrentData.setIdTag("C" + chargingCurrentData.getIdTag());
+                    break;
+                case 8:
+                    chargingCurrentData.setIdTag("K" + chargingCurrentData.getIdTag());
                     break;
                 default:
                     logger.warn("userType none");
