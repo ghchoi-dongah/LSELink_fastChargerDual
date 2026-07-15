@@ -540,6 +540,13 @@ public class ClassUiProcess implements RfCardReaderListener {
                 chargingAlarm = false;  // 알림을 한 번만 보내기 위함
             }
 
+            // 개인 사용 제한 설정 여부
+            boolean utztnLmt = false;
+            if (Objects.equals(GlobalVariables.PersonUtztnLmtYn, "Y")) {
+                String useTime = chargingCurrentData.getChargingUseTime();
+                utztnLmt = isChargingUseTimeOverMinutes(useTime, GlobalVariables.PersonUtztnLmtHr); // 충전 시간 제한
+            }
+
             // stop 조건
             if (!GlobalVariables.isStopTransactionOnEVSideDisconnect() &&
                     !GlobalVariables.isUnlockConnectorOnEVSideDisconnect()) {
@@ -558,7 +565,7 @@ public class ClassUiProcess implements RfCardReaderListener {
                 }
             } else {
                 if (rxData.isCsStop() || !rxData.isCsPilot() || chargingCurrentData.isUserStop() || isSocReached
-                        || !GlobalVariables.ChargerOperation[getCh()+1]) {
+                        || !GlobalVariables.ChargerOperation[getCh()+1] || utztnLmt) {
                     controlBoard.getTxData(getCh()).setStop(true);
                     controlBoard.getTxData(getCh()).setStart(false);
                     if (!rxData.isCsPilot()) {
@@ -573,6 +580,27 @@ public class ClassUiProcess implements RfCardReaderListener {
         } catch (Exception e) {
             logger.error("ClassUiProcess - CHARGING error : {}", e.getMessage());
         }
+    }
+
+    public boolean isChargingUseTimeOverMinutes(String chargingUseTime, int thresholdMinutes) {
+        if (chargingUseTime == null || chargingUseTime.isEmpty()) {
+            return false;
+        }
+        try {
+            String[] parts = chargingUseTime.split(":");
+            if (parts.length != 3) {
+                return false;
+            }
+            int hours = Integer.parseInt(parts[0]);
+            int minutes = Integer.parseInt(parts[1]);
+            int seconds = Integer.parseInt(parts[2]);
+            long totalSeconds = (hours * 3600L) + (minutes * 60L) + seconds;
+            long thresholdSeconds = thresholdMinutes * 60L;
+            return totalSeconds >= thresholdSeconds;
+        } catch (Exception e) {
+            logger.error("isChargingUseTimeOverMinutes error : {}", e.getMessage(), e);
+        }
+        return false;
     }
 
     // finish wait
