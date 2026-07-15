@@ -11,14 +11,14 @@ android {
     }
 
     // clear
-    signingConfigs {
-        platformkeystore {
-            keyAlias "platform"
-            keyPassword "android"
-            storeFile file("D:\\AndroidDongah\\PlatformKeyClear\\keystore\\platform.jks")
-            storePassword "android"
-        }
-    }
+//    signingConfigs {
+//        platformkeystore {
+//            keyAlias "platform"
+//            keyPassword "android"
+//            storeFile file("D:\\AndroidDongah\\PlatformKeyClear\\keystore\\platform.jks")
+//            storePassword "android"
+//        }
+//    }
 
     // senke
 //    signingConfigs {
@@ -31,14 +31,14 @@ android {
 //    }
 
     // hola
-//    signingConfigs {
-//        getByName("debug") {
-//            keyAlias = "androiddebugkey"
-//            keyPassword = "android"
-//            storeFile = file("D:\\AndroidDongah\\JKS_hola\\platform.jks")
-//            storePassword = "android"
-//        }
-//    }
+    signingConfigs {
+        getByName("debug") {
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+            storeFile = file("D:\\AndroidDongah\\JKS_hola\\platform.jks")
+            storePassword = "android"
+        }
+    }
 
     defaultConfig {
         applicationId "com.dongah.fastcharger"

@@ -48,8 +48,8 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
     private String mParam2;
     private int mChannel;
 
-    CardView cardViewMember, cardViewNoMember, cardViewCorp, cardViewKeco;
-    TextView textViewMemberUnitInput, textViewNoMemberUnitInput, textViewCorpUnitInput, textViewKecoUnitInput;
+    CardView cardViewMember, cardViewNoMember, cardViewCorp, cardViewMoe;
+    TextView textViewMemberUnitInput, textViewNoMemberUnitInput, textViewCorpUnitInput, textViewMoeUnitInput;
 
     MainActivity activity;
     ClassUiProcess classUiProcess;
@@ -105,12 +105,12 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
         cardViewNoMember.setOnClickListener(this);
         cardViewCorp = view.findViewById(R.id.cardViewCorp);
         cardViewCorp.setOnClickListener(this);
-        cardViewKeco = view.findViewById(R.id.cardViewKeco);
-        cardViewKeco.setOnClickListener(this);
+        cardViewMoe = view.findViewById(R.id.cardViewMoe);
+        cardViewMoe.setOnClickListener(this);
         textViewMemberUnitInput = view.findViewById(R.id.textViewMemberUnitInput);
         textViewNoMemberUnitInput = view.findViewById(R.id.textViewNoMemberUnitInput);
         textViewCorpUnitInput = view.findViewById(R.id.textViewCorpUnitInput);
-        textViewKecoUnitInput = view.findViewById(R.id.textViewKecoUnitInput);
+        textViewMoeUnitInput = view.findViewById(R.id.textViewMoeUnitInput);
 
         return view;
     }
@@ -123,16 +123,16 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
             if (Objects.equals(chargerConfiguration.getAuthMode(), 1)) {
                 // member + nomember
                 cardViewCorp.setVisibility(View.INVISIBLE);
-                cardViewKeco.setVisibility(View.INVISIBLE);
+                cardViewMoe.setVisibility(View.INVISIBLE);
             } else if (Objects.equals(chargerConfiguration.getAuthMode(), 2)) {
-                // member + nomember + corp + keco
+                // member + nomember + corp + moe
                 cardViewCorp.setVisibility(View.VISIBLE);
-                cardViewKeco.setVisibility(View.VISIBLE);
+                cardViewMoe.setVisibility(View.VISIBLE);
             }
             textViewMemberUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeM));
             textViewNoMemberUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeN));
             textViewCorpUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeC));
-            textViewKecoUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeK));
+            textViewMoeUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeK));
         } catch (Exception e) {
             logger.error("onViewCreated error : {}", e.getMessage(), e);
         }
@@ -160,9 +160,9 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
                 chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeC);
                 classUiProcess.setUiSeq(UiSeq.MEMBER_CARD);
                 fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
-            } else if (Objects.equals(getId, R.id.cardViewKeco)) {
+            } else if (Objects.equals(getId, R.id.cardViewMoe)) {
                 chargingCurrentData.setAuthType("K");
-                chargingCurrentData.setPaymentType(PaymentType.KECO);
+                chargingCurrentData.setPaymentType(PaymentType.MOE);
                 chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeK);
                 classUiProcess.setUiSeq(UiSeq.MEMBER_CARD);
                 fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);

@@ -86,11 +86,8 @@
         android:id="@+id/imageViewCreditCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/creditcardtagging"
-        android:importantForAccessibility="no"
-        app:layout_constraintStart_toStartOf="@id/imageViewCardReader"
+        android:background="@drawable/credit_card"
         app:layout_constraintEnd_toEndOf="@id/imageViewCardReader"
-        app:layout_constraintTop_toTopOf="@id/imageViewCardReader"
         app:layout_constraintBottom_toBottomOf="@id/imageViewCardReader"
         tools:ignore="contentDescription" />
 

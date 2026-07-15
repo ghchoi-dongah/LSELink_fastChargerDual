@@ -9,7 +9,7 @@ public enum PaymentType {
     TEST(5),
     FREE(6),
     CORP(7),
-    KECO(8);
+    MOE(8);
 
     PaymentType(int value) {
         this.value = value;

@@ -1,8 +1,6 @@
 package com.dongah.fastcharger.pages;
 
 import android.annotation.SuppressLint;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +11,8 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,7 +48,7 @@ public class CreditCardFragment extends Fragment {
     int timer = 40;
     TextView txtInputAmt, textViewTagTimer;
     ImageView imageViewCreditCard;
-    AnimationDrawable animationDrawable;
+    Animation animation;
 
     DecimalFormat amountFormatter;
     Handler countHandler;
@@ -99,10 +99,9 @@ public class CreditCardFragment extends Fragment {
 
         textViewTagTimer = view.findViewById(R.id.textViewTagTimer);
         txtInputAmt = view.findViewById(R.id.txtInputAmt);
-        imageViewCreditCard = view.findViewById(R.id.imageViewCreditCard);
-        imageViewCreditCard.setBackgroundResource(R.drawable.creditcardtagging);
-        animationDrawable = (AnimationDrawable) imageViewCreditCard.getBackground();
         amountFormatter = new DecimalFormat("###,##0");
+        imageViewCreditCard = view.findViewById(R.id.imageViewCreditCard);
+        animation = AnimationUtils.loadAnimation(getContext(), R.anim.translate);
 
         // TODO creditcardtagging
         return view;
@@ -113,8 +112,8 @@ public class CreditCardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         try {
-            animationDrawable.start();
             textViewTagTimer.setText(timer + "초");
+            imageViewCreditCard.startAnimation(animation);
 
             try {
                 txtInputAmt.setText(amountFormatter.format(GlobalVariables.FullRechgAmt)); // 완충기준 충전금액
@@ -131,7 +130,6 @@ public class CreditCardFragment extends Fragment {
                     if (timer <= 0) {
                         countHandler.removeCallbacks(countRunnable);
                         countHandler.removeCallbacksAndMessages(null);
-                        countHandler.removeMessages(0);
 
                         if (chargingCurrentData.isPrePaymentResult()) {
                             //TODO: 선 결제에 의한 무카드 취소
@@ -155,25 +153,18 @@ public class CreditCardFragment extends Fragment {
     @Override
     public void onDestroyView() {
         try {
-            if (animationDrawable != null) {
-                animationDrawable.stop();
-            }
-
-            if (imageViewCreditCard != null) {
-                Drawable bg = imageViewCreditCard.getBackground();
-                if (bg instanceof AnimationDrawable) {
-                    ((AnimationDrawable) bg).stop();
-                }
-                imageViewCreditCard.setBackground(null);
-            }
-
             if (countHandler != null) {
                 countHandler.removeCallbacks(countRunnable);
                 countHandler.removeCallbacksAndMessages(null);
-                countHandler.removeMessages(0);
+            }
+
+            if (animation != null) {
+                imageViewCreditCard.clearAnimation();
+                animation.setAnimationListener(null);
+                animation = null;
             }
         } catch (Exception e) {
-            logger.error("onDestroyView error : {}", e.getMessage());
+            logger.error("onDestroyView error : {}", e.getMessage(), e);
         }
         super.onDestroyView();
     }

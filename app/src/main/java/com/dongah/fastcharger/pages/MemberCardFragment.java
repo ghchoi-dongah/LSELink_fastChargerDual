@@ -1,8 +1,6 @@
 package com.dongah.fastcharger.pages;
 
 import android.annotation.SuppressLint;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,11 +12,14 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
+import com.dongah.fastcharger.basefunction.ChargingCurrentData;
 import com.dongah.fastcharger.utils.SharedModel;
 
 import org.slf4j.Logger;
@@ -46,11 +47,13 @@ public class MemberCardFragment extends Fragment {
     private int mChannel;
 
     int timer = 20;
-    TextView textViewTagTimer;
+    TextView textViewTagTimer, textViewMemberCheckMessage;
     ImageView imageViewMemberCard;
-    AnimationDrawable animationDrawable;
+    Animation animation;
     Handler countHandler;
     Runnable countRunnable;
+    MainActivity activity;
+    ChargingCurrentData chargingCurrentData;
 
     public MemberCardFragment() {
         // Required empty public constructor
@@ -88,17 +91,20 @@ public class MemberCardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_member_card, container, false);
+        activity = (MainActivity) MainActivity.mContext;
+        chargingCurrentData = activity.getChargingCurrentData(mChannel);
+
+        textViewMemberCheckMessage = view.findViewById(R.id.textViewMemberCheckMessage);
         textViewTagTimer = view.findViewById(R.id.textViewTagTimer);
         imageViewMemberCard = view.findViewById(R.id.imageViewMemberCard);
-        imageViewMemberCard.setBackgroundResource(R.drawable.membercardtagging);
-        animationDrawable = (AnimationDrawable) imageViewMemberCard.getBackground();
+        animation = AnimationUtils.loadAnimation(getContext(), R.anim.translate);
         String[] requestStrings = new String[1];
         SharedModel sharedModel = new ViewModelProvider(requireActivity()).get(SharedModel.class);
         requestStrings[0] = String.valueOf(mChannel);
         sharedModel.setMutableLiveData(requestStrings);
 
         // rfCard ready
-        ((MainActivity) MainActivity.mContext).getRfCardReaderReceive().rfCardReadRequest(mChannel);
+        activity.getRfCardReaderReceive().rfCardReadRequest(mChannel);
 
         return view;
     }
@@ -108,8 +114,9 @@ public class MemberCardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         try {
-            animationDrawable.start();
             textViewTagTimer.setText(timer + "초");
+            updateCardBackground(chargingCurrentData.getAuthType());
+            imageViewMemberCard.startAnimation(animation);
 
             countHandler = new Handler();
             countRunnable = new Runnable() {
@@ -117,6 +124,7 @@ public class MemberCardFragment extends Fragment {
                 public void run() {
                     timer--;
                     if (timer <= 0) {
+                        countHandler.removeCallbacks(countRunnable);
                         ((MainActivity) MainActivity.mContext).getClassUiProcess(mChannel).onHome();
                     } else {
                         countHandler.postDelayed(countRunnable, 1000);
@@ -126,41 +134,43 @@ public class MemberCardFragment extends Fragment {
             };
             countHandler.postDelayed(countRunnable, 1000);
         } catch (Exception e) {
-            logger.error("onViewCreated error: {}", e.getMessage());
+            logger.error("onViewCreated error: {}", e.getMessage(), e);
+        }
+    }
+
+    private void updateCardBackground(String type) {
+        switch (type) {
+            case "C":
+                imageViewMemberCard.setBackgroundResource(R.drawable.corp_card);
+                textViewMemberCheckMessage.setText(getString(R.string.corpCardTagMessage));
+                break;
+            case "K":
+                imageViewMemberCard.setBackgroundResource(R.drawable.moe_card);
+                textViewMemberCheckMessage.setText(getString(R.string.moeCardTagMessage));
+                break;
+            default:
+                imageViewMemberCard.setBackgroundResource(R.drawable.member_card);
+                textViewMemberCheckMessage.setText(getString(R.string.memberCardTagMessage));
+                break;
         }
     }
 
     @Override
     public void onDestroyView() {
         try {
-            if (animationDrawable != null) {
-                animationDrawable.stop();
-            }
-
-            if (imageViewMemberCard != null) {
-                Drawable bg = imageViewMemberCard.getBackground();
-                if (bg instanceof AnimationDrawable) {
-                    ((AnimationDrawable) bg).stop();
-                }
-                imageViewMemberCard.setBackground(null);
-            }
-        } catch (Exception e) {
-            logger.error("onDestroyView error : {}", e.getMessage());
-        }
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        try {
             if (countHandler != null) {
                 countHandler.removeCallbacks(countRunnable);
                 countHandler.removeCallbacksAndMessages(null);
-                countHandler.removeMessages(0);
+            }
+
+            if (animation != null) {
+                imageViewMemberCard.clearAnimation();
+                animation.setAnimationListener(null);
+                animation = null;
             }
         } catch (Exception e) {
-            logger.error("onDetach error : {}", e.getMessage());
+            logger.error("onDestroyView error : {}", e.getMessage(), e);
         }
+        super.onDestroyView();
     }
 }

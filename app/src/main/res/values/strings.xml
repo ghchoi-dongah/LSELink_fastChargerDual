@@ -15,15 +15,17 @@
     <string name="nomemberMessage">비회원</string>
     <string name="corpMessage">법인</string>
     <string name="corpInfoMessage">법인카드를 태그하여 충전</string>
-    <string name="kecoMessage">환경부</string>
-    <string name="kecoInfoMessage">환경부 카드를 태그하여 충전</string>
+    <string name="moeMessage">환경부</string>
+    <string name="moeInfoMessage">환경부 카드를 태그하여 충전</string>
     <string name="creditMessage"><font color="#000">신용 카드 결제</font></string>
     <string name="creditSubMessage">선결제로 진행되며,\n충전 후 사용한 금액만큼 최종 결제됩니다.\n나머지 금액은 자동 취소됩니다.</string>
     <string name="prePayment">선결제금액</string>
     <string name="partCancelPay">부분취소금액</string>
     <string name="payUnitMessage">원</string>
     <string name="nomemberInfoMessage">신용카드 결제로 충전</string>
-    <string name="memberCardTagMessage"><font color="#000">인증 카드 태깅</font></string>
+    <string name="memberCardTagMessage"><font color="#000">회원 카드 태깅</font></string>
+    <string name="corpCardTagMessage"><font color="#000">법인 카드 태깅</font></string>
+    <string name="moeCardTagMessage"><font color="#000">환경부 카드 태깅</font></string>
     <string name="noMacMessage"><font color="#000">등록되지 않은 차량입니다.\n차량 등록은 관리자에게 문의해 주세요.</font></string>
     <string name="memberCardTagNoMacMessage"><font color="#000">차량이 등록된 회원이 아닙니다.\n회원일 경우 회원카드를 접촉해 주세요.</font></string>
     <string name="vehicleRegistMessage"><font color="#000">차량 등록은 관리자에게 문의해 주세요.</font></string>

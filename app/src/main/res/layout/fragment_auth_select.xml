@@ -227,7 +227,7 @@
 
     <!--  환경부  -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewKeco"
+        android:id="@+id/cardViewMoe"
         android:layout_width="450dp"
         android:layout_height="120dp"
         android:layout_marginTop="20dp"
@@ -245,30 +245,30 @@
             android:background="@drawable/layer_list_rect_corner">
 
             <TextView
-                android:id="@+id/textViewKeco"
+                android:id="@+id/textViewMoe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="14dp"
-                android:text="@string/kecoMessage"
+                android:text="@string/moeMessage"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="@color/black_500"
-                app:layout_constraintTop_toTopOf="@id/imageViewKeco"
-                app:layout_constraintStart_toEndOf="@id/imageViewKeco"/>
+                app:layout_constraintTop_toTopOf="@id/imageViewMoe"
+                app:layout_constraintStart_toEndOf="@id/imageViewMoe"/>
 
             <ImageView
-                android:id="@+id/imageViewKeco"
+                android:id="@+id/imageViewMoe"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/keco"
+                android:background="@drawable/moe"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="contentDescription" />
 
             <TextView
-                android:id="@+id/textViewKecoUnitInput"
+                android:id="@+id/textViewMoeUnitInput"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
@@ -276,20 +276,20 @@
                 android:textSize="18sp"
                 android:textColor="@color/black_600"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/textViewKeco"
-                app:layout_constraintBottom_toBottomOf="@id/textViewKeco" />
+                app:layout_constraintTop_toTopOf="@id/textViewMoe"
+                app:layout_constraintBottom_toBottomOf="@id/textViewMoe" />
 
             <TextView
-                android:id="@+id/textViewKecoContent"
+                android:id="@+id/textViewMoeContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:gravity="start"
-                android:text="@string/kecoInfoMessage"
+                android:text="@string/moeInfoMessage"
                 android:textSize="20sp"
                 android:textColor="@color/black_500"
-                app:layout_constraintStart_toStartOf="@id/textViewKeco"
-                app:layout_constraintTop_toBottomOf="@id/textViewKeco" />
+                app:layout_constraintStart_toStartOf="@id/textViewMoe"
+                app:layout_constraintTop_toBottomOf="@id/textViewMoe" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

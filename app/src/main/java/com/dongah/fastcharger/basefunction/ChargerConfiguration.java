@@ -78,7 +78,7 @@ public class ChargerConfiguration {
     public String imsi = "";                            // 모뎀 SIM 카드의 IMSI
     public String meterSerialNumber = "";               // 충전기의 주전력량계의 시리얼 번호
     public String meterType = "";                       // 충전기의 주전력량계의 타입 포함
-    public int connectorPriority = 0;                   // 1구 제어 우선순위
+    public int connectorPriority = 1;                   // 1구 제어 우선순위
     public String testPrice = "313.0";                  // 테스트 단가
     public int targetSoc = 80;                          // SoC
     public int dr = 0;                                  // 전류 제한

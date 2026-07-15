@@ -20,6 +20,7 @@
         android:gravity="center"
         android:text="@string/memberCardTagMessage"
         android:textSize="36sp"
+        android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -39,11 +40,9 @@
         android:id="@+id/imageViewMemberCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/membercardtagging"
+        android:background="@drawable/member_card"
         android:importantForAccessibility="no"
-        app:layout_constraintStart_toStartOf="@id/imageViewMemberCardReader"
         app:layout_constraintEnd_toEndOf="@id/imageViewMemberCardReader"
-        app:layout_constraintTop_toTopOf="@id/imageViewMemberCardReader"
         app:layout_constraintBottom_toBottomOf="@id/imageViewMemberCardReader"
         tools:ignore="contentDescription" />
 
