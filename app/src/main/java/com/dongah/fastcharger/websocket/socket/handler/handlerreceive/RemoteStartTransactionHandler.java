@@ -40,7 +40,6 @@ public class RemoteStartTransactionHandler implements OcppHandler  {
         try {
             int connector = payload.getInt("connectorId");
             ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(connector-1);
-
             chargingCurrentData.setConnectorId(payload.getInt("connectorId"));
             chargingCurrentData.setIdTag(payload.getString("idTag"));
             chargingCurrentData.setPaymentType(PaymentType.MEMBER);

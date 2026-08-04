@@ -10,6 +10,7 @@ import java.util.Objects;
 public class CancelReservationConfirmation implements Confirmation {
 
     private CancelReservationStatus status;
+    public static final String ACTION_NAME = "CancelReservation";
 
     /**
      * @deprecated use {@link #CancelReservationConfirmation(CancelReservationStatus)} to be sure to
@@ -17,6 +18,10 @@ public class CancelReservationConfirmation implements Confirmation {
      */
     @Deprecated
     public CancelReservationConfirmation() {
+    }
+
+    public String getActionName() {
+        return ACTION_NAME;
     }
 
     /**

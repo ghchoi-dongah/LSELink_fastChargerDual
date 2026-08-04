@@ -187,6 +187,54 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
             UiSeq uiSeq = classUiProcess.getUiSeq();
             SocketReceiveMessage socketReceiveMessage = activity.getSocketReceiveMessage();
 
+            // reservation check
+            if (chargingCurrentData.getReservedStatus() == ChargePointStatus.Reserved) {
+                if (!Objects.equals(chargingCurrentData.getResIdTag(), chargingCurrentData.getIdTag())) {
+                    // resIdTag ≠ idTag
+                    if (Objects.equals(uiSeq, UiSeq.CHARGING)) {
+                        // 현재 UI가 CHARING
+                        // 충전 중 다른 카드 태그 → resIdTag로 재인증(Authorize 요청)
+                        // 충전 중인데 다른 카드를 태그 → 태그한 그 카드로 인증 시도
+                        AuthorizeReq authorizeReq = new AuthorizeReq(chargingCurrentData.getConnectorId());
+                        authorizeReq.sendAuthorize(chargingCurrentData.getResIdTag());
+                    } else {
+                        if (!Objects.equals(chargingCurrentData.getResParentIdTag(), "")) {
+                            // Charging 아닌 상태 && resParentIdTag가 있음 → idTag로 Authorize 요청(그룹 카드 하위 카드 → 원래 카드로 인증)
+                            // 충전 시작 전인데 카드 ID가 다름 + 상위 그룹 카드가 있음 → 원래 카드로 다시 인증 시도
+                            AuthorizeReq authorizeReq = new AuthorizeReq(chargingCurrentData.getConnectorId());
+                            authorizeReq.sendAuthorize(chargingCurrentData.getIdTag());
+                        } else {
+                            // Charging 아닌 상태 && resParentIdTag가 없음 → 인증 불가로 HOME 이동
+                            // 충전 시작 전인데 카드 ID가 다름 + 상위 카드도 없음 → 인증 불가, HOME 이동
+                            activity.getClassUiProcess(mChannel).onHome();
+                        }
+                    }
+                    return;
+                } else {
+                    // Authorization, resIdTag == idTag
+                    if (Objects.equals(uiSeq, UiSeq.CHARGING)) {
+                        // 현재 UI가 CHARGING
+                        idTagInfo = socketReceiveMessage.getLocalAuthorizationListStrings(chargingCurrentData.getIdTagStop());
+                        if (Objects.equals(chargingCurrentData.getParentIdTag(), idTagInfo[1]) ||
+                                Objects.equals(chargingCurrentData.getIdTag(), chargingCurrentData.getIdTagStop())) {
+                            // 같은 카드 or 상위 그룹 카드로 태그 → 충전 종료
+                            classUiProcess.setUiSeq(UiSeq.FINISH_WAIT);
+                            fragmentChange.onFragmentChange(mChannel,UiSeq.FINISH_WAIT, "FINISH_WAIT", null);
+                        } else {
+                            // 다른 카드로 태그 → 충전 화면 유지
+//                            classUiProcess.setUiSeq(UiSeq.CHARGING);
+                            fragmentChange.onFragmentChange(mChannel,UiSeq.CHARGING, "CHARGING", null);
+                        }
+                    } else {
+                        // 충전 시작 전
+                        chargingCurrentData.setIdTag(chargingCurrentData.getResIdTag()); // idTag를 resIdTag로 업데이트
+                        AuthorizeReq authorizeReq = new AuthorizeReq(chargingCurrentData.getConnectorId());
+                        authorizeReq.sendAuthorize(chargingCurrentData.getIdTag());
+                    }
+                    return;
+                }
+            }
+
             // isLocalPreAuthorize == true : local authorization list 에서 사용자 인증
             // isLocalPreAuthorize: 사전 로컬 인증 모드
             if (GlobalVariables.isLocalPreAuthorize()) {

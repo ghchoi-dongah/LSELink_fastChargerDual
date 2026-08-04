@@ -7,7 +7,12 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.util.Log;
+
+
+import androidx.annotation.NonNull;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import service.vcat.smartro.com.vcat.SmartroVCatCallback;
 import service.vcat.smartro.com.vcat.SmartroVCatInterface;
@@ -21,31 +26,22 @@ import service.vcat.smartro.com.vcat.SmartroVCatInterface;
  *   3) vcat.bind();                 // onCreate
  *   4) vcat.executeService(json);   // 결제/기능 호출
  *   5) vcat.unbind();               // onDestroy
+ *
+ *   1) Application.onCreate() 에서 VCatManager.getInstance().init(this)
+ *   2) VCatManager.getInstance().bind()  (앱 시작 시 1회)
+ *   3) 결제 필요 시 execute(json, listener)
+ *   4) Application.onTerminate() 또는 앱 종료 시 unbind()
  */
 public class VCatManager {
-
-    private static final String TAG = "VCatManager";
+    private static final Logger logger = LoggerFactory.getLogger(VCatManager.class);
 
     private static final String VCAT_ACTION  = "smartro.vcat.action";
     private static final String VCAT_PACKAGE = "service.vcat.smartro.com.vcat";
     private static final String VCAT_WAKEUP_URI = "smartroapp://vcatscheme?manage=awake";
 
 
-    private SmartroVCatInterface mSmartroVCatInterface = null;
-    private ServiceConnection mServiceConnectionExacmple = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mSmartroVCatInterface = SmartroVCatInterface.Stub.asInterface(service);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    };
-
     private final Context mContext;
-    private SmartroVCatInterface mInterface;
+    private SmartroVCatInterface mSmartroVCatInterface  = null;
     private VCatListener mListener;
     private boolean mBound = false;
 
@@ -60,7 +56,7 @@ public class VCatManager {
     }
 
     public boolean isBound() {
-        return mBound && mInterface != null;
+        return mBound && mSmartroVCatInterface != null;
     }
 
     /**
@@ -76,7 +72,9 @@ public class VCatManager {
 
         boolean ok = mContext.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
         if (!ok) {
-            Log.w(TAG, "bindService failed. Try wakeUp() then bind() again.");
+            // 일부 장비에서 V-CAT이 비활성 상태이면 bindService가 실패하거나 콜백이 오지 않음.
+            // 문서 10장: 강제 실행 후 재바인딩.
+            logger.warn("bindService failed. Try wakeUp() then bind() again.");
         }
         return ok;
     }
@@ -87,10 +85,10 @@ public class VCatManager {
             try {
                 mContext.unbindService(mServiceConnection);
             } catch (IllegalArgumentException e) {
-                Log.w(TAG, "unbindService: not registered.", e);
+                logger.warn("unbindService: not registered. ", e);
             }
             mBound = false;
-            mInterface = null;
+            mSmartroVCatInterface = null;
         }
     }
 
@@ -107,7 +105,11 @@ public class VCatManager {
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.setData(Uri.parse(VCAT_WAKEUP_URI));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity(intent);
+        try {
+            mContext.startActivity(intent);
+        } catch (Exception e) {
+            logger.error("wakeUp: V-CAT 강제 실행 실패 ", e);
+        }
     }
 
     /**
@@ -116,15 +118,15 @@ public class VCatManager {
      * */
     public boolean executeService(String requestJson) {
         if (!isBound()) {
-            Log.e(TAG, "executeService: not bound.");
+            logger.error("executeService: not bound.");
             return false;
         }
 
         try {
-            mInterface.executeService(requestJson, mCallback);
+            mSmartroVCatInterface.executeService(requestJson, mCallback);
             return true;
         } catch (RemoteException e) {
-            Log.e(TAG, "executeService error", e);
+            logger.error("executeService error", e);
             return false;
         }
     }
@@ -132,16 +134,16 @@ public class VCatManager {
     /**
      * prompt 이벤트(서명, pay-type 선택, DCC 통화 선택 등)에 대한 추가 데이터 전달
      * */
-    public boolean postExtraData(String extraJson) {
+    public boolean postExtraData(@NonNull String extraJson) {
         if (!isBound()) {
-            Log.e(TAG, "postExtraData: not bound.");
+            logger.error("postExtraData: not bound.");
             return false;
         }
         try {
-            mInterface.postExtraData(extraJson);
+            mSmartroVCatInterface.postExtraData(extraJson);
             return true;
         } catch (RemoteException e) {
-            Log.e(TAG, "postExtraData error", e);
+            logger.error("postExtraData error", e);
             return false;
         }
     }
@@ -154,10 +156,10 @@ public class VCatManager {
     public boolean cancelService() {
         if (!isBound()) return false;
         try {
-            mInterface.cancelService();
+            mSmartroVCatInterface.cancelService();
             return true;
         } catch (RemoteException e) {
-            Log.e(TAG, "cancelService error", e);
+            logger.error("cancelService error", e);
             return false;
         }
     }
@@ -169,128 +171,35 @@ public class VCatManager {
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            mInterface = SmartroVCatInterface.Stub.asInterface(service);
+            mSmartroVCatInterface = SmartroVCatInterface.Stub.asInterface(service);
             mBound = true;
-            Log.d(TAG, "V-CAT service connected.");
+            logger.info("V-CAT service connected.");
             if (mListener != null) mListener.onServiceConnectionChanged(true);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            mInterface = null;
+            mSmartroVCatInterface = null;
             mBound = false;
-            Log.d(TAG, "V-CAT service disconnected.");
+            logger.info("V-CAT service disconnected.");
             if (mListener != null) mListener.onServiceConnectionChanged(false);
         }
     };
 
+    // ------------------------------------------------------------------
+    // Callback stub → UI 스레드 dispatch
+    // ------------------------------------------------------------------
     private final SmartroVCatCallback.Stub mCallback = new SmartroVCatCallback.Stub() {
         @Override
         public void onServiceEvent(String strEventJSON) throws RemoteException {
-            Log.d(TAG, "onServiceEvent: " + strEventJSON);
+            logger.info("onServiceEvent: {}", strEventJSON);
             if (mListener != null) mListener.onEvent(strEventJSON);
         }
 
         @Override
         public void onServiceResult(String strResultJSON) throws RemoteException {
-            Log.d(TAG, "onServiceResult: " + strResultJSON);
+            logger.info("onServiceResult: {}", strResultJSON);
             if (mListener != null) mListener.onResult(strResultJSON);
         }
     };
-
-
-//    private static final String VCAT_PACKAGE = "service.vcat.smartro.com.vcat";
-//    private static final String VCAT_SERVICE = "service.vcat.smartro.com.vcat.SmartroVCatService";
-//
-//    public interface VCatListener {
-//        void onConnected();
-//        void onDisconnected();
-//        void onServiceEvent(String strEventJSON);
-//        void onServiceResult(String strEventJSON);
-//    }
-//
-//    private final Context mContext;
-//    private final VCatListener mListener;
-//    private boolean mBound = false;
-//
-//    private final SmartroVCatCallback.Stub mCallback = new SmartroVCatCallback.Stub() {
-//        @Override
-//        public void onServiceEvent(String strEventJSON) {
-//            mListener.onServiceEvent(strEventJSON);
-//        }
-//
-//        @Override
-//        public void onServiceResult(String strEventJSON) {
-//            mListener.onServiceResult(strEventJSON);
-//        }
-//    };
-//
-//    private final ServiceConnection mConnection = new ServiceConnection() {
-//        @Override
-//        public void onServiceConnected(ComponentName name, IBinder service) {
-//            mSmartroVCatInterface = SmartroVCatInterface.Stub.asInterface(service);
-//            mBound = true;
-//            mListener.onConnected();
-//        }
-//
-//        @Override
-//        public void onServiceDisconnected(ComponentName name) {
-//            mSmartroVCatInterface = null;
-//            mBound = false;
-//            mListener.onDisconnected();
-//        }
-//    };
-//
-//    public VCatManager(Context context, VCatListener listener) {
-//        mContext = context;
-//        mListener = listener;
-//    }
-//
-//    public boolean bind() {
-//        Intent intent = new Intent();
-//        intent.setComponent(new ComponentName(VCAT_PACKAGE, VCAT_SERVICE));
-//        return mContext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-//    }
-//
-//    public void unbind() {
-//        if (mBound) {
-//            mContext.unbindService(mConnection);
-//            mBound = false;
-//            mSmartroVCatInterface = null;
-//        }
-//    }
-//
-//    public void executeService(String strJSON) {
-//        if (!mBound || mSmartroVCatInterface == null) return;
-//        try {
-//            mSmartroVCatInterface.executeService(strJSON, mCallback);
-//        } catch (RemoteException e) {
-//            mBound = false;
-//            mSmartroVCatInterface = null;
-//        }
-//    }
-//
-//    public void postExtraData(String strJSON) {
-//        if (!mBound || mSmartroVCatInterface == null) return;
-//        try {
-//            mSmartroVCatInterface.postExtraData(strJSON);
-//        } catch (RemoteException e) {
-//            mBound = false;
-//            mSmartroVCatInterface = null;
-//        }
-//    }
-//
-//    public void cancelService() {
-//        if (!mBound || mSmartroVCatInterface == null) return;
-//        try {
-//            mSmartroVCatInterface.cancelService();
-//        } catch (RemoteException e) {
-//            mBound = false;
-//            mSmartroVCatInterface = null;
-//        }
-//    }
-//
-//    public boolean isBound() {
-//        return mBound;
-//    }
 }

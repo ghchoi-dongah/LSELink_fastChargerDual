@@ -17,12 +17,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ReserveNowConfirmation implements Confirmation {
 
     private ReservationStatus status;
+    public static final String ACTION_NAME = "ReserveNow";
 
     /**
      * @deprecated use {@link #ReserveNowConfirmation(ReservationStatus)} to be sure to set required fields.
      */
     @Deprecated
     public ReserveNowConfirmation() {
+    }
+
+    public String getActionName() {
+        return ACTION_NAME;
     }
 
     /**

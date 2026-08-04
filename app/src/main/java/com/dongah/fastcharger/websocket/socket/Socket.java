@@ -122,7 +122,7 @@ public class Socket extends WebSocketListener {
             socketInterface.onOpen(webSocket);
 
             ProcessHandler ph = ((MainActivity) MainActivity.mContext).getProcessHandler();
-            if (ph != null) {
+            if (ph != null && !GlobalVariables.isConnectRetry()) {
                 ph.onBootNotificationStart(5);
             } else {
                 logger.warn("onOpen: ProcessHandler not ready yet");
@@ -510,10 +510,16 @@ public class Socket extends WebSocketListener {
                 }
             }
 
-
             // JSON append 저장
-            LogDataSave logDataSave = new LogDataSave("log");
-            logDataSave.makeLogDate(100,"SOCKET_ERROR", log.toString());
+            fileManagement.stringToFileSave(
+                    GlobalVariables.getRootPath(),
+                    FILE_NAME,
+                    log.toString(),
+                    true
+            );
+
+//            LogDataSave logDataSave = new LogDataSave("log");
+//            logDataSave.makeLogDate(100,"SOCKET_ERROR", log.toString());
 
             logger.error("WebSocket Failure logged : {}", log.toString());
         } catch (Exception e) {

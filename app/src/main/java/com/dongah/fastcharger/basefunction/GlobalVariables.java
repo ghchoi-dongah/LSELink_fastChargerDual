@@ -9,10 +9,14 @@ import java.io.File;
 public class GlobalVariables {
 
     //storage/emulated/0/download
-    public static String ROOT_PATH = Environment.getExternalStorageDirectory().toString() + File.separator + "Download";
+//    public static String ROOT_PATH = Environment.getExternalStorageDirectory().toString() + File.separator + "Download";
 
-    public static String VERSION = "1.2.0";
-    public static String FW_VERSION = "1.0.1";
+    //storage/emulated/0/Android/media/files
+    public static String ROOT_PATH = Environment.getExternalStorageDirectory().toString() + File.separator + "Android" +
+            File.separator + "media" + File.separator + "files";
+
+    public static String VERSION = "1.0.0";
+    public static String FW_VERSION = "1.0.0";
 
     // file names
     public static final String UNIT_FILE_NAME = "unitPrice.dongah";

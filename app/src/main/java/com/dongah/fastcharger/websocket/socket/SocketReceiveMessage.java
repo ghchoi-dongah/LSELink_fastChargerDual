@@ -16,6 +16,7 @@ import com.dongah.fastcharger.websocket.ocpp.common.model.Request;
 import com.dongah.fastcharger.websocket.ocpp.utilities.Stopwatch;
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.AuthorizeHandler;
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.BootNotificationHandler;
+import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.CancelReservationHandler;
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.ChangeAvailabilityHandler;
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.ChangeConfigurationHandler;
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.ChangeElecModeHandler;
@@ -34,6 +35,7 @@ import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.PrePayment
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.RechgrsocscheduleHandler;
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.RemoteStartTransactionHandler;
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.RemoteStopTransactionHandler;
+import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.ReserveNowHandler;
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.ResetHandler;
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.SendLocalListHandler;
 import com.dongah.fastcharger.websocket.socket.handler.handlerreceive.StartTransactionHandler;
@@ -170,6 +172,8 @@ public class SocketReceiveMessage extends JSONCommunicator implements SocketInte
         handlerMap.put("UpdateFirmware", new UpdateFirmwareHandler());
         handlerMap.put("FirmwareStatusNotification", new FirmwareStatusNotificationHandler());
         handlerMap.put("TriggerMessage", new TriggerMessageHandler());
+        handlerMap.put("ReserveNow", new ReserveNowHandler());
+        handlerMap.put("CancelReservation", new CancelReservationHandler());
 
         // DataTransfer messageId별 핸들러
         handlerMap.put("unitprice.req", new UnitPriceHandler());

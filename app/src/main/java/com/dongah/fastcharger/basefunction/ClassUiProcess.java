@@ -382,14 +382,19 @@ public class ClassUiProcess implements RfCardReaderListener {
     @Override
     public void onRfCardDataReceive(int ch, String cardNum, boolean value) {
         try {
-            if (cardNum.isEmpty() || Objects.equals(cardNum,"0000000000000000")) {
-                MainActivity activity = (MainActivity) MainActivity.mContext;
-                setUiSeq(UiSeq.INIT);
-                fragmentChange.onFragmentChange(ch, UiSeq.INIT,"INIT",null);
+            // 회원카드 태깅 화면이 아니면 RF 카드 이벤트 무시
+            UiSeq currentSeq = ((MainActivity) MainActivity.mContext).getClassUiProcess(ch).getUiSeq();
+            if (!Objects.equals(UiSeq.CHARGING, currentSeq) &&
+                    !Objects.equals(UiSeq.MEMBER_CARD, currentSeq) &&
+                    !Objects.equals(UiSeq.INIT, currentSeq)) {
+                return;
+            }
 
-                activity.runOnUiThread(() -> {
-                    Toast.makeText(activity, "카드 리더기에서 응답이 없습니다.", Toast.LENGTH_SHORT).show();
-                });
+            if (cardNum.isEmpty() || Objects.equals(cardNum,"0000000000000000")) {
+                // 카드 미인식 — MEMBER_CARD 상태에서만 재요청 (CHARGING 중에는 무시)
+                if (Objects.equals(UiSeq.MEMBER_CARD, currentSeq)) {
+                    rfCardReaderReceive.rfCardReadRequest(ch);
+                }
             } else {
                 onRfCardDataReceiveEvent(ch, cardNum, true);
             }
@@ -440,6 +445,7 @@ public class ClassUiProcess implements RfCardReaderListener {
     }
 
     // init
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleInit() {
         setoSeq(UiSeq.INIT);
         setPowerMeterCheck(0);
@@ -458,6 +464,24 @@ public class ClassUiProcess implements RfCardReaderListener {
         else if (!GlobalVariables.ChargerOperation[getCh()+1]) {
             setUiSeq(UiSeq.OP_STOP);
             fragmentChange.onFragmentChange(getCh(), UiSeq.OP_STOP, "OP_STOP", null);
+        } else if (chargingCurrentData.getChargePointStatus() == ChargePointStatus.Reserved) {
+            // reservation
+            String currentTime = zonedDateTimeConvert.doGetKstDatetimeAsString();
+            // 현재 KST 시간과 예약 만료 시간 비교 => 현재 시간이 예약 만료 시간을 지났는지 확인
+            // str1.compareTo(str2) > 0 : str1이 str2보다 큼 → 예약 만료 처리
+            if (currentTime.compareTo(chargingCurrentData.getResExpiryDate()) > 0) {
+                // available
+                chargingCurrentData.setChargePointStatus(ChargePointStatus.Available);
+                statusNotificationReq.sendStatusNotification(); // StatusNotification send
+
+                // reservation clear
+                chargingCurrentData.setResConnectorId(0);
+                chargingCurrentData.setResIdTag("");
+                chargingCurrentData.setResExpiryDate("");
+                chargingCurrentData.setResReservationId("");
+                chargingCurrentData.setResParentIdTag("");
+                chargingCurrentData.setReservedStatus(ChargePointStatus.Available);
+            }
         }
     }
 
