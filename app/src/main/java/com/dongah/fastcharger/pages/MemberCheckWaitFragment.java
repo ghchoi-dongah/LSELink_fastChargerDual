@@ -49,7 +49,7 @@ import java.util.Objects;
  * Use the {@link MemberCheckWaitFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MemberCheckWaitFragment extends Fragment implements View.OnClickListener {
+public class MemberCheckWaitFragment extends Fragment {
 
     private static final Logger logger = LoggerFactory.getLogger(MemberCheckWaitFragment.class);
 
@@ -120,7 +120,6 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_member_check_wait, container, false);
-        view.setOnClickListener(this);
         imageViewLoading = view.findViewById(R.id.imageViewLoading);
         imageViewLoading.setBackgroundResource(R.drawable.ani_loading);
         animationDrawable = (AnimationDrawable) imageViewLoading.getBackground();
@@ -167,9 +166,13 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
                                 if (cnt > TIME_MAX) {
                                     countHandler.removeCallbacks(countRunnable);
 
-                                    // 회원 인증 실패
-                                    classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
-                                    fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
+                                    if (Objects.equals(classUiProcess.getUiSeq(), UiSeq.CHARGING)) {
+                                        fragmentChange.onFragmentChange(mChannel, UiSeq.CHARGING, "CHARGING", null);
+                                    } else {
+                                        // 회원 인증 실패
+                                        classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
+                                        fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CHECK_FAILED, "MEMBER_CHECK_FAILED", null);
+                                    }
                                 } else {
                                     countHandler.postDelayed(countRunnable, 1000);
                                 }
@@ -239,17 +242,23 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
             // isLocalPreAuthorize: 사전 로컬 인증 모드
             if (GlobalVariables.isLocalPreAuthorize()) {
                 // local authorization enabled --> local 인증
-                idTagInfo = socketReceiveMessage.getLocalAuthorizationListStrings(uiSeq == UiSeq.CHARGING ? chargingCurrentData.getIdTagStop() : chargingCurrentData.getIdTag());
+                idTagInfo = socketReceiveMessage.getLocalAuthorizationListStrings(uiSeq == UiSeq.CHARGING ?
+                        chargingCurrentData.getIdTagStop() : chargingCurrentData.getIdTag());
                 if (Objects.equals(UiSeq.CHARGING, uiSeq)) {
+                    // 충전 중 상태
                     if (Objects.equals(chargingCurrentData.getParentIdTag(), idTagInfo[1]) ||
                             Objects.equals(chargingCurrentData.getIdTag(), chargingCurrentData.getIdTagStop())) {
-                        classUiProcess.setUiSeq(UiSeq.FINISH_WAIT);
-                        activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.FINISH_WAIT, "FINISH_WAIT", null);
+                        // 같은 카드 or 그룹 카드 → 충전 종료
+                        chargingCurrentData.setUserStop(true);
+//                        classUiProcess.setUiSeq(UiSeq.FINISH_WAIT);
+//                        activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.FINISH_WAIT, "FINISH_WAIT", null);
                     } else  {
-                        classUiProcess.setUiSeq(UiSeq.CHARGING);
+                        // 다른 카드 → 충전 화면 유지
+//                        classUiProcess.setUiSeq(UiSeq.CHARGING);
                         activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.CHARGING, "CHARGING", null);
                     }
                 } else {
+                    // 충전 전
                     if (!Objects.equals(chargingCurrentData.getChargePointStatus(), ChargePointStatus.Preparing) &&
                             Objects.equals(chargerConfiguration.getOpMode(), 1)) {
                         chargingCurrentData.setChargePointStatus(ChargePointStatus.Preparing);
@@ -258,11 +267,13 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
                     }
 
                     if (Objects.equals(idTagInfo[0], chargingCurrentData.getIdTag())) {
+                        // 로컬 목록에 있음
                         chargingCurrentData.setAuthorizeResult(true);
                         chargingCurrentData.setParentIdTag(idTagInfo[1]);
-                        activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.PLUG_CHECK);
+                        classUiProcess.setUiSeq(UiSeq.PLUG_CHECK);
                         activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.PLUG_CHECK, "PLUG_CHECK", null);
                     } else if (Objects.equals(idTagInfo[0], "notFound")) {
+                        // 목록에 없음(notFound)
                         AuthorizeReq authorizeReq = new AuthorizeReq(chargingCurrentData.getConnectorId());
                         authorizeReq.sendAuthorize(chargingCurrentData.getIdTag());
                     } else {
@@ -281,9 +292,14 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
             } else {
                 // central system send
                 SocketState state = socketReceiveMessage.getSocket().getState();
-                if (state == SocketState.OPEN) {
-                    if (Objects.equals(UiSeq.CHARGING, uiSeq) && Objects.equals(chargingCurrentData.getIdTag(), chargingCurrentData.getIdTagStop())) {
-                        activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.FINISH_WAIT, "FINISH_WAIT", null);
+                if (state == SocketState.OPEN) {    // 서버 연결됨
+                    if (Objects.equals(UiSeq.CHARGING, uiSeq)) {
+                        if (Objects.equals(chargingCurrentData.getIdTag(), chargingCurrentData.getIdTagStop())) {
+                            chargingCurrentData.setUserStop(true);
+//                        activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.FINISH_WAIT, "FINISH_WAIT", null);
+                        } else {
+                            fragmentChange.onFragmentChange(mChannel, UiSeq.CHARGING, "CHARGING", null);
+                        }
                     } else {
                         if (chargingCurrentData.getChargePointStatus() == ChargePointStatus.Reserved) {
                             if (!Objects.equals(chargingCurrentData.getResIdTag(), chargingCurrentData.getIdTag())) {
@@ -299,14 +315,16 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
                     // isLocalAuthorizeOffline: 서버 연결이 끊겼을 때 오프라인 로컬 인증 허용 여부
                     if (GlobalVariables.isLocalAuthorizeOffline()) {
                         // local authorization enabled --> local 인증
-                        idTagInfo = socketReceiveMessage.getLocalAuthorizationListStrings(uiSeq == UiSeq.CHARGING ? chargingCurrentData.getIdTagStop() : chargingCurrentData.getIdTag());
+                        idTagInfo = socketReceiveMessage.getLocalAuthorizationListStrings(uiSeq == UiSeq.CHARGING ?
+                                chargingCurrentData.getIdTagStop() : chargingCurrentData.getIdTag());
                         if (Objects.equals(UiSeq.CHARGING, uiSeq)) {
                             if (Objects.equals(chargingCurrentData.getParentIdTag(), idTagInfo[1]) ||
                                     Objects.equals(chargingCurrentData.getIdTag(), chargingCurrentData.getIdTagStop())) {
-                                classUiProcess.setUiSeq(UiSeq.FINISH_WAIT);
-                                activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.FINISH_WAIT, "FINISH_WAIT", null);
+                                chargingCurrentData.setUserStop(true);
+//                                classUiProcess.setUiSeq(UiSeq.FINISH_WAIT);
+//                                activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.FINISH_WAIT, "FINISH_WAIT", null);
                             } else {
-                                classUiProcess.setUiSeq(UiSeq.CHARGING);
+//                                classUiProcess.setUiSeq(UiSeq.CHARGING);
                                 activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.CHARGING, "CHARGING", null);
                             }
                         } else {
@@ -337,7 +355,7 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
                     } else {
                         Toast.makeText(getActivity(), "서버와 통신 DISCONNECT!!! 인증 실패. ", Toast.LENGTH_SHORT).show();
                         if (Objects.equals(UiSeq.CHARGING, uiSeq)) {
-                            activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.CHARGING);
+//                            activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.CHARGING);
                             activity.getFragmentChange().onFragmentChange(mChannel,UiSeq.CHARGING, "CHARGING", null);
                         } else {
                             classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);
@@ -348,17 +366,6 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
             }
         } catch (Exception e) {
             logger.error("onViewCreated error : {}", e.getMessage());
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        try {
-            return;
-//            if (!isAdded() && !isFlag) return;
-//            activity.getClassUiProcess(mChannel).onHome();
-        } catch (Exception e) {
-            logger.error("onClick error : {}", e.getMessage());
         }
     }
 
@@ -384,22 +391,6 @@ public class MemberCheckWaitFragment extends Fragment implements View.OnClickLis
             mediaPlayer = null;
         }
     }
-
-//    private void authorizeFailed() {
-//        try {
-//            textViewMemberWaitMessage.setText(R.string.memberCheckFailedMessage);
-//            animationDrawable.stop();
-//            imageViewLoading.setVisibility(View.INVISIBLE);
-//            imageViewMemberFailed.setVisibility(View.VISIBLE);
-//            textViewFailed.setVisibility(View.VISIBLE);
-//            textViewConnectorRetryMessage.setVisibility(View.VISIBLE);
-//            textViewMemberRegistMessage.setVisibility(View.VISIBLE);
-//            fadeAnimator.start();
-//            isFlag = true;
-//        } catch (Exception e) {
-//            logger.error("authorizeFailed : {}", e.getMessage());
-//        }
-//    }
 
     @Override
     public void onDestroyView() {

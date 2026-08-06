@@ -22,6 +22,8 @@ import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
 import com.dongah.fastcharger.basefunction.ChargerConfiguration;
 import com.dongah.fastcharger.basefunction.ChargingCurrentData;
+import com.dongah.fastcharger.basefunction.PaymentType;
+import com.dongah.fastcharger.basefunction.UiSeq;
 import com.dongah.fastcharger.controlboard.TxData;
 import com.dongah.fastcharger.utils.SharedModel;
 import com.dongah.fastcharger.websocket.ocpp.utilities.ZonedDateTimeConvert;
@@ -165,7 +167,19 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (Objects.equals(v.getId(), R.id.btnChargingStop)) {
-            chargingCurrentData.setUserStop(true);
+            if (Objects.equals(chargerConfiguration.getOpMode(), 0)) {
+                // test mode
+                chargingCurrentData.setUserStop(true);
+            } else {
+                // server mode
+                boolean requireRfCard = Objects.equals(chargingCurrentData.getPaymentType(), PaymentType.MEMBER) &&
+                        chargerConfiguration.isStopConfirm();
+                if (requireRfCard) {
+                    activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
+                } else {
+                    chargingCurrentData.setUserStop(true);
+                }
+            }
         }
     }
     

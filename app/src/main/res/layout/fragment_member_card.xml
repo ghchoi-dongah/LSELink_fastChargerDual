@@ -57,4 +57,17 @@
         app:layout_constraintEnd_toEndOf="@id/imageViewMemberCardReader"
         app:layout_constraintTop_toBottomOf="@id/imageViewMemberCardReader" />
 
+    <TextView
+        android:id="@+id/textViewMemberStopMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/memberCardTagStopMessage"
+        android:textSize="22sp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/textViewMemberCheckMessage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

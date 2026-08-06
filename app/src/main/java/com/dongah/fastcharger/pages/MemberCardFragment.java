@@ -20,10 +20,14 @@ import android.widget.TextView;
 import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
 import com.dongah.fastcharger.basefunction.ChargingCurrentData;
+import com.dongah.fastcharger.basefunction.ClassUiProcess;
+import com.dongah.fastcharger.basefunction.UiSeq;
 import com.dongah.fastcharger.utils.SharedModel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 
 /**
@@ -46,14 +50,15 @@ public class MemberCardFragment extends Fragment {
     private String mParam2;
     private int mChannel;
 
-    int timer = 20;
-    TextView textViewTagTimer, textViewMemberCheckMessage;
+    int timer = 30;
+    TextView textViewTagTimer, textViewMemberCheckMessage, textViewMemberStopMessage;
     ImageView imageViewMemberCard;
     Animation animation;
     Handler countHandler;
     Runnable countRunnable;
     MainActivity activity;
     ChargingCurrentData chargingCurrentData;
+    ClassUiProcess classUiProcess;
 
     public MemberCardFragment() {
         // Required empty public constructor
@@ -87,14 +92,17 @@ public class MemberCardFragment extends Fragment {
         }
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_member_card, container, false);
         activity = (MainActivity) MainActivity.mContext;
         chargingCurrentData = activity.getChargingCurrentData(mChannel);
+        classUiProcess = activity.getClassUiProcess(mChannel);
 
         textViewMemberCheckMessage = view.findViewById(R.id.textViewMemberCheckMessage);
+        textViewMemberStopMessage = view.findViewById(R.id.textViewMemberStopMessage);
         textViewTagTimer = view.findViewById(R.id.textViewTagTimer);
         imageViewMemberCard = view.findViewById(R.id.imageViewMemberCard);
         animation = AnimationUtils.loadAnimation(getContext(), R.anim.translate);
@@ -114,6 +122,8 @@ public class MemberCardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         try {
+            textViewMemberStopMessage.setVisibility(Objects.equals(classUiProcess.getUiSeq(), UiSeq.CHARGING) ?
+                    View.VISIBLE : View.INVISIBLE);
             textViewTagTimer.setText(timer + "초");
             updateCardBackground(chargingCurrentData.getAuthType());
             imageViewMemberCard.startAnimation(animation);

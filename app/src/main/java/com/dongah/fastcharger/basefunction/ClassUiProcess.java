@@ -170,13 +170,8 @@ public class ClassUiProcess implements RfCardReaderListener {
 
                 case MEMBER_CARD:
                 case MEMBER_CHECK_WAIT:
-                    break;
-
                 case CONNECTION_FAILED:
                 case MEMBER_CHECK_FAILED:
-                    if (!rxData.isCsPilot()) {
-                        onHome();
-                    }
                     break;
 
                 case PLUG_CHECK:
@@ -196,7 +191,7 @@ public class ClassUiProcess implements RfCardReaderListener {
                     break;
 
                 case FINISH:
-                    onFinish(rxData);
+                    onFinish();
                     break;
 
                 case FAULT:
@@ -226,14 +221,10 @@ public class ClassUiProcess implements RfCardReaderListener {
     }
 
     /** 충전 완료 */
-    private void onFinish(RxData rxData) {
+    private void onFinish() {
         try {
             if (chargingCurrentData.isReBoot()) {
                 setUiSeq(UiSeq.INIT);
-            }
-
-            if (!rxData.isCsPilot()) {
-                onHome();
             }
         } catch (Exception e) {
             logger.error("ClassUiProcess onFinish error : {}", e.getMessage());
@@ -516,24 +507,40 @@ public class ClassUiProcess implements RfCardReaderListener {
     }
 
     private void onRfCardDataReceiveEvent(int ch, String cardNum, boolean b) {
-        if (b) {
-            try {
-                if (Objects.equals(cardNum,"0000000000000000")) {
-                    rfCardReaderReceive.rfCardReadRequest(ch);
-                } else if (!cardNum.isEmpty()) {
-                    MainActivity activity = ((MainActivity) MainActivity.mContext);
-                    ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(ch);
+        try {
+            if (!cardNum.isEmpty() && !Objects.equals(cardNum,"0000000000000000")) {
+                MainActivity activity = ((MainActivity) MainActivity.mContext);
+                ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(ch);
+                UiSeq seq = activity.getClassUiProcess(ch).getUiSeq();
 
-                    chargingCurrentData.setAuthType("M");
+                if (Objects.equals(UiSeq.CHARGING, seq)) {
+                    int userType = chargingCurrentData.getPaymentType().value();
+                    switch (userType) {
+                        case 1:
+                            chargingCurrentData.setIdTagStop("M" + cardNum);
+                            break;
+                        case 2:
+                            chargingCurrentData.setIdTagStop("N" + cardNum);
+                            break;
+                        case 7:
+                            chargingCurrentData.setIdTagStop("C" + cardNum);
+                            break;
+                        case 8:
+                            chargingCurrentData.setIdTagStop("K" + cardNum);
+                            break;
+                        default:
+                            logger.error("onRfCardDataReceiveEvent userType none");
+                            break;
+                    }
+                } else {
                     chargingCurrentData.setIdTag(cardNum);
-
                     activity.getClassUiProcess(ch).setUiSeq(UiSeq.MEMBER_CHECK_WAIT);
-                    fragmentChange.onFragmentChange(ch, UiSeq.MEMBER_CHECK_WAIT,"MEMBER_CHECK_WAIT",null);
-                    rfCardReaderReceive.rfCardReadRelease();
                 }
-            } catch (Exception e) {
-                logger.error("onRfCardDataReceiveEvent error : {} ", e.getMessage());
+                fragmentChange.onFragmentChange(ch, UiSeq.MEMBER_CHECK_WAIT,"MEMBER_CHECK_WAIT",null);
+                rfCardReaderReceive.rfCardReadRelease();
             }
+        } catch (Exception e) {
+            logger.error("onRfCardDataReceiveEvent error : {} ", e.getMessage());
         }
     }
 
@@ -747,9 +754,11 @@ public class ClassUiProcess implements RfCardReaderListener {
 
         try {
             controlBoard.getTxData(getCh()).setStop(true);
+            controlBoard.getTxData(getCh()).setStart(false);
             controlBoard.getTxData(getCh()).setUiSequence((short) 3);
             //사용자 user stop
-            chargingCurrentData.setStopReason(chargingCurrentData.isUserStop() ? Reason.Local : chargingCurrentData.getStopReason());
+            chargingCurrentData.setStopReason(chargingCurrentData.isUserStop() ?
+                    Reason.Local : chargingCurrentData.getStopReason());
             // 충전 사용량 정리
             chargingCurrentData.setPowerMeterStop(rxData.getPowerMeter()*10);
             chargingCurrentData.setChargingEndTime(zonedDateTimeConvert.getStringCurrentTimeZone());
@@ -770,14 +779,8 @@ public class ClassUiProcess implements RfCardReaderListener {
                     stopTransactionReq.sendStopTransactionReq();
                 }
 
-                if (!GlobalVariables.ChargerOperation[getCh()+1]) {
-                    setUiSeq(UiSeq.INIT);
-                    fragmentChange.onFragmentChange(getCh(), UiSeq.INIT, "INIT", null);
-                } else {
-                    setUiSeq(UiSeq.FINISH);
-                    fragmentChange.onFragmentChange(getCh(), UiSeq.FINISH, "FINISH", null);
-                }
-
+                setUiSeq(UiSeq.FINISH);
+                fragmentChange.onFragmentChange(getCh(), UiSeq.FINISH, "FINISH", null);
             }, 3000);
         } catch (Exception e) {
             finishWaitScheduled = false;

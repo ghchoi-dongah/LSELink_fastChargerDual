@@ -24,6 +24,7 @@
     <string name="payUnitMessage">원</string>
     <string name="nomemberInfoMessage">신용카드 결제로 충전</string>
     <string name="memberCardTagMessage"><font color="#000">회원 카드 태깅</font></string>
+    <string name="memberCardTagStopMessage"><font color="#545454">본인 확인 후 충전이 종료됩니다.</font></string>
     <string name="corpCardTagMessage"><font color="#000">법인 카드 태깅</font></string>
     <string name="moeCardTagMessage"><font color="#000">환경부 카드 태깅</font></string>
     <string name="noMacMessage"><font color="#000">등록되지 않은 차량입니다.\n차량 등록은 관리자에게 문의해 주세요.</font></string>
@@ -123,6 +124,7 @@
     <string name="soc"><font color="#000">SoC</font></string>
     <string name="dr"><font color="#000">출력 전류 제한(kW)</font></string>
     <string name="initInfoYn"><font color="#000">Soc/출력 정보 표시</font></string>
+    <string name="stopConfirm"><font color="#000">충전태그 여부</font></string>
 
     <!-- environment   -->
     <string name="configButton">환경설정</string>
