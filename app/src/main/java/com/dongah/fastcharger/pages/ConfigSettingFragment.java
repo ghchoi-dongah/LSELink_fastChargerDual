@@ -66,7 +66,7 @@ public class ConfigSettingFragment extends Fragment implements View.OnClickListe
     EditText editMeterSerialNumber, editMeterType;
     EditText editSoc, editDR;
     Button btnExit, btnSave, btnRebooting, btnKeyboardControl;
-    CheckBox checkboxControlMonitor, checkboxInitInfo;
+    CheckBox checkboxControlMonitor, checkboxInitInfo, checkboxStopConfirm;
 
 
     public ConfigSettingFragment() {
@@ -144,6 +144,7 @@ public class ConfigSettingFragment extends Fragment implements View.OnClickListe
             spinnerChargePointModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                    spChargerPointModelCode = position;
                     chargerConfiguration.setChargerPointModelCode(position);
                     Resources resources = getResources();
                     String[] chargerModel = resources.getStringArray(R.array.chargerModel);
@@ -401,6 +402,8 @@ public class ConfigSettingFragment extends Fragment implements View.OnClickListe
             checkboxControlMonitor.setChecked(chargerConfiguration.isControlMonitor());
             checkboxInitInfo = v.findViewById(R.id.checkboxInitInfo);
             checkboxInitInfo.setChecked(chargerConfiguration.isInitInfo());
+            checkboxStopConfirm = v.findViewById(R.id.checkboxStopConfirm);
+            checkboxStopConfirm.setChecked(chargerConfiguration.isStopConfirm());
         } catch (Exception e) {
             logger.error("ConfigSettingFragment InitializationComponents error : {}",  e.getMessage());
         }
@@ -447,6 +450,7 @@ public class ConfigSettingFragment extends Fragment implements View.OnClickListe
 
             chargerConfiguration.setControlMonitor(checkboxControlMonitor.isChecked());
             chargerConfiguration.setInitInfo(checkboxInitInfo.isChecked());
+            chargerConfiguration.setStopConfirm(checkboxStopConfirm.isChecked());
         } catch (Exception e) {
             logger.error("ConfigSettingFragment onConfigurationUpdate error : {}",  e.getMessage());
         }

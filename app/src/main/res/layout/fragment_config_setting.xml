@@ -586,6 +586,28 @@
         app:layout_constraintBottom_toBottomOf="@id/textViewInitInfo"
         app:layout_constraintEnd_toEndOf="@id/editDR" />
 
+    <TextView
+        android:id="@+id/textViewStopConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/stopConfirm"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/textViewControlMonitor"
+        app:layout_constraintEnd_toStartOf="@id/checkboxInitInfo"/>
+
+    <CheckBox
+        android:id="@+id/checkboxStopConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:scaleX="1.3"
+        android:scaleY="1.3"
+        app:layout_constraintTop_toTopOf="@id/textViewStopConfirm"
+        app:layout_constraintBottom_toBottomOf="@id/textViewStopConfirm"
+        app:layout_constraintEnd_toEndOf="@id/editDR" />
+
     <Button
         android:id="@+id/btnExit"
         android:layout_width="240dp"
