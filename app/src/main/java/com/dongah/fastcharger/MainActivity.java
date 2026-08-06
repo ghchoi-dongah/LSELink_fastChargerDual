@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
         processHandler = new ProcessHandler();
 
         // 6. socket
-//        String baseUrl = "ws://dongahtest.p-e.kr:5000/v2/DAE000202";
+//        String baseUrl = "ws://octt.dongahtest.p-e.kr:9000/DAE000101";
         String baseUrl =  chargerConfiguration.getServerConnectingString() + chargerConfiguration.getChargeBoxSerialNumber() + chargerConfiguration.getChargerId();
         socketReceiveMessage = new SocketReceiveMessage(baseUrl);
 
@@ -271,9 +271,7 @@ public class MainActivity extends AppCompatActivity {
          **/
         if (Objects.equals(chargerConfiguration.getOpMode(), 1)) {
             onChangeMode(sqLiteHelper); // change mode
-        }
-
-        if (state != SocketState.OPEN || Objects.equals(chargerConfiguration.getOpMode(), 0)) {
+        } else if (Objects.equals(chargerConfiguration.getOpMode(), 0)) {
             // 전류, SoC 제한 설정
             for (int i = 0; i <GlobalVariables.maxChannel; i++) {
                 ((MainActivity) MainActivity.mContext).getControlBoard().getTxData(i).setOutPowerLimit((short) chargerConfiguration.getDr());

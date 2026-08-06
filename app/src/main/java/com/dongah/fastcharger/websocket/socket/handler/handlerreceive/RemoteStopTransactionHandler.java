@@ -36,11 +36,12 @@ public class RemoteStopTransactionHandler implements OcppHandler  {
             MainActivity activity = ((MainActivity) MainActivity.mContext);
             ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(connectorId-1);
 
-            RemoteStartStopStatus status = !Objects.equals(chargingCurrentData.getTransactionId(), transactionId) ?
-                    RemoteStartStopStatus.Rejected : RemoteStartStopStatus.Accepted;
+//            RemoteStartStopStatus status = !Objects.equals(chargingCurrentData.getTransactionId(), transactionId) ?
+//                    RemoteStartStopStatus.Rejected : RemoteStartStopStatus.Accepted;
 
+            // LS E-Link SW 운영상 사용 안 함
             RemoteStopTransactionConfirmation remoteStopTransactionConfirmation =
-                    new RemoteStopTransactionConfirmation(status);
+                    new RemoteStopTransactionConfirmation(RemoteStartStopStatus.Rejected);
             activity.getSocketReceiveMessage().onResultSend(
                     connectorId,
                     remoteStopTransactionConfirmation.getActionName(),
@@ -48,7 +49,7 @@ public class RemoteStopTransactionHandler implements OcppHandler  {
                     remoteStopTransactionConfirmation
             );
         } catch (Exception e) {
-            logger.error(" RemoteStopTransaction sendResponse error : {}", e.getMessage());
+            logger.error("sendResponse error : {}", e.getMessage());
         }
     }
 }

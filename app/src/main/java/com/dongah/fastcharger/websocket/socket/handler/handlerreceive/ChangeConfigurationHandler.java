@@ -146,7 +146,7 @@ public class ChangeConfigurationHandler implements OcppHandler {
                 result = fileManagement.stringToFileSave(GlobalVariables.getRootPath(), "ConfigurationKey", sObject.toString(), false);
             }
         } catch (Exception e) {
-            logger.error("SetConfigurationValue {}", e.getMessage());
+            logger.error("SetConfigurationValue error : {}", e.getMessage());
         }
         return result;
     }
@@ -160,7 +160,7 @@ public class ChangeConfigurationHandler implements OcppHandler {
                 return value;
             }
         } catch (Exception e) {
-            logger.error(" doAuthorizationKeyConvert error : {}", e.getMessage());
+            logger.error("doAuthorizationKeyConvert error : {}", e.getMessage());
             return "0";
         }
     }

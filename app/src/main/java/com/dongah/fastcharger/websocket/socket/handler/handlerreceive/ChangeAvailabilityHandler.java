@@ -124,7 +124,7 @@ public class ChangeAvailabilityHandler implements OcppHandler {
                 fileManagement.stringToFileSave(rootPath, fileName, statusContent, true);
             }
         } catch (Exception e) {
-            logger.error("onChargerOperateSave {}", e.getMessage());
+            logger.error("onChargerOperateSave error : {}", e.getMessage(), e);
         }
     }
 }

@@ -14,7 +14,6 @@ import com.dongah.fastcharger.basefunction.ChargerConfiguration;
 import com.dongah.fastcharger.basefunction.DumpDataSend;
 import com.dongah.fastcharger.basefunction.GlobalVariables;
 import com.dongah.fastcharger.utils.FileManagement;
-import com.dongah.fastcharger.utils.LogDataSave;
 import com.dongah.fastcharger.websocket.ocpp.utilities.Base64Util;
 import com.dongah.fastcharger.websocket.ocpp.utilities.ZonedDateTimeConvert;
 import com.dongah.fastcharger.websocket.socket.handler.handlersend.ProcessHandler;
@@ -241,7 +240,7 @@ public class Socket extends WebSocketListener {
             useBasicAuth = GlobalVariables.isUseBasicAuth();
             if (useBasicAuth) {
                 //Basic <Based64encoded(chargerPointId:AuthorizationKey)>
-                String authorizationKey = com.dongah.fastcharger.basefunction.GlobalVariables.getAuthorizationKey();
+                String authorizationKey = GlobalVariables.getAuthorizationKey();
                 // 최초 인증 번호는 자체 생성
                 if (authorizationKey.isEmpty()) {
                     String chargerId = chargerConfiguration.getChargeBoxSerialNumber() + chargerConfiguration.getChargerId();

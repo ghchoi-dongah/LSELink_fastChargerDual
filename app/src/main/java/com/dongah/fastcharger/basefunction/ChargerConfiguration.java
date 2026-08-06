@@ -44,7 +44,7 @@ public class ChargerConfiguration {
      * 0: 회원카드
      * 1: 회원카드 + 신용카드
      * */
-    public int authMode = 1;
+    public int authMode = 0;
     public int authModeId;
 
     /** 운영모드
@@ -67,8 +67,8 @@ public class ChargerConfiguration {
 
     /** charging point configuration setting */
     public int chargerPointType = 0;                    // 커플러 타입
-    public String chargerPointModel = "DEVD240";        // 충전기 모델ID
-    public int chargerPointModelCode = 0;
+    public String chargerPointModel = "DEVS100DN";      // 충전기 모델ID
+    public int chargerPointModelCode = 9;
     public String chargeBoxSerialNumber = "";           // 충전소ID
     public String chargerId = "";                       // 충전기ID
     public String chargePointSerialNumber = "";         // 충전기 시리얼 번호
@@ -81,7 +81,7 @@ public class ChargerConfiguration {
     public int connectorPriority = 1;                   // 1구 제어 우선순위
     public String testPrice = "313.0";                  // 테스트 단가
     public int targetSoc = 80;                          // SoC
-    public int dr = 0;                                  // 전류 제한
+    public int dr = 50;                                  // 전류 제한
 
     public boolean StopConfirm;
     public boolean signed = true ;
