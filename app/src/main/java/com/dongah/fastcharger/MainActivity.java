@@ -40,6 +40,7 @@ import com.dongah.fastcharger.basefunction.GlobalVariables;
 import com.dongah.fastcharger.basefunction.UiSeq;
 import com.dongah.fastcharger.utils.DatabaseHttpServer;
 import com.dongah.fastcharger.utils.ToastPositionMake;
+import com.dongah.fastcharger.vcat.ServiceProcessingActivity;
 import com.dongah.fastcharger.websocket.ocpp.core.ChargePointStatus;
 import com.dongah.fastcharger.websocket.ocpp.core.Reason;
 import com.dongah.fastcharger.websocket.ocpp.utilities.ZonedDateTimeConvert;
@@ -100,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
     ClientSocket clientSocket;
     MonitorHttpServer monitorHttpServer;
     DatabaseHttpServer databaseHttpServer;
+    ServiceProcessingActivity serviceProcessingActivity;
+
 
 
     public UiSeq getFragmentSeq(int ch)  {
@@ -152,6 +155,10 @@ public class MainActivity extends AppCompatActivity {
 
     public ProcessHandler getProcessHandler() {
         return processHandler;
+    }
+
+    public ServiceProcessingActivity getServiceProcessingActivity() {
+        return serviceProcessingActivity;
     }
 
 
@@ -246,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
          *  충전소ID : 000000
          *  충전기ID : 26
          */
-        chargerConfiguration.setSigned(false);
+//        chargerConfiguration.setSigned(false);
 
         // 5. handler
         processHandler = new ProcessHandler();
@@ -274,12 +281,20 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // 7. classUiProcess
+        // 7. V-CAT 결제 서비스 (ClassUiProcess 생성 전에 초기화 — 생성자에서 리스너 등록)
+        serviceProcessingActivity = new ServiceProcessingActivity(this);
+        boolean vcatBound = serviceProcessingActivity.bindVCATService();
+        if (!vcatBound) {
+            logger.warn("V-CAT bindService 실패. wakeUp 후 재시도.");
+            serviceProcessingActivity.wakeUp();
+            serviceProcessingActivity.bindVCATService();
+        }
+
+        // 8. classUiProcess
         classUiProcess = new ClassUiProcess[GlobalVariables.maxChannel];
         for (int i = 0; i < GlobalVariables.maxChannel; i++) {
             classUiProcess[i] = new ClassUiProcess(i);
             classUiProcess[i].setUiSeq(UiSeq.INIT);
-
         }
 
         // 8. PLC modem
@@ -547,6 +562,7 @@ public class MainActivity extends AppCompatActivity {
         if (monitorHttpServer != null) {
             monitorHttpServer.stopServer();
         }
+        if (serviceProcessingActivity != null) serviceProcessingActivity.unbind();
         super.onDestroy();
     }
 

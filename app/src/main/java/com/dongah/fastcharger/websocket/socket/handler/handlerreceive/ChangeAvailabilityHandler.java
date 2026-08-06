@@ -114,7 +114,7 @@ public class ChangeAvailabilityHandler implements OcppHandler {
         try {
             boolean chk;
             FileManagement fileManagement = new FileManagement();
-            String rootPath = Environment.getExternalStorageDirectory().toString() + File.separator + "Download";
+            String rootPath = GlobalVariables.ROOT_PATH;
             String fileName = "ChargerOperate";
             File file = new File(rootPath + File.separator + fileName);
             if (file.exists()) chk = file.delete();

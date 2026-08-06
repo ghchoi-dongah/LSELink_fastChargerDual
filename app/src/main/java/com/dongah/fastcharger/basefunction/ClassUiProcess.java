@@ -15,6 +15,8 @@ import com.dongah.fastcharger.controlboard.RxData;
 import com.dongah.fastcharger.pages.FaultFragment;
 import com.dongah.fastcharger.rfcard.RfCardReaderListener;
 import com.dongah.fastcharger.rfcard.RfCardReaderReceive;
+import com.dongah.fastcharger.vcat.VCatListener;
+import com.dongah.fastcharger.vcat.ServiceProcessingActivity;
 import com.dongah.fastcharger.websocket.ocpp.core.ChargePointErrorCode;
 import com.dongah.fastcharger.websocket.ocpp.core.ChargePointStatus;
 import com.dongah.fastcharger.websocket.ocpp.core.Reason;
@@ -29,6 +31,7 @@ import com.dongah.fastcharger.websocket.socket.handler.handlersend.StartTransact
 import com.dongah.fastcharger.websocket.socket.handler.handlersend.StatusNotificationReq;
 import com.dongah.fastcharger.websocket.socket.handler.handlersend.StopTransactionReq;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +44,7 @@ public class ClassUiProcess implements RfCardReaderListener {
     int ch;
     UiSeq uiSeq;
     UiSeq oSeq;
+    MainActivity activity;
     ChargerConfiguration chargerConfiguration;
     ChargingCurrentData chargingCurrentData;
 
@@ -63,6 +67,8 @@ public class ClassUiProcess implements RfCardReaderListener {
     StatusNotificationReq statusNotificationReq;
     MeterValuesReq meterValuesReq;
     private final Handler handler = new Handler(Looper.getMainLooper());
+
+    ServiceProcessingActivity vcat;
 
     public int getCh() {
         return ch;
@@ -103,6 +109,7 @@ public class ClassUiProcess implements RfCardReaderListener {
             setUiSeq(UiSeq.INIT);
             zonedDateTimeConvert = new ZonedDateTimeConvert();
 
+            activity = (MainActivity) MainActivity.mContext;
             // rf card
             rfCardReaderReceive = ((MainActivity) MainActivity.mContext).getRfCardReaderReceive();
             rfCardReaderReceive.setRfCardReaderListener(this);
@@ -116,6 +123,11 @@ public class ClassUiProcess implements RfCardReaderListener {
             notifyFaultCheck = new NotifyFaultCheck(ch);
             // process handler
             processHandler = ((MainActivity) MainActivity.mContext).getProcessHandler();
+            // V-CAT listener
+            vcat = ((MainActivity) MainActivity.mContext).getServiceProcessingActivity();
+            if (vcat != null) {
+                onVCatService();
+            }
 
             statusNotificationReq = new StatusNotificationReq(ch+1);
 
@@ -371,6 +383,106 @@ public class ClassUiProcess implements RfCardReaderListener {
         } catch (Exception e) {
             logger.error("power meter calculate error : {}", e.getMessage());
         }
+    }
+
+    public void onVCatService() {
+        // prompt/card-no: V-CAT이 카드 번호를 전달하며 다음 단계 진행 여부 묻는 이벤트
+        // 다음 단계(VAN 승인) 진행 허용
+        // V-CAT API V3.13: service-result==0 && response-code=="00" 이면 승인
+        // V-CAT API V3.13 응답 필드
+        // card-no 는 onEvent(prompt/card-no) 에서 이미 저장됨
+        // TODO: 아래 필드명은 V-CAT API V3.13 문서로 최종 확인 필요
+        VCatListener vCatListener = new VCatListener() {
+            @Override
+            public void onServiceConnectionChanged(boolean connected) {
+                logger.info("V-CAT 서비스 연결 상태: {}", connected);
+                if (!connected) {
+                    if (vcat != null) {
+                        vcat.wakeUp();
+                        vcat.bindVCATService();
+                    }
+                }
+            }
+
+            @Override
+            public void onEvent(String eventJson) {
+                logger.info("V-CAT 이벤트: {}", eventJson);
+                try {
+                    JSONObject json = new JSONObject(eventJson);
+                    // prompt/card-no: V-CAT이 카드 번호를 전달하며 다음 단계 진행 여부 묻는 이벤트
+                    if ("prompt".equals(json.optString("event")) &&
+                            "card-no".equals(json.optString("description"))) {
+                        String cardNo = json.optString("card-no", "");
+                        if (activity.getClassUiProcess(getCh()).getUiSeq() == UiSeq.CREDIT_CARD_WAIT) {
+                            activity.getChargingCurrentData(getCh()).setCreditCardNumber(cardNo);
+                        }
+                        // 다음 단계(VAN 승인) 진행 허용
+                        if (vcat != null) {
+                            JSONObject reply = new JSONObject();
+                            reply.put("go-next-step", "y");
+                            vcat.postExtraData(reply.toString());
+                        }
+                    }
+                } catch (Exception e) {
+                    logger.error("V-CAT onEvent 파싱 오류", e);
+                }
+            }
+
+            @Override
+            public void onResult(String resultJson) {
+                logger.info("V-CAT 결과: {}", resultJson);
+                try {
+                    JSONObject json = new JSONObject(resultJson);
+
+                    // V-CAT API V3.13: service-result==0 && response-code=="00" 이면 승인
+                    int serviceResult = Integer.parseInt(json.optString("service-result", "1"));
+                    boolean success = (serviceResult == 0)
+                            && "00".equals(json.optString("response-code", ""));
+
+                    int targetCh = -1;
+                    MainActivity activity = (MainActivity) MainActivity.mContext;
+                    for (int i = 0; i < GlobalVariables.maxChannel; i++) {
+                        if (activity.getClassUiProcess(i).getUiSeq() == UiSeq.CREDIT_CARD_WAIT) {
+                            targetCh = i;
+                            break;
+                        }
+                    }
+                    if (targetCh < 0) {
+                        logger.warn("V-CAT onResult: CREDIT_CARD_WAIT 채널 없음");
+                        return;
+                    }
+
+                    final int ch = targetCh;
+                    if (success) {
+                        ChargingCurrentData data = activity.getChargingCurrentData(ch);
+                        // V-CAT API V3.13 응답 필드
+                        data.setApprovalNumber(json.optString("approval-no", "").trim());
+                        data.setApprovalDate(json.optString("approval-date", ""));
+                        data.setApprovalTime(json.optString("approval-time", ""));
+                        data.setPgTranSeq(json.optString("pg-tran-seq", ""));
+                        // card-no 는 onEvent(prompt/card-no) 에서 이미 저장됨
+                        // TODO: 아래 필드명은 V-CAT API V3.13 문서로 최종 확인 필요
+                        data.setStoreNumber(json.optString("merchant-no", ""));
+                        data.setTerminalNumber(json.optString("tran-serial", ""));
+                        data.setIssuer(json.optString("issuer-name", ""));
+                        data.setBuyer(json.optString("acq-name", ""));
+                        data.setPrePaymentResult(true);
+                        handler.post(() -> {
+                            activity.getClassUiProcess(ch).setUiSeq(UiSeq.PLUG_CHECK);
+                            activity.getFragmentChange().onFragmentChange(
+                                    ch, UiSeq.PLUG_CHECK, "PLUG_CHECK", null);
+                        });
+                    } else {
+                        String msg = json.optString("display-msg", "승인 거절");
+                        logger.warn("V-CAT 결제 거절 ch={} service-result={} msg={}", ch, serviceResult, msg);
+                        handler.post(() -> activity.getClassUiProcess(ch).onHome());
+                    }
+                } catch (Exception e) {
+                    logger.error("V-CAT onResult 파싱 오류", e);
+                }
+            }
+        };
+        vcat.setListener(vCatListener);
     }
 
     /**

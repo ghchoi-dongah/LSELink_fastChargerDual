@@ -46,6 +46,7 @@ public class ChargingFinishFragment extends Fragment implements View.OnClickList
     private String mParam2;
     private int mChannel;
 
+    private static final long UI_CHECK_INTERVAL_MS = 5 * 60 * 1000; // 5분
     Button btnCheck;
     TextView textViewSocValue, textViewChargingAmtValue, textViewChargingTimeValue, textViewLimitSocValue;
     TextView textViewPrePayment, textViewInputPrePayment, textViewPartCancelPay, textViewInputCancelPayment;
@@ -118,22 +119,40 @@ public class ChargingFinishFragment extends Fragment implements View.OnClickList
             progressCircular.isIndeterminate();
             mediaPlayer();
 
+            // unplug check 후 초기 화면
+            uiCheckHandler = new Handler();
+            uiCheckHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (!((MainActivity) MainActivity.mContext).getControlBoard().getRxData(mChannel).isCsPilot()) {
+                        ((MainActivity) MainActivity.mContext).getClassUiProcess(mChannel).onHome();
+                    }
+                    uiCheckHandler.postDelayed(this, UI_CHECK_INTERVAL_MS);
+                }
+            }, UI_CHECK_INTERVAL_MS);
+
+
             // charging finish info
             ((MainActivity) MainActivity.mContext).runOnUiThread(new Runnable() {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void run() {
-                    textViewSocValue.setText(chargingCurrentData.getSoc() + "%");
-                    progressCircular.setProgress(chargingCurrentData.getSoc(), true);
-                    textViewLimitSocValue.setText("목표 충전율: " +chargingCurrentData.getLimitSoc() + "%");
-                    textViewChargingAmtValue.setText(powerFormatter.format(chargingCurrentData.getPowerMeterUse() * 0.01) + "kWh");
-                    textViewChargingTimeValue.setText(chargingCurrentData.getChargingUseTime());
-
-                    // 신용카드 결제
-                    prepaymentInfo(chargingCurrentData.isPrePaymentResult());
-                    if (chargingCurrentData.isPrePaymentResult()) {
-
+                    try {
+                        textViewSocValue.setText(chargingCurrentData.getSoc() + "%");
+                        progressCircular.setProgress(chargingCurrentData.getSoc(), true);
+                        textViewLimitSocValue.setText("목표 충전율: " +chargingCurrentData.getLimitSoc() + "%");
+                        textViewChargingAmtValue.setText(powerFormatter.format(chargingCurrentData.getPowerMeterUse() * 0.01) + "kWh");
+                        textViewChargingTimeValue.setText(chargingCurrentData.getChargingUseTime());
+                    } catch (Exception e) {
+                        logger.error("onViewCreated charging result error : {}", e.getMessage(), e);
                     }
+
+
+                    // TODO : 신용카드 결제 정산
+                    prepaymentInfo(chargingCurrentData.isPrePaymentResult());
+//                    if (chargingCurrentData.isPrePaymentResult()) {
+//
+//                    }
                 }
             });
         } catch (Exception e) {
@@ -153,7 +172,6 @@ public class ChargingFinishFragment extends Fragment implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (!isAdded()) return;
-
         if (Objects.equals(v.getId(), R.id.btnCheck)) {
             ((MainActivity) MainActivity.mContext).getClassUiProcess(mChannel).onHome();
         }

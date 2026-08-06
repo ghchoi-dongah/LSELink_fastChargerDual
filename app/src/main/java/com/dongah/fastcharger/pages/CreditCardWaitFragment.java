@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
 import com.dongah.fastcharger.basefunction.UiSeq;
+import com.dongah.fastcharger.vcat.ServiceProcessingActivity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -152,6 +153,10 @@ public class CreditCardWaitFragment extends Fragment implements View.OnClickList
 
     private void creditFailed() {
         try {
+            // 타임아웃: 진행 중인 V-CAT 세션 취소
+            ServiceProcessingActivity svc = activity.getServiceProcessingActivity();
+            if (svc != null) svc.cancelService();
+
             textViewCreditWaitMessage.setText(R.string.creditCheckFailedMessage);
             animationDrawable.stop();
             imageViewLoading.setVisibility(View.INVISIBLE);
@@ -201,6 +206,11 @@ public class CreditCardWaitFragment extends Fragment implements View.OnClickList
             }
             countRunnable = null;
 
+            // 아직 CREDIT_CARD_WAIT 상태면 V-CAT 세션이 남아있는 비정상 이탈 — 강제 취소
+            if (activity.getClassUiProcess(mChannel).getUiSeq() == UiSeq.CREDIT_CARD_WAIT) {
+                ServiceProcessingActivity svc = activity.getServiceProcessingActivity();
+                if (svc != null) svc.cancelService();
+            }
         } catch (Exception e) {
             logger.error("onDestroyView error : {}", e.getMessage());
         }

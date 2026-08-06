@@ -23,6 +23,8 @@ import com.dongah.fastcharger.R;
 import com.dongah.fastcharger.basefunction.ChargerConfiguration;
 import com.dongah.fastcharger.basefunction.ChargerPointType;
 import com.dongah.fastcharger.basefunction.ChargingCurrentData;
+import com.dongah.fastcharger.basefunction.GlobalVariables;
+import com.dongah.fastcharger.basefunction.PaymentType;
 import com.dongah.fastcharger.basefunction.UiSeq;
 import com.dongah.fastcharger.controlboard.RxData;
 import com.dongah.fastcharger.controlboard.TxData;
@@ -202,6 +204,9 @@ public class InitFragment extends Fragment implements View.OnClickListener {
                     SocketState socketState = activity.getSocketReceiveMessage().getSocket().getState();
                     if (Objects.equals(socketState, SocketState.OPEN)) {
                         if (chargerConfiguration.getAuthMode() == 0) {
+                            chargingCurrentData.setAuthType("M");
+                            chargingCurrentData.setPaymentType(PaymentType.MEMBER);
+                            chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeM);
                             activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.MEMBER_CARD);
                             activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
                         } else {

@@ -172,7 +172,7 @@ public class BootNotificationThread extends Thread {
     private void onChargerOperateSave() {
         try {
             boolean check;
-            String rootPath = Environment.getExternalStorageDirectory().toString() + File.separator + "Download";
+            String rootPath = GlobalVariables.ROOT_PATH;
             File file = new File(rootPath + File.separator + "ChargerOperate");
             if (file.exists()) check = file.delete();
 

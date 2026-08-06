@@ -93,7 +93,7 @@ public class ChargerConfiguration {
     public UploadLogStatus uploadLogStatus = UploadLogStatus.Idle;
 
     public ChargerConfiguration() {
-        setRootPath(Environment.getExternalStorageDirectory().toString() + File.separator + "Download");
+        setRootPath(GlobalVariables.ROOT_PATH);
         fileManagement = new FileManagement();
     }
 

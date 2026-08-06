@@ -74,7 +74,7 @@
     <string name="connectorDisconnectMessage"><font color="#000">커넥터를 분리하여 정리해 주세요.</font></string>
     <string name="etcInfo">기타정보</string>
     <string name="chargingInfo">충전정보</string>
-    <string name="intiInfo">충전량 제한 : %1$d%%\n출력 제한 : %2$dkW</string>
+    <string name="intiInfo">충전율 제한 : %1$d%%\n출력 제한 : %2$dkW</string>
     <string name="price">%1$,.0f원/kWh</string>
 
     <!-- config setting -->

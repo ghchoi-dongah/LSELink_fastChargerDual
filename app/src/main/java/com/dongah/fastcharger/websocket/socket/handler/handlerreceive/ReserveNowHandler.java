@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi;
 import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.basefunction.ChargingCurrentData;
 import com.dongah.fastcharger.basefunction.GlobalVariables;
+import com.dongah.fastcharger.basefunction.UiSeq;
 import com.dongah.fastcharger.controlboard.RxData;
 import com.dongah.fastcharger.utils.FileManagement;
 import com.dongah.fastcharger.utils.SupportFunction;
@@ -37,29 +38,24 @@ public class ReserveNowHandler implements OcppHandler {
             String resParentIdTag = payload.has("parentIdTag") ? payload.getString("parentIdTag") : "";
             String resReservationId = payload.has("reservationId") ? payload.getString("reservationId") : "";
 
-
             MainActivity activity = (MainActivity) MainActivity.mContext;
             ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(connectorId-1);
-
             boolean faultedCase = false, occupiedCase = false, unavailableCase = false;
 
             if (GlobalVariables.isReserveConnectorZeroSupported() &&  resConnectorId == 0) {
-                RxData rxData = activity.getControlBoard().getRxData(connectorId-1);
-                faultedCase = rxData.isCsFault();
-                occupiedCase = activity.getChargingCurrentData(connectorId-1).getChargePointStatus() == ChargePointStatus.Available;
-                unavailableCase = GlobalVariables.ChargerOperation[1];
+                RxData rxData0 = activity.getControlBoard().getRxData(0);
+                RxData rxData1 = activity.getControlBoard().getRxData(1);
+                faultedCase = rxData0.isCsFault() || rxData1.isCsFault();
+                occupiedCase = activity.getChargingCurrentData(0).getChargePointStatus() == ChargePointStatus.Available ||
+                        activity.getChargingCurrentData(1).getChargePointStatus() == ChargePointStatus.Available;
+                unavailableCase = GlobalVariables.ChargerOperation[1] || GlobalVariables.ChargerOperation[2];
             } else if (resConnectorId > 0) {
                 int resChannel = resConnectorId - 1;
                 chargingCurrentData = activity.getChargingCurrentData(resChannel);
                 RxData rxData = activity.getControlBoard().getRxData(resChannel);
-                faultedCase = rxData.isCsFault();
-                ChargePointStatus resConnStatus = chargingCurrentData.getChargePointStatus();
-                occupiedCase = chargingCurrentData.getReservedStatus() == ChargePointStatus.Reserved
-                        || resConnStatus == ChargePointStatus.Preparing
-                        || resConnStatus == ChargePointStatus.Charging
-                        || resConnStatus == ChargePointStatus.SuspendedEV
-                        || resConnStatus == ChargePointStatus.SuspendedEVSE
-                        || resConnStatus == ChargePointStatus.Finishing;
+                faultedCase = rxData.isCsFault() || activity.getClassUiProcess(resChannel).getUiSeq() != UiSeq.INIT;
+                occupiedCase = chargingCurrentData.getReservedStatus() == ChargePointStatus.Available
+                        && chargingCurrentData.getChargePointStatus() == ChargePointStatus.Available;
                 unavailableCase = GlobalVariables.ChargerOperation[resConnectorId];
             }
 

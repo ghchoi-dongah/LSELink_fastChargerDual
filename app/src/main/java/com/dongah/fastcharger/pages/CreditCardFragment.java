@@ -1,6 +1,7 @@
 package com.dongah.fastcharger.pages;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,7 +21,10 @@ import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
 import com.dongah.fastcharger.basefunction.ChargingCurrentData;
 import com.dongah.fastcharger.basefunction.GlobalVariables;
-
+import com.dongah.fastcharger.basefunction.PaymentType;
+import com.dongah.fastcharger.basefunction.UiSeq;
+import com.dongah.fastcharger.vcat.ServiceProcessingActivity;
+import com.dongah.fastcharger.vcat.VCat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,7 +107,6 @@ public class CreditCardFragment extends Fragment {
         imageViewCreditCard = view.findViewById(R.id.imageViewCreditCard);
         animation = AnimationUtils.loadAnimation(getContext(), R.anim.translate);
 
-        // TODO creditcardtagging
         return view;
     }
 
@@ -131,8 +134,8 @@ public class CreditCardFragment extends Fragment {
                         countHandler.removeCallbacks(countRunnable);
                         countHandler.removeCallbacksAndMessages(null);
 
-                        if (chargingCurrentData.isPrePaymentResult()) {
-                            //TODO: 선 결제에 의한 무카드 취소
+                        if (!chargingCurrentData.isPrePaymentResult()) {
+                            activity.getServiceProcessingActivity().cancelService();
                         }
 
                         activity.getClassUiProcess(mChannel).onHome();
@@ -144,7 +147,45 @@ public class CreditCardFragment extends Fragment {
             };
             countHandler.postDelayed(countRunnable, 1000);
 
-            // TODO: 신용카드 결제
+            // V-CAT 결제 요청 (NFC 카드 태깅 대기)
+            if (!activity.getServiceProcessingActivity().isBound()) {
+                logger.warn("ch={} V-CAT 미연결 - 결제 불가", mChannel);
+            } else {
+                try {
+                    int amount = GlobalVariables.FullRechgAmt;
+                    int tax    = Math.round(amount / 11.0f);
+
+                    chargingCurrentData.setPaymentType(PaymentType.CREDIT);
+                    chargingCurrentData.setPrePayment(amount);
+                    chargingCurrentData.setSurtax(tax);
+                    chargingCurrentData.setTip(0);
+
+                    // V-CAT API V3.13 요청 빌드
+                    VCat vcat        = new VCat(activity);
+                    vcat.tranType    = VCat.TYPE_CREDIT;
+                    vcat.tranDeal    = VCat.DEAL_APPROVAL;
+                    vcat.totalAmount = String.valueOf(amount);
+                    vcat.surtax      = String.valueOf(tax);
+                    vcat.tip         = "0";
+                    vcat.needCardNo  = true;
+                    vcat.mid         = activity.getChargerConfiguration().getMID();
+                    // vanComm: 운영 모드에 따라 실서버/테스트 서버 선택
+                    vcat.vanComm     = (activity.getChargerConfiguration().getOpMode() == 0)
+                                       ? VCat.SERVER_TEST : VCat.SERVER_REAL;
+
+                    boolean sent = activity.getServiceProcessingActivity()
+                            .executeService(vcat.buildRequest().toString());
+                    if (sent) {
+                        activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.CREDIT_CARD_WAIT);
+                        activity.getFragmentChange().onFragmentChange(
+                                mChannel, UiSeq.CREDIT_CARD_WAIT, "CREDIT_CARD_WAIT", null);
+                    } else {
+                        logger.warn("ch={} V-CAT executeService 실패", mChannel);
+                    }
+                } catch (Exception e) {
+                    logger.error("ch={} V-CAT 결제 요청 오류", mChannel, e);
+                }
+            }
         } catch (Exception e) {
             logger.error("onViewCreated error : {}", e.getMessage(), e);
         }
