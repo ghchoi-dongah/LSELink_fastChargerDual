@@ -82,6 +82,11 @@ public class GlobalVariables {
     public static boolean triggerSet = false;
 
 
+    public static boolean memberRegisterMode = false;
+    public static MemberCardRegisterCallback memberCardRegisterCallback = null;
+    public interface MemberCardRegisterCallback {
+        void onCardReceived(String cardId);
+    }
 
 
     public static String getRootPath() {

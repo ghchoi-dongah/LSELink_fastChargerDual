@@ -485,6 +485,12 @@ public class ClassUiProcess implements RfCardReaderListener {
     @Override
     public void onRfCardDataReceive(int ch, String cardNum, boolean value) {
         try {
+            if (GlobalVariables.memberRegisterMode && GlobalVariables.memberCardRegisterCallback != null &&
+                    !cardNum.isEmpty() && !Objects.equals(cardNum, "0000000000000000")) {
+                GlobalVariables.memberCardRegisterCallback.onCardReceived("M" + cardNum);
+                return;
+            }
+
             // 회원카드 태깅 화면이 아니면 RF 카드 이벤트 무시
             UiSeq currentSeq = ((MainActivity) MainActivity.mContext).getClassUiProcess(ch).getUiSeq();
             if (!Objects.equals(UiSeq.CHARGING, currentSeq) &&

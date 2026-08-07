@@ -77,16 +77,29 @@
 
     <Button
         android:id="@+id/btnLoadTest"
-        android:layout_width="420dp"
+        android:layout_width="205dp"
         android:layout_height="140dp"
         android:layout_marginBottom="100dp"
-        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded_left"
         android:text="@string/loadTest"
-        android:textSize="42sp"
+        android:textSize="36sp"
         android:textColor="@color/primary"
         app:backgroundTint="@null"
         app:layout_constraintLeft_toLeftOf="@id/btnControl"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <Button
+        android:id="@+id/btnMember"
+        android:layout_width="205dp"
+        android:layout_height="140dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded_right"
+        android:text="@string/userInfoButton"
+        android:textStyle="bold"
+        android:textSize="36sp"
+        android:textColor="@color/primary"
+        app:backgroundTint="@null"
+        app:layout_constraintRight_toRightOf="@id/btnControl"
+        app:layout_constraintTop_toTopOf="@id/btnUi" />
 
     <Button
         android:id="@+id/btnUi"

@@ -29,6 +29,7 @@ import com.dongah.fastcharger.pages.InitFragment;
 import com.dongah.fastcharger.pages.MemberCardFragment;
 import com.dongah.fastcharger.pages.MemberCheckFailedFragment;
 import com.dongah.fastcharger.pages.MemberCheckWaitFragment;
+import com.dongah.fastcharger.pages.MemberRegisterFragment;
 import com.dongah.fastcharger.pages.OperationStopFragment;
 import com.dongah.fastcharger.pages.RemoteTestFragment;
 import com.dongah.fastcharger.pages.ScreenSaverFragment;
@@ -308,6 +309,17 @@ public class FragmentChange {
                     transaction.commit();
                 } catch (Exception e) {
                     logger.error("onFragmentChange error : DATABASE {}", e.getMessage());
+                }
+                break;
+            case MEMBER_REGISTER:
+                try {
+                    onFrameLayoutChange(true);
+                    MemberRegisterFragment memberRegisterFragment = new MemberRegisterFragment();
+                    memberRegisterFragment.setArguments(bundle);
+                    transaction.replace(R.id.frameFull, memberRegisterFragment, "MEMBER_REGISTER");
+                    transaction.commit();
+                } catch (Exception e) {
+                    logger.error("onFragmentChange error : MEMBER_REGISTER {}", e.getMessage());
                 }
                 break;
             default:

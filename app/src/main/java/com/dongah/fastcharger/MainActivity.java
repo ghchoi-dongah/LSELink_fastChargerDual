@@ -233,15 +233,15 @@ public class MainActivity extends AppCompatActivity {
         // 4. rf card reader : MID = terminal ID
         rfCardReaderReceive = new RfCardReaderReceive(chargerConfiguration.getRfCom());
 
-        // Web Monitor Server
         if (chargerConfiguration.isControlMonitor()) {
+            // Web Monitor Server
             monitorHttpServer = new MonitorHttpServer(8080);
             monitorHttpServer.start();
+            // Database Inspector Server
+            databaseHttpServer = new DatabaseHttpServer();
+            databaseHttpServer.start();
         }
 
-        // Database Inspector Server
-        databaseHttpServer = new DatabaseHttpServer();
-        databaseHttpServer.start();
 
         /**
          *  개발 ocpp 서버 url :

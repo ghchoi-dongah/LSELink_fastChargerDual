@@ -133,8 +133,9 @@
     <string name="dbControl">DB 제어</string>
     <string name="uiButton">화면\n전환</string>
     <string name="systemExit">시스템\n종료</string>
-    <string name="loadTest">Load Test</string>
+    <string name="loadTest">Load\nTest</string>
     <string name="remoteTest">원격\n테스트</string>
+    <string name="userInfoButton">회원\n등록</string>
 
     <!-- control board -->
     <string name="channelSelect">[채널 선택]</string>
@@ -146,4 +147,17 @@
 
     <!-- web socket -->
     <string name="logDel">로그삭제</string>
+
+    <!-- member register -->
+    <string name="memberRegisterTitle">회원 등록 관리</string>
+    <string name="memberListEmpty">등록된 회원이 없습니다.</string>
+    <string name="btnMemberRegister">등 록</string>
+    <string name="btnMemberDeleteMode">삭 제</string>
+    <string name="btnMemberDeleteConfirm">삭제 확인</string>
+    <string name="btnConfigExit">나가기</string>
+    <string name="memberCardTaggingRegister">카드를 태그해 주세요\n(등록 모드)</string>
+    <string name="memberRegisterSuccess">회원 카드 등록 완료</string>
+    <string name="memberAlreadyExists">이미 등록된 카드입니다</string>
+    <string name="memberDeleteConfirm">선택한 카드를 삭제하시겠습니까?</string>
+
 </resources>

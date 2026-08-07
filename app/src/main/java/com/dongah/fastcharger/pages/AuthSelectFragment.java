@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
@@ -149,11 +150,12 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
                 classUiProcess.setUiSeq(UiSeq.MEMBER_CARD);
                 fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
             } else if (Objects.equals(getId, R.id.cardViewNoMember)) {
-                chargingCurrentData.setAuthType("N");
-                chargingCurrentData.setPaymentType(PaymentType.CREDIT);
-                chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeN);
-                classUiProcess.setUiSeq(UiSeq.CREDIT_CARD);
-                fragmentChange.onFragmentChange(mChannel, UiSeq.CREDIT_CARD, "CREDIT_CARD", null);
+                Toast.makeText(getActivity(), "서비스 준비 중입니다.", Toast.LENGTH_SHORT).show();
+//                chargingCurrentData.setAuthType("N");
+//                chargingCurrentData.setPaymentType(PaymentType.CREDIT);
+//                chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeN);
+//                classUiProcess.setUiSeq(UiSeq.CREDIT_CARD);
+//                fragmentChange.onFragmentChange(mChannel, UiSeq.CREDIT_CARD, "CREDIT_CARD", null);
             } else if (Objects.equals(getId, R.id.cardViewCorp)) {
                 chargingCurrentData.setAuthType("C");
                 chargingCurrentData.setPaymentType(PaymentType.CORP);
