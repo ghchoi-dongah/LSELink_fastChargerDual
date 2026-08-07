@@ -38,11 +38,12 @@ public class ChangeAvailabilityHandler implements OcppHandler {
 
             // 충전 중 일시중지/재시작
             if (type == AvailabilityType.Pause || type == AvailabilityType.Restart) {
+                boolean isCharging = isAnyChannelCharging(activity);
+                AvailabilityStatus status = isCharging ? AvailabilityStatus.Accepted : AvailabilityStatus.Rejected;
+                sendChangeAvailabilityResponse(activity, connectorId, messageId, status);
+                if (status == AvailabilityStatus.Rejected) return;
                 short powerLimit = (type == AvailabilityType.Pause) ? (short) 0 : GlobalVariables.limitPower;
                 applyPowerLimitToChargingChannels(activity, connectorId, powerLimit);
-                boolean isCharging = isAnyChannelCharging(activity);
-                sendChangeAvailabilityResponse(activity, connectorId, messageId, isCharging ?
-                        AvailabilityStatus.Accepted : AvailabilityStatus.Rejected);
                 return;
             }
 
