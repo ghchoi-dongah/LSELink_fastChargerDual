@@ -76,7 +76,7 @@
     <string name="etcInfo">기타정보</string>
     <string name="chargingInfo">충전정보</string>
     <string name="intiInfo">충전율 제한 : %1$d%%\n출력 제한 : %2$dkW</string>
-    <string name="price">%1$,.0f원/kWh</string>
+    <string name="price">%1$,.1f원/kWh</string>
 
     <!-- config setting -->
     <string name="chargePointType"><font color="#000">커플러 타입</font></string>

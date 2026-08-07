@@ -49,7 +49,7 @@ public class ChargingFinishFragment extends Fragment implements View.OnClickList
     private static final long UI_CHECK_INTERVAL_MS = 5 * 60 * 1000; // 5분
     Button btnCheck;
     TextView textViewSocValue, textViewChargingAmtValue, textViewChargingTimeValue, textViewLimitSocValue;
-    TextView textViewPrePayment, textViewInputPrePayment, textViewPartCancelPay, textViewInputCancelPayment;
+    TextView textViewPrePayment, textViewInputPrePayment, textViewPartCancelPay, textViewInputCancelPayment, txtChargePay;
     CircularProgressIndicator progressCircular;
 
     MediaPlayer mediaPlayer;
@@ -57,6 +57,8 @@ public class ChargingFinishFragment extends Fragment implements View.OnClickList
     ChargerConfiguration chargerConfiguration;
     ChargingCurrentData chargingCurrentData;
     DecimalFormat powerFormatter = new DecimalFormat("#,###,##0.00");
+    DecimalFormat payFormatter = new DecimalFormat("#,###,##0");
+    int realPay;
 
 
     public ChargingFinishFragment() {
@@ -108,6 +110,7 @@ public class ChargingFinishFragment extends Fragment implements View.OnClickList
         textViewInputPrePayment = view.findViewById(R.id.textViewInputPrePayment);
         textViewPartCancelPay = view.findViewById(R.id.textViewPartCancelPay);
         textViewInputCancelPayment = view.findViewById(R.id.textViewInputCancelPayment);
+        txtChargePay = view.findViewById(R.id.txtChargePay);
         return view;
     }
 
@@ -143,6 +146,8 @@ public class ChargingFinishFragment extends Fragment implements View.OnClickList
                         textViewLimitSocValue.setText("목표 충전율: " +chargingCurrentData.getLimitSoc() + "%");
                         textViewChargingAmtValue.setText(powerFormatter.format(chargingCurrentData.getPowerMeterUse() * 0.01) + "kWh");
                         textViewChargingTimeValue.setText(chargingCurrentData.getChargingUseTime());
+                        realPay = (int) chargingCurrentData.getPowerMeterUsePay();
+                        txtChargePay.setText(payFormatter.format(realPay) + " 원");
                     } catch (Exception e) {
                         logger.error("onViewCreated charging result error : {}", e.getMessage(), e);
                     }
