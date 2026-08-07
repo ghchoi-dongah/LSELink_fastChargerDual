@@ -42,8 +42,7 @@ public class ChangeAvailabilityHandler implements OcppHandler {
                 AvailabilityStatus status = isCharging ? AvailabilityStatus.Accepted : AvailabilityStatus.Rejected;
                 sendChangeAvailabilityResponse(activity, connectorId, messageId, status);
                 if (status == AvailabilityStatus.Rejected) return;
-                short powerLimit = (type == AvailabilityType.Pause) ? (short) 0 : GlobalVariables.limitPower;
-                applyPowerLimitToChargingChannels(activity, connectorId, powerLimit);
+                applyPowerLimitToChargingChannels(activity, connectorId, type);
                 return;
             }
 
@@ -90,12 +89,14 @@ public class ChangeAvailabilityHandler implements OcppHandler {
         }
     }
 
-    private void applyPowerLimitToChargingChannels(MainActivity activity, int connectorId, short powerLimit) {
+    private void applyPowerLimitToChargingChannels(MainActivity activity, int connectorId, AvailabilityType type) {
         if (connectorId == 0) {
             for (int i = 0; i < GlobalVariables.maxChannel; i++) {
+                short powerLimit = (type == AvailabilityType.Pause) ? (short) 0 : activity.getChargingCurrentData(connectorId-1).getLimitPower();
                 applyPowerLimitIfCharging(activity, i, powerLimit);
             }
         } else {
+            short powerLimit = (type == AvailabilityType.Pause) ? (short) 0 : activity.getChargingCurrentData(connectorId-1).getLimitPower();
             applyPowerLimitIfCharging(activity, connectorId - 1, powerLimit);
         }
     }

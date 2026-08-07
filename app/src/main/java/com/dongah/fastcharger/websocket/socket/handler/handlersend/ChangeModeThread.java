@@ -264,7 +264,7 @@ public class ChangeModeThread extends Thread {
             if (!helper.isTableExists(helper, tableName)) {
                 logger.warn("setChgModeElec {} doesn't exist", tableName);
                 txData.setOutPowerLimit((short) chargerConfiguration.getDr());
-                GlobalVariables.limitPower = (short) chargerConfiguration.getDr();
+                activity.getChargingCurrentData(connectorId-1).setLimitPower((short) chargerConfiguration.getDr());
                 if (Objects.equals(classUiProcess.getUiSeq(), UiSeq.INIT)) classUiProcess.onHome();
                 return;
             }
@@ -275,7 +275,7 @@ public class ChangeModeThread extends Thread {
             if (cursor == null || !cursor.moveToFirst()) {
                 logger.warn("setChgModeElec {} cursor is null or no data. connectorId : {}", tableName, connectorId);
                 txData.setOutPowerLimit((short) chargerConfiguration.getDr());
-                GlobalVariables.limitPower = (short) chargerConfiguration.getDr();
+                activity.getChargingCurrentData(connectorId-1).setLimitPower((short) chargerConfiguration.getDr());
                 if (Objects.equals(classUiProcess.getUiSeq(), UiSeq.INIT)) classUiProcess.onHome();
                 return;
             }
@@ -283,10 +283,10 @@ public class ChangeModeThread extends Thread {
             int value = cursor.getInt(cursor.getColumnIndexOrThrow("RECHG_ELEC"));
             if (value == 0) {
                 txData.setOutPowerLimit((short) chargerConfiguration.getDr());
-                GlobalVariables.limitPower = (short) chargerConfiguration.getDr();
+                activity.getChargingCurrentData(connectorId-1).setLimitPower((short) chargerConfiguration.getDr());
             } else {
                 txData.setOutPowerLimit((short) value);
-                GlobalVariables.limitPower = (short) value;
+                activity.getChargingCurrentData(connectorId-1).setLimitPower((short) value);
             }
 
             logger.info("setChgModeElec connectorId[{}] outPowerLimit : {}", connectorId, txData.getOutPowerLimit());
