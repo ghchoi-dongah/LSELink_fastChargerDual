@@ -40,7 +40,9 @@ public class ChangeAvailabilityHandler implements OcppHandler {
             if (type == AvailabilityType.Pause || type == AvailabilityType.Restart) {
                 short powerLimit = (type == AvailabilityType.Pause) ? (short) 0 : GlobalVariables.limitPower;
                 applyPowerLimitToChargingChannels(activity, connectorId, powerLimit);
-                sendChangeAvailabilityResponse(activity, connectorId, messageId, AvailabilityStatus.Accepted);
+                boolean isCharging = isAnyChannelCharging(activity);
+                sendChangeAvailabilityResponse(activity, connectorId, messageId, isCharging ?
+                        AvailabilityStatus.Accepted : AvailabilityStatus.Rejected);
                 return;
             }
 
