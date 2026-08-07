@@ -781,7 +781,7 @@ public class ClassUiProcess implements RfCardReaderListener {
 
                 setUiSeq(UiSeq.FINISH);
                 fragmentChange.onFragmentChange(getCh(), UiSeq.FINISH, "FINISH", null);
-            }, 3000);
+            }, 2000);
         } catch (Exception e) {
             finishWaitScheduled = false;
             logger.error("ClassUiProcess - FINISH_WAIT error : {} ", e.getMessage());

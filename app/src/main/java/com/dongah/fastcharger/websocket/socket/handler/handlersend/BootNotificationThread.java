@@ -45,7 +45,6 @@ public class BootNotificationThread extends Thread {
 
     public void stopThread() {
         stopped = true;
-        interrupt(); // sleep 깨우기
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -97,9 +96,8 @@ public class BootNotificationThread extends Thread {
                     bootNotificationRequest.getActionName(),
                     bootNotificationRequest
             );
+            stopThread();
         }
-
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

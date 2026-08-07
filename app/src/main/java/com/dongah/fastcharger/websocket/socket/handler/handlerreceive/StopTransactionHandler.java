@@ -27,7 +27,7 @@ public class StopTransactionHandler implements OcppHandler  {
     public void handle(JSONObject payload, int connectorId, String messageId) throws Exception {
         MainActivity activity = (MainActivity) MainActivity.mContext;
         ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(connectorId-1);
-        final StatusNotificationReq statusNotificationReq;
+//        final StatusNotificationReq statusNotificationReq;
 
         JSONObject idTagInfo = payload.getJSONObject("idTagInfo");
 
@@ -42,11 +42,6 @@ public class StopTransactionHandler implements OcppHandler  {
 
         //accept continue
         if (Objects.equals(status, AuthorizationStatus.Accepted)) {
-
-            statusNotificationReq = new StatusNotificationReq(connectorId);
-            chargingCurrentData.setChargePointStatus(ChargePointStatus.Finishing);
-            statusNotificationReq.sendStatusNotification(connectorId, ChargePointStatus.Finishing);
-
             // DataTransfer ChargingAlarm
             ChargingAlarmReq chargingAlarmReq = new ChargingAlarmReq(connectorId);
             chargingAlarmReq.sendChargingAlarmReq(3);
@@ -56,8 +51,9 @@ public class StopTransactionHandler implements OcppHandler  {
                 Handler mainHandler = new Handler(Looper.getMainLooper());
                 mainHandler.postDelayed(() -> {
                     chargingCurrentData.setChargePointStatus(ChargePointStatus.Available);
+                    StatusNotificationReq statusNotificationReq = new StatusNotificationReq(connectorId);
                     statusNotificationReq.sendStatusNotification(connectorId, ChargePointStatus.Available);
-                }, 3000);
+                }, 2000);
             }
         }
     }

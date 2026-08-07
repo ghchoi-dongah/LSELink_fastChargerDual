@@ -137,13 +137,6 @@ public class NotifyFaultCheck {
                         statusNotificationReq.sendStatusNotification();
                     }
 
-//                    if (isPlugStatus) {
-//                        chargingCurrentData.setChargePointErrorCode(ChargePointErrorCode.NoError);
-//                        chargingCurrentData.setChargePointStatus(ChargePointStatus.Available);
-//                        statusNotificationReq.sendStatusNotification();
-//                    }
-
-
                 } else {
                     if (Objects.equals(chargingCurrentData.getChargePointStatus(), ChargePointStatus.Available)) {
                         chargingCurrentData.setChargePointErrorCode(ChargePointErrorCode.NoError);

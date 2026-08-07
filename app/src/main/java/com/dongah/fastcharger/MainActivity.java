@@ -194,8 +194,6 @@ public class MainActivity extends AppCompatActivity {
         // SQLite DB
         sqLiteHelper = new SQLiteHelper(this);
         sqLiteDatabase = sqLiteHelper.getWritableDatabase();
-//        sqLiteHelper.dropAllTables(sqLiteDatabase);   // delete all tables
-//        sqLiteHelper.onCreate(sqLiteDatabase);          // create all tables
 
         imgNetwork = findViewById(R.id.imageViewNetwork);
         textViewVersion = findViewById(R.id.textViewVersionValue);
@@ -253,7 +251,6 @@ public class MainActivity extends AppCompatActivity {
          *  충전소ID : 000000
          *  충전기ID : 26
          */
-//        chargerConfiguration.setSigned(false);
 
         // 5. handler
         processHandler = new ProcessHandler();
@@ -262,8 +259,6 @@ public class MainActivity extends AppCompatActivity {
 //        String baseUrl = "ws://octt.dongahtest.p-e.kr:9000/DAE000101";
         String baseUrl =  chargerConfiguration.getServerConnectingString() + chargerConfiguration.getChargeBoxSerialNumber() + chargerConfiguration.getChargerId();
         socketReceiveMessage = new SocketReceiveMessage(baseUrl);
-
-        SocketState state = socketReceiveMessage.getSocket().getState();
 
         /** opMode
          * 0: test mode
@@ -280,13 +275,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // 7. V-CAT 결제 서비스 (ClassUiProcess 생성 전에 초기화 — 생성자에서 리스너 등록)
-        serviceProcessingActivity = new ServiceProcessingActivity(this);
-        boolean vcatBound = serviceProcessingActivity.bindVCATService();
-        if (!vcatBound) {
-            logger.warn("V-CAT bindService 실패. wakeUp 후 재시도.");
-            serviceProcessingActivity.wakeUp();
-            serviceProcessingActivity.bindVCATService();
-        }
+//        serviceProcessingActivity = new ServiceProcessingActivity(this);
+//        boolean vcatBound = serviceProcessingActivity.bindVCATService();
+//        if (!vcatBound) {
+//            logger.warn("V-CAT bindService 실패. wakeUp 후 재시도.");
+//            serviceProcessingActivity.wakeUp();
+//            serviceProcessingActivity.bindVCATService();
+//        }
 
         // 8. classUiProcess
         classUiProcess = new ClassUiProcess[GlobalVariables.maxChannel];
@@ -560,7 +555,7 @@ public class MainActivity extends AppCompatActivity {
         if (monitorHttpServer != null) {
             monitorHttpServer.stopServer();
         }
-        if (serviceProcessingActivity != null) serviceProcessingActivity.unbind();
+//        if (serviceProcessingActivity != null) serviceProcessingActivity.unbind();
         super.onDestroy();
     }
 
