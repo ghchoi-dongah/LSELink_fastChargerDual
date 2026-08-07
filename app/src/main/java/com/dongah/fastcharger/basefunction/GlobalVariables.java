@@ -80,6 +80,7 @@ public class GlobalVariables {
     public static String IMSI = "" ;
     public static String RSRP = "";
     public static boolean triggerSet = false;
+    public static short limitPower = 0;
 
 
     public static boolean memberRegisterMode = false;

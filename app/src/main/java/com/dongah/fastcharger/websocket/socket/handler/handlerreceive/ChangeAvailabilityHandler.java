@@ -10,6 +10,7 @@ import com.dongah.fastcharger.basefunction.ChargingCurrentData;
 import com.dongah.fastcharger.basefunction.GlobalVariables;
 import com.dongah.fastcharger.basefunction.UiSeq;
 import com.dongah.fastcharger.utils.FileManagement;
+import com.dongah.fastcharger.websocket.ocpp.common.OccurenceConstraintException;
 import com.dongah.fastcharger.websocket.ocpp.core.AvailabilityStatus;
 import com.dongah.fastcharger.websocket.ocpp.core.AvailabilityType;
 import com.dongah.fastcharger.websocket.ocpp.core.ChangeAvailabilityConfirmation;
@@ -35,6 +36,15 @@ public class ChangeAvailabilityHandler implements OcppHandler {
             MainActivity activity = (MainActivity) MainActivity.mContext;
             AvailabilityType type = AvailabilityType.valueOf(payload.getString("type"));
 
+            // 충전 중 일시중지/재시작
+            if (type == AvailabilityType.Pause || type == AvailabilityType.Restart) {
+                short powerLimit = (type == AvailabilityType.Pause) ? (short) 0 : GlobalVariables.limitPower;
+                applyPowerLimitToChargingChannels(activity, connectorId, powerLimit);
+                sendChangeAvailabilityResponse(activity, connectorId, messageId, AvailabilityStatus.Accepted);
+                return;
+            }
+
+
             // Operative → 충전기 사용 가능
             boolean checkType = type == AvailabilityType.Operative;
 
@@ -46,32 +56,15 @@ public class ChangeAvailabilityHandler implements OcppHandler {
             // ChargerOperate
             // connectorId == 0 → 전체 업데이트
             if (connectorId == 0) {
-
-                boolean isCharging = Objects.equals(activity.getClassUiProcess(0).getUiSeq(), UiSeq.CHARGING);
-                isCharging = isCharging || Objects.equals(activity.getClassUiProcess(1).getUiSeq(), UiSeq.CHARGING);
-
-                AvailabilityStatus result =
-                        ((type == AvailabilityType.Inoperative) || (type == AvailabilityType.Maintenance) && isCharging)
-                                ? AvailabilityStatus.Scheduled
-                                : AvailabilityStatus.Accepted;
-
-                // change availability response
-                ChangeAvailabilityConfirmation changeAvailabilityConfirmation = new ChangeAvailabilityConfirmation(result);
-                activity.getSocketReceiveMessage().onResultSend(
-                        connectorId,
-                        changeAvailabilityConfirmation.getActionName(),
-                        messageId,
-                        changeAvailabilityConfirmation);
-
+                boolean isCharging = isAnyChannelCharging(activity);
+                AvailabilityStatus result = resolveAvailabilityStatus(type, isCharging);
                 Arrays.fill(GlobalVariables.ChargerOperation, checkType);
 
-                for (int i = 0; i < GlobalVariables.maxChannel; i++) {
-                    ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(i);
-                    chargingCurrentData.setChargePointStatus(status);
+                // change availability response
+                sendChangeAvailabilityResponse(activity, connectorId, messageId, result);
 
-                    // StatusNotification send
-                    StatusNotificationReq statusNotificationReq = new StatusNotificationReq(i+1);
-                    statusNotificationReq.sendStatusNotification(i+1, chargingCurrentData.getChargePointStatus());
+                for (int i = 0; i < GlobalVariables.maxChannel; i++) {
+                    updateStatusAndNotify(activity, i, status);
                 }
 
             } else {
@@ -80,27 +73,12 @@ public class ChangeAvailabilityHandler implements OcppHandler {
                         UiSeq.CHARGING
                 );
 
-                AvailabilityStatus result =
-                        ((type == AvailabilityType.Inoperative) || (type == AvailabilityType.Maintenance)) && isCharging
-                                ? AvailabilityStatus.Scheduled
-                                : AvailabilityStatus.Accepted;
-
-                // change availability response
-                ChangeAvailabilityConfirmation changeAvailabilityConfirmation = new ChangeAvailabilityConfirmation(result);
-                activity.getSocketReceiveMessage().onResultSend(
-                        connectorId,
-                        changeAvailabilityConfirmation.getActionName(),
-                        messageId,
-                        changeAvailabilityConfirmation);
-
+                AvailabilityStatus result = resolveAvailabilityStatus(type, isCharging);
                 GlobalVariables.ChargerOperation[connectorId] = checkType;
 
-                ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(connectorId-1);
-                chargingCurrentData.setChargePointStatus(status);
-
-                // StatusNotification send
-                StatusNotificationReq statusNotificationReq = new StatusNotificationReq(connectorId);
-                statusNotificationReq.sendStatusNotification(connectorId, chargingCurrentData.getChargePointStatus());
+                // change availability response
+                sendChangeAvailabilityResponse(activity, connectorId, messageId, result);
+                updateStatusAndNotify(activity, connectorId - 1, status);
             }
 
             onChargerOperateSave(checkType);
@@ -109,6 +87,58 @@ public class ChangeAvailabilityHandler implements OcppHandler {
         }
     }
 
+    private void applyPowerLimitToChargingChannels(MainActivity activity, int connectorId, short powerLimit) {
+        if (connectorId == 0) {
+            for (int i = 0; i < GlobalVariables.maxChannel; i++) {
+                applyPowerLimitIfCharging(activity, i, powerLimit);
+            }
+        } else {
+            applyPowerLimitIfCharging(activity, connectorId - 1, powerLimit);
+        }
+    }
+
+    private void applyPowerLimitIfCharging(MainActivity activity, int channel, short powerLimit) {
+        boolean isCharging = Objects.equals(activity.getClassUiProcess(channel).getUiSeq(), UiSeq.CHARGING);
+        if (isCharging) {
+            activity.getControlBoard().getTxData(channel).setOutPowerLimit(powerLimit);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void sendChangeAvailabilityResponse(MainActivity activity, int connectorId, String messageId, AvailabilityStatus status) throws OccurenceConstraintException {
+        ChangeAvailabilityConfirmation confirmation = new ChangeAvailabilityConfirmation(status);
+        activity.getSocketReceiveMessage().onResultSend(
+                connectorId,
+                confirmation.getActionName(),
+                messageId,
+                confirmation);
+    }
+
+    private boolean isAnyChannelCharging(MainActivity activity) {
+        for (int i = 0; i < GlobalVariables.maxChannel; i++) {
+            if (Objects.equals(activity.getClassUiProcess(i).getUiSeq(), UiSeq.CHARGING)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private AvailabilityStatus resolveAvailabilityStatus(AvailabilityType type, boolean isCharging) {
+        boolean isInoperativeOrMaintenance =
+                type == AvailabilityType.Inoperative || type == AvailabilityType.Maintenance;
+        return (isInoperativeOrMaintenance && isCharging)
+                ? AvailabilityStatus.Scheduled
+                : AvailabilityStatus.Accepted;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void updateStatusAndNotify(MainActivity activity, int channelIndex, ChargePointStatus status) {
+        ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(channelIndex);
+        chargingCurrentData.setChargePointStatus(status);
+
+        StatusNotificationReq statusNotificationReq = new StatusNotificationReq(channelIndex + 1);
+        statusNotificationReq.sendStatusNotification(channelIndex + 1, chargingCurrentData.getChargePointStatus());
+    }
 
     private void onChargerOperateSave(boolean checkType) {
         try {

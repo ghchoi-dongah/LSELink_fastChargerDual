@@ -132,8 +132,10 @@ public class ChangeElecModeThread extends Thread {
                     TxData txData = activity.getControlBoard().getTxData(i-1);
                     if (value == 0) {
                         txData.setOutPowerLimit((short) chargerConfiguration.getDr());
+                        GlobalVariables.limitPower = (short) chargerConfiguration.getDr();
                     } else {
                         txData.setOutPowerLimit((short) value);
+                        GlobalVariables.limitPower = (short) value;
                     }
 
                     logger.info("processRechgElec connectorId[{}] outPowerLimit : {}", i, txData.getOutPowerLimit());
@@ -177,6 +179,7 @@ public class ChangeElecModeThread extends Thread {
 
             TxData txData = activity.getControlBoard().getTxData(connectorId-1);
             txData.setOutPowerLimit((short) chargerConfiguration.getDr());
+            GlobalVariables.limitPower = (short) chargerConfiguration.getDr();
             logger.info("insertChgElecMode connectorId[{}] outPowerLimit : {}", connectorId, txData.getOutPowerLimit());
 
             if (Objects.equals(classUiProcess.getUiSeq(), UiSeq.INIT)) {
