@@ -225,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
             fragmentChange.onFragmentHeaderChange(i, "Header");
             chargingCurrentData[i] = new ChargingCurrentData();
             chargingCurrentData[i].onCurrentDataClear();
+            chargingCurrentData[i].setConnectorId(i + 1);
         }
 
         // 3. control board
