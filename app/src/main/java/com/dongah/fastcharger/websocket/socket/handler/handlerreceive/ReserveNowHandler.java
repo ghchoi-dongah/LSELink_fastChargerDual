@@ -33,7 +33,7 @@ public class ReserveNowHandler implements OcppHandler {
     public void handle(JSONObject payload, int connectorId, String messageId) throws Exception {
         try {
             int resConnectorId = payload.has("connectorId") ? payload.getInt("connectorId") : 0;
-            String resExpiryDate = payload.has("expiryDat") ? payload.getString("expiryDate") : "";
+            String resExpiryDate = payload.has("expiryDate") ? payload.getString("expiryDate") : "";
             String resIdTag = payload.has("idTag") ? payload.getString("idTag") : "";
             String resParentIdTag = payload.has("parentIdTag") ? payload.getString("parentIdTag") : "";
             String resReservationId = payload.has("reservationId") ? payload.getString("reservationId") : "";
@@ -65,7 +65,7 @@ public class ReserveNowHandler implements OcppHandler {
 
             ReservationStatus reservationStatus;
             reservationStatus = (!reserveSupported || resConnectorId == 0 ? ReservationStatus.Rejected : faultedCase ? ReservationStatus.Faulted :
-                    !unavailableCase ? ReservationStatus.Unavailable : occupiedCase ? ReservationStatus.Occupied :
+                    !unavailableCase ? ReservationStatus.Unavailable : !occupiedCase ? ReservationStatus.Occupied :
                             ReservationStatus.Accepted);
 
             ReserveNowConfirmation reserveNowConfirmation = new ReserveNowConfirmation(reservationStatus);
@@ -87,7 +87,7 @@ public class ReserveNowHandler implements OcppHandler {
 
                 // StatusNotification(Reserved)
                 StatusNotificationReq statusNotificationReq = new StatusNotificationReq(connectorId);
-                statusNotificationReq.sendStatusNotification();
+                statusNotificationReq.sendStatusNotification(resConnectorId, chargingCurrentData.getChargePointStatus());
             }
         } catch (Exception e) {
             logger.error("ReserveNowHandler error : {}", e.getMessage(), e);

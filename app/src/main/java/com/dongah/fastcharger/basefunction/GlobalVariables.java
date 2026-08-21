@@ -5,6 +5,8 @@ import android.os.Environment;
 import com.dongah.fastcharger.websocket.ocpp.localauthlist.UpdateStatus;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GlobalVariables {
 
@@ -75,6 +77,8 @@ public class GlobalVariables {
     public static boolean[] dumpSending = new boolean[2];
     public static boolean reconnectCheck = false;
     public static boolean Scheduled = false;
+    public static boolean[] RemoteStart = new boolean[2];
+    public static Map<Integer, Integer> remoteConnectorId = new HashMap<>();
 
     //modem tel number
     public static String IMSI = "" ;

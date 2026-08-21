@@ -1,7 +1,8 @@
 package com.dongah.fastcharger.websocket.socket.handler.handlerreceive;
 
 import android.os.Build;
-import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.RequiresApi;
 
@@ -41,16 +42,17 @@ public class ChangeAvailabilityHandler implements OcppHandler {
                 boolean isCharging = isAnyChannelCharging(activity);
                 AvailabilityStatus status = isCharging ? AvailabilityStatus.Accepted : AvailabilityStatus.Rejected;
                 sendChangeAvailabilityResponse(activity, connectorId, messageId, status);
-                if (status == AvailabilityStatus.Rejected) return;
-                applyPowerLimitToChargingChannels(activity, connectorId, type);
+                if (Objects.equals(status, AvailabilityStatus.Accepted)) {
+                    sendStatusNotification(activity, connectorId, type);
+                    applyPowerLimitToChargingChannels(activity, connectorId, type);
+                }
                 return;
             }
 
-
             // Operative → 충전기 사용 가능
-            boolean checkType = type == AvailabilityType.Operative;
+            boolean checkType = (type.equals(AvailabilityType.Operative) || type.equals(AvailabilityType.Managecomplete));
 
-            ChargePointStatus status = (type.equals(AvailabilityType.Operative) || type.equals(AvailabilityType.Managecomplete))
+            ChargePointStatus status = checkType
                     ? ChargePointStatus.Available : type.equals(AvailabilityType.Inoperative)
                     ? ChargePointStatus.Unavailable : ChargePointStatus.Maintenance;
 
@@ -65,10 +67,17 @@ public class ChangeAvailabilityHandler implements OcppHandler {
                 // change availability response
                 sendChangeAvailabilityResponse(activity, connectorId, messageId, result);
 
-                for (int i = 0; i < GlobalVariables.maxChannel; i++) {
-                    updateStatusAndNotify(activity, i, status);
+                if (isCharging) {
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        for (int i = 0; i < GlobalVariables.maxChannel; i++) {
+                            updateStatusAndNotify(activity, i, status);
+                        }
+                    }, 6000);
+                } else {
+                    for (int i = 0; i < GlobalVariables.maxChannel; i++) {
+                        updateStatusAndNotify(activity, i, status);
+                    }
                 }
-
             } else {
                 boolean isCharging = Objects.equals(
                         activity.getClassUiProcess(connectorId-1).getUiSeq(),
@@ -80,7 +89,16 @@ public class ChangeAvailabilityHandler implements OcppHandler {
 
                 // change availability response
                 sendChangeAvailabilityResponse(activity, connectorId, messageId, result);
-                updateStatusAndNotify(activity, connectorId - 1, status);
+
+                if (isCharging) {
+                    if (checkType) return;
+                    int ch = connectorId - 1;
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        updateStatusAndNotify(activity, ch, status);
+                    }, 6000);
+                } else {
+                    updateStatusAndNotify(activity, connectorId - 1, status);
+                }
             }
 
             onChargerOperateSave(checkType);
@@ -116,6 +134,32 @@ public class ChangeAvailabilityHandler implements OcppHandler {
                 confirmation.getActionName(),
                 messageId,
                 confirmation);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void sendStatusNotification(MainActivity activity, int connectorId, AvailabilityType type) {
+        ChargePointStatus status = type == AvailabilityType.Pause ?
+                ChargePointStatus.Pause : ChargePointStatus.Charging;
+
+        if (connectorId == 0) {
+            for (int i = 0; i < GlobalVariables.maxChannel; i++) {
+                UiSeq uiSeq = activity.getClassUiProcess(i).getUiSeq();
+                ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(i);
+                if (Objects.equals(uiSeq, UiSeq.CHARGING)) {
+                    chargingCurrentData.setChargePointStatus(status);
+                    StatusNotificationReq statusNotificationReq = new StatusNotificationReq(i+1);
+                    statusNotificationReq.sendStatusNotification(i+1, status);
+                }
+            }
+        } else {
+            UiSeq uiSeq = activity.getClassUiProcess(connectorId-1).getUiSeq();
+            ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(connectorId-1);
+            if (Objects.equals(uiSeq, UiSeq.CHARGING)) {
+                chargingCurrentData.setChargePointStatus(status);
+                StatusNotificationReq statusNotificationReq = new StatusNotificationReq(connectorId);
+                statusNotificationReq.sendStatusNotification(connectorId, status);
+            }
+        }
     }
 
     private boolean isAnyChannelCharging(MainActivity activity) {

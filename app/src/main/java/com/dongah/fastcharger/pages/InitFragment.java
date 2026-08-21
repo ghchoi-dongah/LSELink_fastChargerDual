@@ -142,6 +142,7 @@ public class InitFragment extends Fragment implements View.OnClickListener {
             logger.error("onCreateView error : {}", e.getMessage(), e);
         }
 
+        initData();
         return view;
     }
 
@@ -186,8 +187,6 @@ public class InitFragment extends Fragment implements View.OnClickListener {
 
     private void changeFragment() {
         try {
-            initData();
-
             if (Objects.equals(chargerConfiguration.getOpMode(), 0)) {
                 // test mode
                 double testPrice = Double.parseDouble(chargerConfiguration.getTestPrice());

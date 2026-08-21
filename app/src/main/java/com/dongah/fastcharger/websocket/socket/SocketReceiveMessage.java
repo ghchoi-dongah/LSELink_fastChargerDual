@@ -211,7 +211,7 @@ public class SocketReceiveMessage extends JSONCommunicator implements SocketInte
             String actionName = "";
             int connectorIdForLog = 0;
             int resultType = message.getResultType();
-            logger.info("onGetMessage received: resultType={}, id={}, text={}", resultType, message.getId(), text);
+//            logger.info("onGetMessage received: resultType={}, id={}, text={}", resultType, message.getId(), text);
 
             /*
              * 1. Call(Type=2) 인 경우 → message.action 사용

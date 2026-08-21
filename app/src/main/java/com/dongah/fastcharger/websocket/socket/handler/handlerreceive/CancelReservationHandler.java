@@ -36,7 +36,7 @@ public class CancelReservationHandler implements OcppHandler {
             // response
             CancelReservationConfirmation cancelReservationConfirmation = new CancelReservationConfirmation(cancelReservationStatus);
             activity.getSocketReceiveMessage().onResultSend(
-                    cancelConnectorId,
+                    100,
                     cancelReservationConfirmation.getActionName(),
                     messageId,
                     cancelReservationConfirmation
@@ -65,6 +65,7 @@ public class CancelReservationHandler implements OcppHandler {
                     chargingCurrentData.setResParentIdTag("");
                     chargingCurrentData.setResReservationId("");
                     chargingCurrentData.setChargePointStatus(ChargePointStatus.Available);
+                    chargingCurrentData.setReservedStatus(ChargePointStatus.Available);
                     break;
                 }
             }

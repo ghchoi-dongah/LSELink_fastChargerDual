@@ -6,14 +6,13 @@ import androidx.annotation.RequiresApi;
 
 import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.basefunction.ChargingCurrentData;
+import com.dongah.fastcharger.basefunction.GlobalVariables;
 import com.dongah.fastcharger.basefunction.PaymentType;
 import com.dongah.fastcharger.basefunction.UiSeq;
-import com.dongah.fastcharger.websocket.ocpp.core.ChargePointStatus;
 import com.dongah.fastcharger.websocket.ocpp.core.RemoteStartStopStatus;
 import com.dongah.fastcharger.websocket.ocpp.core.RemoteStartTransactionConfirmation;
 import com.dongah.fastcharger.websocket.socket.OcppHandler;
 import com.dongah.fastcharger.websocket.socket.handler.handlersend.AuthorizeReq;
-import com.dongah.fastcharger.websocket.socket.handler.handlersend.StatusNotificationReq;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -42,7 +41,6 @@ public class RemoteStartTransactionHandler implements OcppHandler  {
             ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(connector-1);
             chargingCurrentData.setConnectorId(payload.getInt("connectorId"));
             chargingCurrentData.setIdTag(payload.getString("idTag"));
-            chargingCurrentData.setPaymentType(PaymentType.MEMBER);
 
             // 응답
             sendResponse(connector, messageId);
@@ -70,19 +68,49 @@ public class RemoteStartTransactionHandler implements OcppHandler  {
             );
 
             if (Objects.equals(status, RemoteStartStopStatus.Accepted)) {
-                chargingCurrentData.setAuthType("C");
+                String idTag = chargingCurrentData.getIdTag();
+                authType(idTag.charAt(0), chargingCurrentData);
+                GlobalVariables.RemoteStart[connectorId-1] = true;
 
                 // Authorize
                 AuthorizeReq authorizeReq = new AuthorizeReq(connectorId);
                 authorizeReq.sendAuthorize(chargingCurrentData.getIdTag());
-
-                // StatusNotification
-                chargingCurrentData.setChargePointStatus(ChargePointStatus.Preparing);
-                StatusNotificationReq statusNotificationReq = new StatusNotificationReq(connectorId);
-                statusNotificationReq.sendStatusNotification(connectorId, ChargePointStatus.Preparing);
             }
         } catch (Exception e) {
             logger.error("RemoteStartTransactionHandler sendResponse error : {}", e.getMessage());
+        }
+    }
+
+    private void authType(char type, ChargingCurrentData chargingCurrentData) {
+
+        try {
+            switch (type) {
+                case 'C':
+                    chargingCurrentData.setAuthType("C");
+                    chargingCurrentData.setPaymentType(PaymentType.CORP);
+                    chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeC);
+                    break;
+                case 'M':
+                    chargingCurrentData.setAuthType("M");
+                    chargingCurrentData.setPaymentType(PaymentType.MEMBER);
+                    chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeM);
+                    break;
+                case 'N':
+                    chargingCurrentData.setAuthType("N");
+                    chargingCurrentData.setPaymentType(PaymentType.CREDIT);
+                    chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeN);
+                    break;
+                case 'K':
+                    chargingCurrentData.setAuthType("K");
+                    chargingCurrentData.setPaymentType(PaymentType.MOE);
+                    chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeK);
+                    break;
+                default:
+                    logger.error("authType none");
+                    break;
+            }
+        } catch (Exception e) {
+            logger.error("authType error : {}", e.getMessage(), e);
         }
     }
 }

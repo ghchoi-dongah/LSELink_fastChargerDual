@@ -605,7 +605,7 @@ public class ClassUiProcess implements RfCardReaderListener {
         else if (!GlobalVariables.ChargerOperation[getCh()+1]) {
             setUiSeq(UiSeq.OP_STOP);
             fragmentChange.onFragmentChange(getCh(), UiSeq.OP_STOP, "OP_STOP", null);
-        } else if (chargingCurrentData.getChargePointStatus() == ChargePointStatus.Reserved) {
+        } else if (chargingCurrentData.getReservedStatus() == ChargePointStatus.Reserved) {
             // reservation
             String currentTime = zonedDateTimeConvert.doGetKstDatetimeAsString();
             // 현재 KST 시간과 예약 만료 시간 비교 => 현재 시간이 예약 만료 시간을 지났는지 확인
@@ -730,7 +730,7 @@ public class ClassUiProcess implements RfCardReaderListener {
                 }
             } else {
                 if (rxData.isCsStop() || !rxData.isCsPilot() || chargingCurrentData.isUserStop() || isSocReached
-                        || !GlobalVariables.ChargerOperation[getCh()+1] || utztnLmt) {
+                        || !GlobalVariables.ChargerOperation[getCh()+1] || utztnLmt || Objects.equals(chargingCurrentData.getStopReason(), Reason.Remote)) {
                     controlBoard.getTxData(getCh()).setStop(true);
                     controlBoard.getTxData(getCh()).setStart(false);
                     if (!rxData.isCsPilot()) {
@@ -778,6 +778,7 @@ public class ClassUiProcess implements RfCardReaderListener {
             controlBoard.getTxData(getCh()).setStop(true);
             controlBoard.getTxData(getCh()).setStart(false);
             controlBoard.getTxData(getCh()).setUiSequence((short) 3);
+
             //사용자 user stop
             chargingCurrentData.setStopReason(chargingCurrentData.isUserStop() ?
                     Reason.Local : chargingCurrentData.getStopReason());
@@ -785,12 +786,23 @@ public class ClassUiProcess implements RfCardReaderListener {
             chargingCurrentData.setPowerMeterStop(rxData.getPowerMeter()*10);
             chargingCurrentData.setChargingEndTime(zonedDateTimeConvert.getStringCurrentTimeZone());
             chargingCurrentData.setChargePointStatus(ChargePointStatus.Finishing);
+            chargingCurrentData.setUserStop(false);
 
             // stop MeterValues
             if (meterValuesReq != null) {
                 meterValuesReq.sendMeterValues(chargingCurrentData.getConnectorId());
             }
             onMeterValueStop();
+
+            if (chargingCurrentData.getReservedStatus() == ChargePointStatus.Reserved) {
+                // reservation clear
+                chargingCurrentData.setResConnectorId(0);
+                chargingCurrentData.setResIdTag("");
+                chargingCurrentData.setResExpiryDate("");
+                chargingCurrentData.setResReservationId("");
+                chargingCurrentData.setResParentIdTag("");
+                chargingCurrentData.setReservedStatus(ChargePointStatus.Available);
+            }
 
             handler.postDelayed(() -> {
                 finishWaitScheduled = false;   // 완료 후 해제
