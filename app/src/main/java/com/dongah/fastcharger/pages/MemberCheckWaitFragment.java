@@ -209,6 +209,7 @@ public class MemberCheckWaitFragment extends Fragment {
                         } else {
                             // Charging 아닌 상태 && resParentIdTag가 없음 → 인증 불가로 HOME 이동
                             // 충전 시작 전인데 카드 ID가 다름 + 상위 카드도 없음 → 인증 불가, HOME 이동
+                            Toast.makeText(getActivity(), "예약한 회원번호가 틀립니다.", Toast.LENGTH_SHORT).show();
                             activity.getClassUiProcess(mChannel).onHome();
                         }
                     }
@@ -221,11 +222,12 @@ public class MemberCheckWaitFragment extends Fragment {
                         if (Objects.equals(chargingCurrentData.getParentIdTag(), idTagInfo[1]) ||
                                 Objects.equals(chargingCurrentData.getIdTag(), chargingCurrentData.getIdTagStop())) {
                             // 같은 카드 or 상위 그룹 카드로 태그 → 충전 종료
-                            classUiProcess.setUiSeq(UiSeq.FINISH_WAIT);
-                            fragmentChange.onFragmentChange(mChannel,UiSeq.FINISH_WAIT, "FINISH_WAIT", null);
+                            chargingCurrentData.setUserStop(true);
                         } else {
                             // 다른 카드로 태그 → 충전 화면 유지
-//                            classUiProcess.setUiSeq(UiSeq.CHARGING);
+                            // 식별자가 상이할 경우 Authorize 전송
+                            AuthorizeReq authorizeReq = new AuthorizeReq(chargingCurrentData.getConnectorId());
+                            authorizeReq.sendAuthorize(chargingCurrentData.getIdTagStop());
                             fragmentChange.onFragmentChange(mChannel,UiSeq.CHARGING, "CHARGING", null);
                         }
                     } else {
@@ -250,11 +252,11 @@ public class MemberCheckWaitFragment extends Fragment {
                             Objects.equals(chargingCurrentData.getIdTag(), chargingCurrentData.getIdTagStop())) {
                         // 같은 카드 or 그룹 카드 → 충전 종료
                         chargingCurrentData.setUserStop(true);
-//                        classUiProcess.setUiSeq(UiSeq.FINISH_WAIT);
-//                        activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.FINISH_WAIT, "FINISH_WAIT", null);
                     } else  {
                         // 다른 카드 → 충전 화면 유지
-//                        classUiProcess.setUiSeq(UiSeq.CHARGING);
+                        // 식별자가 상이할 경우 Authorize 전송
+                        AuthorizeReq authorizeReq = new AuthorizeReq(chargingCurrentData.getConnectorId());
+                        authorizeReq.sendAuthorize(chargingCurrentData.getIdTagStop());
                         activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.CHARGING, "CHARGING", null);
                     }
                 } else {
@@ -296,8 +298,10 @@ public class MemberCheckWaitFragment extends Fragment {
                     if (Objects.equals(UiSeq.CHARGING, uiSeq)) {
                         if (Objects.equals(chargingCurrentData.getIdTag(), chargingCurrentData.getIdTagStop())) {
                             chargingCurrentData.setUserStop(true);
-//                        activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.FINISH_WAIT, "FINISH_WAIT", null);
                         } else {
+                            // 식별자가 상이할 경우 Authorize 전송
+                            AuthorizeReq authorizeReq = new AuthorizeReq(chargingCurrentData.getConnectorId());
+                            authorizeReq.sendAuthorize(chargingCurrentData.getIdTagStop());
                             fragmentChange.onFragmentChange(mChannel, UiSeq.CHARGING, "CHARGING", null);
                         }
                     } else {
@@ -321,10 +325,7 @@ public class MemberCheckWaitFragment extends Fragment {
                             if (Objects.equals(chargingCurrentData.getParentIdTag(), idTagInfo[1]) ||
                                     Objects.equals(chargingCurrentData.getIdTag(), chargingCurrentData.getIdTagStop())) {
                                 chargingCurrentData.setUserStop(true);
-//                                classUiProcess.setUiSeq(UiSeq.FINISH_WAIT);
-//                                activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.FINISH_WAIT, "FINISH_WAIT", null);
                             } else {
-//                                classUiProcess.setUiSeq(UiSeq.CHARGING);
                                 activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.CHARGING, "CHARGING", null);
                             }
                         } else {
@@ -355,7 +356,6 @@ public class MemberCheckWaitFragment extends Fragment {
                     } else {
                         Toast.makeText(getActivity(), "서버와 통신 DISCONNECT!!! 인증 실패. ", Toast.LENGTH_SHORT).show();
                         if (Objects.equals(UiSeq.CHARGING, uiSeq)) {
-//                            activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.CHARGING);
                             activity.getFragmentChange().onFragmentChange(mChannel,UiSeq.CHARGING, "CHARGING", null);
                         } else {
                             classUiProcess.setUiSeq(UiSeq.MEMBER_CHECK_FAILED);

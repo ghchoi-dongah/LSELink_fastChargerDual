@@ -21,6 +21,7 @@ import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
 import com.dongah.fastcharger.basefunction.ChargingCurrentData;
 import com.dongah.fastcharger.basefunction.ClassUiProcess;
+import com.dongah.fastcharger.basefunction.FragmentChange;
 import com.dongah.fastcharger.basefunction.UiSeq;
 import com.dongah.fastcharger.utils.SharedModel;
 
@@ -57,8 +58,9 @@ public class MemberCardFragment extends Fragment {
     Handler countHandler;
     Runnable countRunnable;
     MainActivity activity;
-    ChargingCurrentData chargingCurrentData;
+    FragmentChange fragmentChange;
     ClassUiProcess classUiProcess;
+    ChargingCurrentData chargingCurrentData;
 
     public MemberCardFragment() {
         // Required empty public constructor
@@ -100,6 +102,7 @@ public class MemberCardFragment extends Fragment {
         activity = (MainActivity) MainActivity.mContext;
         chargingCurrentData = activity.getChargingCurrentData(mChannel);
         classUiProcess = activity.getClassUiProcess(mChannel);
+        fragmentChange = activity.getFragmentChange();
 
         textViewMemberCheckMessage = view.findViewById(R.id.textViewMemberCheckMessage);
         textViewMemberStopMessage = view.findViewById(R.id.textViewMemberStopMessage);
@@ -135,7 +138,12 @@ public class MemberCardFragment extends Fragment {
                     timer--;
                     if (timer <= 0) {
                         countHandler.removeCallbacks(countRunnable);
-                        ((MainActivity) MainActivity.mContext).getClassUiProcess(mChannel).onHome();
+
+                        if (Objects.equals(classUiProcess.getUiSeq(), UiSeq.CHARGING)) {
+                            fragmentChange.onFragmentChange(mChannel, UiSeq.CHARGING, "CHARGING", null);
+                        } else {
+                            classUiProcess.onHome();
+                        }
                     } else {
                         countHandler.postDelayed(countRunnable, 1000);
                         textViewTagTimer.setText(timer + "초");

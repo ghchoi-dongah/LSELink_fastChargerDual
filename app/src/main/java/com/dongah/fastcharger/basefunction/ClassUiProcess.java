@@ -518,9 +518,9 @@ public class ClassUiProcess implements RfCardReaderListener {
                 MainActivity activity = ((MainActivity) MainActivity.mContext);
                 ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(ch);
                 UiSeq seq = activity.getClassUiProcess(ch).getUiSeq();
+                int userType = chargingCurrentData.getPaymentType().value();
 
                 if (Objects.equals(UiSeq.CHARGING, seq)) {
-                    int userType = chargingCurrentData.getPaymentType().value();
                     switch (userType) {
                         case 1:
                             chargingCurrentData.setIdTagStop("M" + cardNum);
@@ -539,7 +539,23 @@ public class ClassUiProcess implements RfCardReaderListener {
                             break;
                     }
                 } else {
-                    chargingCurrentData.setIdTag(cardNum);
+                    switch (userType) {
+                        case 1:
+                            chargingCurrentData.setIdTag("M" + cardNum);
+                            break;
+                        case 2:
+                            chargingCurrentData.setIdTag("N" + cardNum);
+                            break;
+                        case 7:
+                            chargingCurrentData.setIdTag("C" + cardNum);
+                            break;
+                        case 8:
+                            chargingCurrentData.setIdTag("K" + cardNum);
+                            break;
+                        default:
+                            logger.error("onRfCardDataReceiveEvent idTag userType none");
+                            break;
+                    }
                     activity.getClassUiProcess(ch).setUiSeq(UiSeq.MEMBER_CHECK_WAIT);
                 }
                 fragmentChange.onFragmentChange(ch, UiSeq.MEMBER_CHECK_WAIT,"MEMBER_CHECK_WAIT",null);
@@ -785,6 +801,7 @@ public class ClassUiProcess implements RfCardReaderListener {
                     stopTransactionReq.sendStopTransactionReq();
                 }
 
+                GlobalVariables.RemoteStart[getCh()] = false;
                 setUiSeq(UiSeq.FINISH);
                 fragmentChange.onFragmentChange(getCh(), UiSeq.FINISH, "FINISH", null);
             }, 2000);

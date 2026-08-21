@@ -99,15 +99,19 @@ public class ControlBoard implements Runnable {
             this.maxCh = maxCh;
             this.comPort = comPort;
 
-            serialPort = new SerialPort(new File(comPort), 38400, 0);
-            // multi channel
             rxData = new RxData[maxCh];
             txData = new TxData[maxCh];
             for (int i = 0; i < maxCh; i++) {
                 rxData[i] = new RxData();
                 txData[i] = new TxData();
-                txData[i].setInit();    // 초기화
+                txData[i].setInit();
             }
+        } catch (Exception e ) {
+            logger.error("ControlBoard construct error : {}", e.getMessage());
+        }
+
+        try {
+            serialPort = new SerialPort(new File(comPort), 38400, 0);
             isOpen = true;
             inputStream = serialPort.getInputStream();
             outputStream = serialPort.getOutputStream();
@@ -115,7 +119,7 @@ public class ControlBoard implements Runnable {
             receiveThread = new Thread(this);
             receiveThread.start();
         } catch (Exception e) {
-            logger.error("ControlBoard construct error : {}", e.getMessage());
+            logger.error("ControlBoard serialPort error : {}", e.getMessage());
         }
     }
 

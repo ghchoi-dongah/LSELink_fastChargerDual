@@ -4,5 +4,8 @@
         <item>1. 회원</item>
         <item>2. 회원 + 비회원</item>
         <item>3. 회원 + 비회원 + 법인 + 환경부</item>
+        <item>4. 회원 + 법인 + 환경부</item>
+        <item>5. 법인</item>
+        <item>6. 환경부</item>
     </string-array>
 </resources>

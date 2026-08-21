@@ -168,7 +168,7 @@ public class InitFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (!chargingCurrentData.isConnectUse()
-                || (!Objects.equals(v.getId(), R.id.viewCircle) && !rxData.isCsPilot())) {
+                || (!Objects.equals(v.getId(), R.id.viewCircle))) {
             return;
         }
         changeFragment();
@@ -201,24 +201,39 @@ public class InitFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
                 try {
-                    SocketState socketState = activity.getSocketReceiveMessage().getSocket().getState();
-                    if (Objects.equals(socketState, SocketState.OPEN)) {
-                        if (chargerConfiguration.getAuthMode() == 0) {
+                    switch (chargerConfiguration.getAuthMode()) {
+                        case 0:
                             chargingCurrentData.setAuthType("M");
                             chargingCurrentData.setPaymentType(PaymentType.MEMBER);
                             chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeM);
-                            activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.MEMBER_CARD);
-                            activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
-                        } else {
+                            fragmentChangeAuthSelect();
+                            break;
+                        case 1:
+                        case 2:
+                        case 3:
                             activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.AUTH_SELECT);
                             activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.AUTH_SELECT, "AUTH_SELECT", null);
-                        }
-                    } else {
-                        activity.getToastPositionMake().onShowToast(mChannel, "서버 연결 DISCONNECT. \n충전을 할 수 없습니다.");
+                            break;
+                        case 4:
+                            chargingCurrentData.setAuthType("C");
+                            chargingCurrentData.setPaymentType(PaymentType.CORP);
+                            chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeC);
+                            fragmentChangeAuthSelect();
+                            break;
+                        case 5:
+                            chargingCurrentData.setAuthType("K");
+                            chargingCurrentData.setPaymentType(PaymentType.MOE);
+                            chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeK);
+                            fragmentChangeAuthSelect();
+                            break;
+                        default:
+                            logger.error("changeFragment error >> Invalid value");
+                            activity.getToastPositionMake().onShowToast(mChannel, "충전을 할 수 없습니다. 고객센터에 문의주세요.");
+                            break;
                     }
                 } catch (Exception e){
-                    activity.getToastPositionMake().onShowToast(mChannel, "서버 연결 DISCONNECT. \n충전을 할 수 없습니다.");
                     logger.error("server disconnect error : {}", e.getMessage(), e);
+                    activity.getToastPositionMake().onShowToast(mChannel, "충전을 할 수 없습니다. 잠시 후 다시 시도해 주세요.");
                 }
             }
         } catch (Exception e) {
@@ -239,6 +254,11 @@ public class InitFragment extends Fragment implements View.OnClickListener {
             logger.error("onUnitPrice error : {}", e.getMessage(), e);
             return false;
         }
+    }
+
+    private void fragmentChangeAuthSelect() {
+        activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.MEMBER_CARD);
+        activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
     }
 
     @Override

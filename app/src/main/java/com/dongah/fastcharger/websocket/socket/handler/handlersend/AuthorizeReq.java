@@ -5,7 +5,6 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import com.dongah.fastcharger.MainActivity;
-import com.dongah.fastcharger.basefunction.ChargingCurrentData;
 import com.dongah.fastcharger.utils.LogDataSave;
 import com.dongah.fastcharger.websocket.ocpp.core.AuthorizeRequest;
 import com.dongah.fastcharger.websocket.socket.SocketState;
@@ -33,7 +32,7 @@ public class AuthorizeReq {
     public void sendAuthorize(String idTag) {
         try {
             MainActivity activity = (MainActivity) MainActivity.mContext;
-            AuthorizeRequest authorizeRequest = new AuthorizeRequest(idTagWithUserType(idTag));
+            AuthorizeRequest authorizeRequest = new AuthorizeRequest(idTag);
 
             SocketState socketState = activity.getSocketReceiveMessage().getSocket().getState();
             if (socketState.equals(SocketState.OPEN)) {
@@ -71,37 +70,6 @@ public class AuthorizeReq {
             logDataSave.makeDump(connectorId, frame.toString());
         } catch (Exception e) {
             logger.error("saveFullAuthorize error : {}", e.getMessage());
-        }
-    }
-
-    private String idTagWithUserType(String idTag) {
-        try {
-            MainActivity activity = (MainActivity) MainActivity.mContext;
-            ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(getConnectorId()-1);
-            int userType = chargingCurrentData.getPaymentType().value();
-
-            /** pay type : MEMBER(1) CREDIT(2) CORP(7) KECO(8) */
-            switch (userType) {
-                case 1:
-                    chargingCurrentData.setIdTag("M" + chargingCurrentData.getIdTag());
-                    break;
-                case 2:
-                    chargingCurrentData.setIdTag("N" + chargingCurrentData.getIdTag());
-                    break;
-                case 7:
-                    chargingCurrentData.setIdTag("C" + chargingCurrentData.getIdTag());
-                    break;
-                case 8:
-                    chargingCurrentData.setIdTag("K" + chargingCurrentData.getIdTag());
-                    break;
-                default:
-                    logger.warn("userType none");
-                    break;
-            }
-            return chargingCurrentData.getIdTag();
-        } catch (Exception e) {
-            logger.error("idTagWithUserType error : {}", e.getMessage());
-            return idTag;
         }
     }
 }

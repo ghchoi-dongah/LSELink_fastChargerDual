@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,7 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
     FragmentChange fragmentChange;
     ChargingCurrentData chargingCurrentData;
     ChargerConfiguration chargerConfiguration;
+    Handler uiCheckHandler;
 
     public AuthSelectFragment() {
         // Required empty public constructor
@@ -113,6 +115,7 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
         textViewCorpUnitInput = view.findViewById(R.id.textViewCorpUnitInput);
         textViewMoeUnitInput = view.findViewById(R.id.textViewMoeUnitInput);
 
+        applyAuthMode(chargerConfiguration.getAuthMode());
         return view;
     }
 
@@ -121,19 +124,18 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         try {
-            if (Objects.equals(chargerConfiguration.getAuthMode(), 1)) {
-                // member + nomember
-                cardViewCorp.setVisibility(View.INVISIBLE);
-                cardViewMoe.setVisibility(View.INVISIBLE);
-            } else if (Objects.equals(chargerConfiguration.getAuthMode(), 2)) {
-                // member + nomember + corp + moe
-                cardViewCorp.setVisibility(View.VISIBLE);
-                cardViewMoe.setVisibility(View.VISIBLE);
-            }
             textViewMemberUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeM));
             textViewNoMemberUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeN));
             textViewCorpUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeC));
             textViewMoeUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeK));
+
+            uiCheckHandler = new Handler();
+            uiCheckHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    activity.getClassUiProcess(mChannel).onHome();
+                }
+            }, 60000);
         } catch (Exception e) {
             logger.error("onViewCreated error : {}", e.getMessage(), e);
         }
@@ -171,6 +173,45 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
             }
         } catch (Exception e) {
             logger.error("onClick error : {}", e.getMessage(), e);
+        }
+    }
+
+    /**
+     * authMode:
+     * 1 → 회원 + 비회원
+     * 2 → 회원 + 비회원 → 법인 → 환경부
+     * 3 → 회원 + 법인 + 환경부
+     * */
+    private void applyAuthMode(int authMode) {
+        switch (authMode) {
+            case 1:
+                cardViewNoMember.setVisibility(View.VISIBLE);
+                cardViewCorp.setVisibility(View.INVISIBLE);
+                cardViewMoe.setVisibility(View.INVISIBLE);
+                break;
+            case 2:
+                cardViewNoMember.setVisibility(View.VISIBLE);
+                cardViewCorp.setVisibility(View.VISIBLE);
+                cardViewMoe.setVisibility(View.VISIBLE);
+                break;
+            case 3:
+                cardViewNoMember.setVisibility(View.INVISIBLE);
+                cardViewCorp.setVisibility(View.VISIBLE);
+                cardViewMoe.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        try {
+            if (uiCheckHandler != null) {
+                uiCheckHandler.removeCallbacksAndMessages(null);
+                uiCheckHandler = null;
+            }
+        } catch (Exception e) {
+            logger.error("onDestroyView error : {}", e.getMessage(), e);
         }
     }
 

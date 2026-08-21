@@ -19,14 +19,14 @@
         android:id="@+id/cardViewMember"
         android:layout_width="450dp"
         android:layout_height="120dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="20dp"
         android:clickable="true"
         android:focusable="true"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardElevation="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/cardViewNoMember"
+        app:layout_constraintStart_toStartOf="@id/cardViewNoMember"
+        app:layout_constraintEnd_toEndOf="@id/cardViewNoMember">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -92,14 +92,14 @@
         android:id="@+id/cardViewNoMember"
         android:layout_width="450dp"
         android:layout_height="120dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="56dp"
         android:clickable="true"
         android:focusable="true"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardElevation="0dp"
-        app:layout_constraintTop_toBottomOf="@id/cardViewMember"
-        app:layout_constraintStart_toStartOf="@id/cardViewMember"
-        app:layout_constraintEnd_toEndOf="@id/cardViewMember">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -166,9 +166,9 @@
         android:focusable="true"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardElevation="0dp"
-        app:layout_constraintTop_toBottomOf="@id/cardViewNoMember"
-        app:layout_constraintStart_toStartOf="@id/cardViewNoMember"
-        app:layout_constraintEnd_toEndOf="@id/cardViewNoMember">
+        app:layout_constraintTop_toBottomOf="@id/cardViewMember"
+        app:layout_constraintStart_toStartOf="@id/cardViewMember"
+        app:layout_constraintEnd_toEndOf="@id/cardViewMember">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

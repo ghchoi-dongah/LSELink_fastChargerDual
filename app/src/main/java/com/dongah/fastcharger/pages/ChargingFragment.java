@@ -154,7 +154,8 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
                 progressCircular.setProgress(chargingCurrentData.getSoc(), true); // progress
                 textViewLimitSocValue.setText("목표 충전율: " +chargingCurrentData.getLimitSoc() + "%"); // 목표 충전율
                 startTime = zonedDateTimeConvert.doStringDateToDate(chargingCurrentData.getChargingStartTime());    // 충전시간
-                textViewInputUnit.setText(payFormatter.format((long) chargingCurrentData.getPowerUnitPrice()) + "원");    // 충전단가
+//                textViewInputUnit.setText(payFormatter.format((long) chargingCurrentData.getPowerUnitPrice()) + "원");    // 충전단가
+                textViewInputUnit.setText(chargingCurrentData.getPowerUnitPrice() + "원");    // 충전단가
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -172,7 +173,7 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
                 chargingCurrentData.setUserStop(true);
             } else {
                 // server mode
-                boolean requireRfCard = Objects.equals(chargingCurrentData.getPaymentType(), PaymentType.MEMBER) &&
+                boolean requireRfCard = !Objects.equals(chargingCurrentData.getPaymentType(), PaymentType.CREDIT) &&
                         chargerConfiguration.isStopConfirm();
                 if (requireRfCard) {
                     activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
@@ -206,7 +207,7 @@ public class ChargingFragment extends Fragment implements View.OnClickListener {
                                  textViewChargingTimeValue.setText(String.format("%02d", hour) + ":" + String.format("%02d", minute) + ":" + String.format("%02d", second));
                                  chargingCurrentData.setChargingUseTime(textViewChargingTimeValue.getText().toString());
 
-                                 txtChargePay.setText(payFormatter.format((long) chargingCurrentData.getPowerMeterUsePay()) + " 원");
+                                 txtChargePay.setText(payFormatter.format((long) chargingCurrentData.getPowerMeterUsePay()) + "원");
                                  textViewChargingAmtValue.setText(powerFormatter.format(chargingCurrentData.getPowerMeterUse() * 0.01) + "kWh");
 
                                  int rHour = chargingCurrentData.getRemaintime() / 3600;
