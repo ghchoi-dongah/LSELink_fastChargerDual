@@ -20,6 +20,9 @@ public class GlobalVariables {
     public static String VERSION = "1.0.0";
     public static String FW_VERSION = "1.0.0";
 
+    public static final String PACKAGE_NAME=  "com.dongah.autoupdates";
+    public static final String PACKAGE_CLASS_NAME = "com.dongah.autoupdates.MainActivity";
+
     // file names
     public static final String UNIT_FILE_NAME = "unitPrice.dongah";
     public static final String FILE_UNIT = "unitPrice";

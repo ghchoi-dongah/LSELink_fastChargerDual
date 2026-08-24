@@ -1,7 +1,9 @@
 package com.dongah.fastcharger;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -450,8 +452,19 @@ public class MainActivity extends AppCompatActivity {
         try {
             ((MainActivity) MainActivity.mContext).getSocketReceiveMessage().getSocket().disconnect();
             if (Objects.equals(type, "Soft")) {
-                ActivityCompat.finishAffinity(((MainActivity) MainActivity.mContext));
-                System.exit(0);
+                Intent intent = new Intent();
+                intent.setComponent(new ComponentName(GlobalVariables.PACKAGE_NAME, GlobalVariables.PACKAGE_CLASS_NAME));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                try {
+                    startActivity(intent); // 새 앱 실행
+                    overridePendingTransition(0, 0);
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        ActivityCompat.finishAffinity(MainActivity.this); // 모든 액티비티 종료
+                        System.exit(0);
+                    }, 100); // 200ms 딜레이
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
+                }
             } else {
                 try {
                     PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
