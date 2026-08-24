@@ -120,6 +120,12 @@ public class Socket extends WebSocketListener {
             reconnectingAttempts = 0;
             socketInterface.onOpen(webSocket);
 
+            // dump data send
+            for (int i = 1; i <= GlobalVariables.maxChannel; i++) {
+                GlobalVariables.setDumpSending(i, true);
+                ((MainActivity) MainActivity.mContext).getSocketReceiveMessage().getSocket().getDumpDataSend(i).onDumpSend(i);
+            }
+
             ProcessHandler ph = ((MainActivity) MainActivity.mContext).getProcessHandler();
             if (ph != null && !GlobalVariables.isConnectRetry()) {
                 ph.onBootNotificationStart(5);

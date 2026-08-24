@@ -49,14 +49,6 @@ public class BootNotificationHandler implements OcppHandler {
                 // DataTransfer Rechgrsocschedule
                 activity.getProcessHandler().onRechgrsocscheduleStart();
             }
-
-            // dump data send
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-               for (int i = 1; i <= GlobalVariables.maxChannel; i++) {
-                   GlobalVariables.setDumpSending(i, true);
-                   activity.getSocketReceiveMessage().getSocket().getDumpDataSend(i).onDumpSend(i);
-               }
-            }, 8000);
         } else {
             activity.getProcessHandler().onBootNotificationStart(5);
             GlobalVariables.setReconnectCheck(false);
