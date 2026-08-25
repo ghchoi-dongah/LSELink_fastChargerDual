@@ -259,9 +259,7 @@ public class MainActivity extends AppCompatActivity {
         processHandler = new ProcessHandler();
 
         // 6. socket
-//        String baseUrl = "ws://octt.dongahtest.p-e.kr:9000/DAE000101";
-        String baseUrl = "ws://192.168.20.42:8080/ocpp/TESTCHARGER01";
-//        String baseUrl =  chargerConfiguration.getServerConnectingString() + chargerConfiguration.getChargeBoxSerialNumber() + chargerConfiguration.getChargerId();
+        String baseUrl =  chargerConfiguration.getServerConnectingString() + chargerConfiguration.getChargeBoxSerialNumber() + chargerConfiguration.getChargerId();
         socketReceiveMessage = new SocketReceiveMessage(baseUrl);
 
         SocketState state = socketReceiveMessage.getSocket().getState();
