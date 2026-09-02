@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -388,6 +389,15 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode  == VCatPaymentManager.getInstance().getAwakeRequestCode()) {
+            VCatPaymentManager.getInstance().onVCatAwakeResult();
+        }
+    }
+
     private void hideNavigationBar() {
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
@@ -579,6 +589,7 @@ public class MainActivity extends AppCompatActivity {
         if (monitorHttpServer != null) {
             monitorHttpServer.stopServer();
         }
+        VCatPaymentManager.getInstance().unbind();
 //        if (serviceProcessingActivity != null) serviceProcessingActivity.unbind();
         super.onDestroy();
     }
