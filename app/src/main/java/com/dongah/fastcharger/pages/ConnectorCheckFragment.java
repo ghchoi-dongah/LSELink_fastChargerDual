@@ -33,6 +33,7 @@ import com.dongah.fastcharger.basefunction.GlobalVariables;
 import com.dongah.fastcharger.basefunction.UiSeq;
 import com.dongah.fastcharger.controlboard.RxData;
 import com.dongah.fastcharger.controlboard.TxData;
+import com.dongah.fastcharger.smartro.VCatPaymentManager;
 import com.dongah.fastcharger.utils.BitUtilities;
 import com.dongah.fastcharger.utils.SharedModel;
 import com.dongah.fastcharger.websocket.ocpp.core.ChargePointErrorCode;
@@ -43,6 +44,7 @@ import com.dongah.fastcharger.websocket.socket.SocketState;
 import com.dongah.fastcharger.websocket.socket.handler.handlersend.AuthorizeReq;
 import com.dongah.fastcharger.websocket.socket.handler.handlersend.StatusNotificationReq;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,8 +54,18 @@ import java.util.Objects;
  * A simple {@link Fragment} subclass.
  * Use the {@link ConnectorCheckFragment#newInstance} factory method to
  * create an instance of this fragment.
+ *
+ *
+ * [변경] ServiceProcessingFragment → Fragment
+ *   V-CAT 바인딩을 VCatPaymentManager 싱글톤으로 위임
+ *   → requestNoCardCancel() / handleCancelResult() 제거
+ *   → VCatPaymentManager.requestChargeFinishCancel(usedPayment=0) 으로 대체
+ *
+ * 타임아웃 흐름:
+ *   isPrePaymentResult() == true  → VCatPaymentManager 무카드 전체취소 → 홈 이동
+ *   isPrePaymentResult() == false → 바로 홈 이동
  */
-public class ConnectorCheckFragment extends Fragment implements View.OnClickListener {
+public class ConnectorCheckFragment extends Fragment {
     private static final Logger logger = LoggerFactory.getLogger(ConnectorCheckFragment.class);
 
     // TODO: Rename parameter arguments, choose names that match
@@ -69,7 +81,6 @@ public class ConnectorCheckFragment extends Fragment implements View.OnClickList
 
 
     int cnt = 0;
-    boolean isFlag = false, isFlagAuthorize = true;
     TextView textViewConnectorCheckMessage, textViewFailed, textViewConnector;
     ImageView imageViewLoading, imageViewConnectionFailed;
     AnimationDrawable animationDrawable;
@@ -85,6 +96,7 @@ public class ConnectorCheckFragment extends Fragment implements View.OnClickList
     ChargerConfiguration chargerConfiguration;
     ChargingCurrentData chargingCurrentData;
     FragmentChange fragmentChange;
+    private boolean cancelInProgress = false;
 
     public ConnectorCheckFragment() {
         // Required empty public constructor
@@ -122,7 +134,6 @@ public class ConnectorCheckFragment extends Fragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_connector_check, container, false);
-        view.setOnClickListener(this);
         textViewConnectorCheckMessage = view.findViewById(R.id.textViewConnectorCheckMessage);
         imageViewLoading = view.findViewById(R.id.imageViewLoading);
         imageViewLoading.setBackgroundResource(R.drawable.ani_loading);
@@ -143,6 +154,9 @@ public class ConnectorCheckFragment extends Fragment implements View.OnClickList
         chargerConfiguration = activity.getChargerConfiguration();
         chargingCurrentData = activity.getChargingCurrentData(mChannel);
         fragmentChange = activity.getFragmentChange();
+        rxData = activity.getControlBoard().getRxData(mChannel);
+        txData = activity.getControlBoard().getTxData(mChannel);
+
         return view;
     }
 
@@ -154,71 +168,195 @@ public class ConnectorCheckFragment extends Fragment implements View.OnClickList
             sharedModel = new ViewModelProvider(requireActivity()).get(SharedModel.class);
             requestStrings[0] = String.valueOf(mChannel);
             sharedModel.setMutableLiveData(requestStrings);
-            rxData = activity.getControlBoard().getRxData(mChannel);
-            txData = activity.getControlBoard().getTxData(mChannel);
+
             cnt = 0;
-            isFlag = false;
-            isFlagAuthorize = true;
             animationDrawable.start();
-
-            // connection time out
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    countHandler = new Handler();
-                    countRunnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            cnt++;
-                            if (cnt >= GlobalVariables.getConnectionTimeOut()) {
-                                // 충전기 종료
-                                txData.setStart(false);
-                                txData.setStop(true);
-                                countHandler.removeCallbacks(countRunnable);
-
-                                // preparing
-                                if (Objects.equals(chargingCurrentData.getChargePointStatus(), ChargePointStatus.Preparing) &&
-                                        Objects.equals(chargerConfiguration.getOpMode(), 1) &&
-                                        !((MainActivity) MainActivity.mContext).getControlBoard().getRxData(mChannel).isCsPilot()) {
-                                    chargingCurrentData.setChargePointStatus(ChargePointStatus.Available);
-                                    chargingCurrentData.setChargePointErrorCode(ChargePointErrorCode.NoError);
-
-                                    // StatusNotification
-                                    StatusNotificationReq statusNotificationReq = new StatusNotificationReq(chargingCurrentData.getConnectorId());
-                                    statusNotificationReq.sendStatusNotification();
-                                }
-
-                                // 통신 실패
-                                classUiProcess.setUiSeq(UiSeq.CONNECTION_FAILED);
-                                fragmentChange.onFragmentChange(mChannel, UiSeq.CONNECTION_FAILED, "CONNECTION_FAILED", null);
-                            } else {
-                                countHandler.postDelayed(countRunnable, 1000);
-                            }
-
-                            // connecting wait
-                            if (rxData.isCsPilot()) {
-                                if (textViewConnectorCheckMessage.getTag() == null || !(boolean) textViewConnectorCheckMessage.getTag()) {
-                                    textViewConnectorCheckMessage.setText(R.string.EVCheckMessage);
-                                    textViewConnectorCheckMessage.setTag(true);
-                                }
-                            }
-                        }
-                    };
-                    countHandler.postDelayed(countRunnable, 1000);
-                }
-            });
+            startTimeoutCounter();
         } catch (Exception e) {
             logger.error("onViewCreated error : {}", e.getMessage());
         }
     }
 
-    @Override
-    public void onClick(View v) {
+    // connection time out
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void startTimeoutCounter() {
         try {
-            return;
+            countHandler = new Handler();
+            countRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    // [추가] Fragment 분리 상태 가드
+                    if (!isAdded() || getActivity() == null) {
+                        Log.w("PLUG", "guard hit: isAdded=" + isAdded()
+                                + " activity=" + getActivity() + " cnt=" + cnt);
+                        stopTimeoutCounter();
+                        return;
+                    }
+
+                    cnt++;
+
+                    // connecting wait
+                    if (rxData.isCsPilot()) {
+                        if (textViewConnectorCheckMessage.getTag() == null || !(boolean) textViewConnectorCheckMessage.getTag()) {
+                            textViewConnectorCheckMessage.setText(R.string.EVCheckMessage);
+                            textViewConnectorCheckMessage.setTag(true);
+                        }
+                    }
+
+                    // timeout
+                    if (cnt >= GlobalVariables.getConnectionTimeOut()) {
+                        // 충전기 종료
+                        stopTimeoutCounter();
+                        onTimeout();
+                    } else {
+                        countHandler.postDelayed(countRunnable, 1000);
+                    }
+                }
+            };
+            countHandler.postDelayed(countRunnable, 1000);
         } catch (Exception e) {
-            logger.error("onClick error : {}", e.getMessage());
+            logger.error("startTimeoutCounter error : {}", e.getMessage(), e);
         }
+    }
+
+    /**
+     * 타임아웃 발생 시 처리
+     *
+     * 비회원 선결제(isPrePaymentResult) 완료 상태 → 무카드 전체취소
+     * 그 외 → 바로 홈 이동
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void onTimeout() {
+        try {
+            // ── 비회원 선결제 완료 → 무카드 전체취소 ─────────────
+            if (chargingCurrentData.isPrePaymentResult()) {
+                logger.info("비회원 선결제 타임아웃 → 무카드 전체취소 요청");
+                requestNoCardCancelViaSingleton();
+            } else {
+                // 선결제 없음 → 바로 홈
+                goHome();
+            }
+        } catch (Exception e) {
+            logger.error("onTimeout error : {}", e.getMessage(), e);
+        }
+    }
+
+    // ── 무카드 전체취소 (VCatPaymentManager 위임) ─────────
+
+    /**
+     * VCatPaymentManager.requestChargeFinishCancel(usedPayment=0) 호출
+     *
+     * usedPayment=0 → 내부에서 deal="cancellation" (전체취소) 로 처리
+     *
+     * [제거된 코드]
+     *   - requestNoCardCancel()   : V-CAT JSON 직접 빌드 + getVCatInterface() 직접 호출
+     *   - handleCancelResult()    : 결과 파싱 및 상태 처리
+     *   - isServiceConnected()    : ServiceProcessingFragment 전용 메서드
+     *   - cancelInProgress 일부   : VCatPaymentManager 내부에서 관리
+     */
+    private void requestNoCardCancelViaSingleton() {
+        if (cancelInProgress) {
+            logger.warn("requestNoCardCancelViaSingleton: 이미 취소 진행 중");
+            return;
+        }
+
+        // VCatPaymentManager 연결 여부 확인
+        if (!VCatPaymentManager.getInstance().isConnected()) {
+            logger.error("requestNoCardCancelViaSingleton: V-CAT 미연결 → 홈 이동");
+            showToast("결제 취소 서비스에 연결할 수 없습니다. 고객센터에 문의해주세요.");
+            goHome();
+            return;
+        }
+
+        cancelInProgress = true;
+
+
+        // usedPayment = 0 → requestChargeFinishCancel 내부에서 "cancellation" 처리
+        VCatPaymentManager.getInstance().requestChargeFinishCancel(
+                0,
+                chargingCurrentData,
+                chargerConfiguration,
+                chargingCurrentData.getConnectorId(),
+                new VCatPaymentManager.PaymentCallback() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onSuccess(JSONObject result) {
+                        cancelInProgress = false;
+                        logger.info("무카드 전체취소 성공 - 취소승인번호: {}",
+                                result.optString("approval-no", ""));
+
+                        chargingCurrentData.setTradeCode(result.optString("response-code", ""));    // 결제 승인코드, "00" 값이 아니면 거절
+                        chargingCurrentData.setTradeMethod(result.optString("display-msg", ""));    // 화면 메시지
+                        chargingCurrentData.setPrePaymentResult(false);
+
+                        // f2 전문 전송: 전체취소 결과 CSMS 전달 (성공 - 전체 필드)
+//                        sendPartCancelResultToServer(chargingCurrentData.getConnectorId(), true);
+
+                        showToast("결제가 취소되었습니다.");
+                        goHome();
+                    }
+
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onFailure(String errorMessage) {
+                        cancelInProgress = false;
+                        logger.error("무카드 전체취소 실패: {}", errorMessage);
+
+                        // f2 전문 전송: 전체취소 결과 CSMS 전달 (실패 - transaction_id 만)
+//                        sendPartCancelResultToServer(chargingCurrentData.getConnectorId(), false);
+
+                        showToast("결제 취소 실패: 고객운영 센터로 연락하세요!");
+                        goHome();
+                    }
+                }
+        );
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void stopTimeoutCounter() {
+        if (countHandler != null && countRunnable != null) {
+            countHandler.removeCallbacks(countRunnable);
+        }
+
+        txData.setStart(false);
+        txData.setStop(true);
+
+        // preparing
+        if (Objects.equals(chargingCurrentData.getChargePointStatus(), ChargePointStatus.Preparing) &&
+                Objects.equals(chargerConfiguration.getOpMode(), 1) &&
+                !((MainActivity) MainActivity.mContext).getControlBoard().getRxData(mChannel).isCsPilot()) {
+            chargingCurrentData.setChargePointStatus(ChargePointStatus.Available);
+            chargingCurrentData.setChargePointErrorCode(ChargePointErrorCode.NoError);
+
+            // StatusNotification
+            StatusNotificationReq statusNotificationReq = new StatusNotificationReq(chargingCurrentData.getConnectorId());
+            statusNotificationReq.sendStatusNotification();
+        }
+
+        // 통신 실패
+        classUiProcess.setUiSeq(UiSeq.CONNECTION_FAILED);
+        fragmentChange.onFragmentChange(mChannel, UiSeq.CONNECTION_FAILED, "CONNECTION_FAILED", null);
+    }
+
+    private boolean isControlBoardAvailable() {
+        return activity != null && activity.getControlBoard() != null;
+    }
+
+    private void goHome() {
+        if (!isAdded() || getActivity() == null) return;
+        activity.getClassUiProcess(mChannel).onHome();
+    }
+
+    private void showToast(String message) {
+        if (!isAdded() || getActivity() == null) return;
+        getActivity().runOnUiThread(() -> {
+            try {
+                android.widget.Toast.makeText(requireContext(), message,
+                        android.widget.Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                logger.error("showToast error: {}", e.getMessage());
+            }
+        });
     }
 
     @Override

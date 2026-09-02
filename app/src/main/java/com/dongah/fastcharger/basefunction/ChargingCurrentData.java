@@ -69,10 +69,33 @@ public class ChargingCurrentData {
     int surtax = 0;
     int tip = 0;            // 봉사료 (비과세) 금액
     int installment = 0;    // 할부 개월
-    String approvalNumber = "";
+
+    String authNum;
+    String phoneNumber;
+    String errorType;               // 0: no error      3:부분 취소 미처리건 있음;
+    String agency;                  // VAN사 SMATRO
+    String limitApplyMID;           // 상점 ID
+    String limitApplyTid;           // 한도 승인 거래 번호
+    String limitApplySeq;           // 한도 승인 거래 일련 번호
+    String limitApplyNumber;        // 한도 승인 거래 승인 번호
+    int usePoint;                   // 부분 취소할 금액
+    int limitApplyAmount;           // 한도 승인 금액
+    String limitApplyDt;            // 한도 승인 일시 YYYY-MM-DDHH:mm:ssZ
+    int chargeIdx;                  // CMS 인덱스
+    String partCancelTid;
+    String partCancelNumber;
+    int partCancelAmount;
+    String partCancelDt;
+
+    int remaintime = 0;
+
+    String approvalNo = "";
     String approvalDate = "";
     String approvalTime = "";
     String pgTranSeq = "";          // TID(결제승인관리번호)
+    String creditNo = "";
+
+    String approvalNumber = "";
     String creditCardNumber = "";
     String responseCode = "";       //응답코드
     String responseMessage = "";    //응답메세지
@@ -84,25 +107,20 @@ public class ChargingCurrentData {
     String cancelUniqueNo = "";              //취소 거래고유번호
     String tradeUniqueNumber = "";           //거래고유번호
     String issuer = "";                      //발급사 정보
-    String buyer = "";                       // 메입사
+    String buyer = "";                       //매입사
     String terminalNumber = "";              //장치제품번호
     String storeNumber = "";                 //가맹점번호
 
 
-    int remaintime = 0;
     String remainTimeStr = "";
 
 
-    boolean authorizeResult = false;
-
     public SampleValueData sampleValueData;
-
+    boolean authorizeResult = false;
     boolean prePaymentResult = false;       //선결제 성공 여부  true : 성공
     boolean faultCancelPayment = false;
 
     StringBuilder faultMessage;
-
-
     ChargePointStatus reservedStatus = ChargePointStatus.Available;
 
     /**
@@ -113,19 +131,6 @@ public class ChargingCurrentData {
     String resIdTag = "";
     String resParentIdTag = "";
     String resReservationId = "";
-
-    /**
-     * Smart Charging
-     */
-    int maxProfileDuration = 0;
-    double maxProfileLimit = 0;
-    int defaultProfileDuration = 0;
-    int txProfileDuration = 0;
-    public String[] maxProfileSchedulePeriod;
-    public String[] defaultProfileSchedulePeriod;
-    public String[] txProfileSchedulePeriod;
-    public boolean remoteStartSmartCharging = false;
-    public JSONArray remoteSmartChargingJsonArray;
 
     /**
      * 인증타입
@@ -209,7 +214,6 @@ public class ChargingCurrentData {
 //            setResIdTag("");
 //            setResParentIdTag("");
 //            setResReservationId("");
-            setRemoteStartSmartCharging(false);
             setSoc(0);
             setTargetSoc(80);
             setTargetCurrent(0);
@@ -776,47 +780,6 @@ public class ChargingCurrentData {
     public void setResReservationId(String resReservationId) {
         this.resReservationId = resReservationId;
     }
-
-    public int getMaxProfileDuration() {
-        return maxProfileDuration;
-    }
-
-    public void setMaxProfileDuration(int maxProfileDuration) {
-        this.maxProfileDuration = maxProfileDuration;
-    }
-
-    public double getMaxProfileLimit() {
-        return maxProfileLimit;
-    }
-
-    public void setMaxProfileLimit(double maxProfileLimit) {
-        this.maxProfileLimit = maxProfileLimit;
-    }
-
-    public int getDefaultProfileDuration() {
-        return defaultProfileDuration;
-    }
-
-    public void setDefaultProfileDuration(int defaultProfileDuration) {
-        this.defaultProfileDuration = defaultProfileDuration;
-    }
-
-    public int getTxProfileDuration() {
-        return txProfileDuration;
-    }
-
-    public void setTxProfileDuration(int txProfileDuration) {
-        this.txProfileDuration = txProfileDuration;
-    }
-
-    public boolean isRemoteStartSmartCharging() {
-        return remoteStartSmartCharging;
-    }
-
-    public void setRemoteStartSmartCharging(boolean remoteStartSmartCharging) {
-        this.remoteStartSmartCharging = remoteStartSmartCharging;
-    }
-
     public ChargePointStatus getReservedStatus() {
         return reservedStatus;
     }
@@ -875,5 +838,149 @@ public class ChargingCurrentData {
 
     public void setFullrechgsoc(int fullrechgsoc) {
         this.fullrechgsoc = fullrechgsoc;
+    }
+
+    public String getAuthNum() {
+        return authNum;
+    }
+
+    public void setAuthNum(String authNum) {
+        this.authNum = authNum;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getErrorType() {
+        return errorType;
+    }
+
+    public void setErrorType(String errorType) {
+        this.errorType = errorType;
+    }
+
+    public String getAgency() {
+        return agency;
+    }
+
+    public void setAgency(String agency) {
+        this.agency = agency;
+    }
+
+    public String getLimitApplyMID() {
+        return limitApplyMID;
+    }
+
+    public void setLimitApplyMID(String limitApplyMID) {
+        this.limitApplyMID = limitApplyMID;
+    }
+
+    public String getLimitApplyTid() {
+        return limitApplyTid;
+    }
+
+    public void setLimitApplyTid(String limitApplyTid) {
+        this.limitApplyTid = limitApplyTid;
+    }
+
+    public String getLimitApplySeq() {
+        return limitApplySeq;
+    }
+
+    public void setLimitApplySeq(String limitApplySeq) {
+        this.limitApplySeq = limitApplySeq;
+    }
+
+    public String getLimitApplyNumber() {
+        return limitApplyNumber;
+    }
+
+    public void setLimitApplyNumber(String limitApplyNumber) {
+        this.limitApplyNumber = limitApplyNumber;
+    }
+
+    public int getUsePoint() {
+        return usePoint;
+    }
+
+    public void setUsePoint(int usePoint) {
+        this.usePoint = usePoint;
+    }
+
+    public int getLimitApplyAmount() {
+        return limitApplyAmount;
+    }
+
+    public void setLimitApplyAmount(int limitApplyAmount) {
+        this.limitApplyAmount = limitApplyAmount;
+    }
+
+    public String getLimitApplyDt() {
+        return limitApplyDt;
+    }
+
+    public void setLimitApplyDt(String limitApplyDt) {
+        this.limitApplyDt = limitApplyDt;
+    }
+
+    public int getChargeIdx() {
+        return chargeIdx;
+    }
+
+    public void setChargeIdx(int chargeIdx) {
+        this.chargeIdx = chargeIdx;
+    }
+
+    public String getPartCancelTid() {
+        return partCancelTid;
+    }
+
+    public void setPartCancelTid(String partCancelTid) {
+        this.partCancelTid = partCancelTid;
+    }
+
+    public String getPartCancelNumber() {
+        return partCancelNumber;
+    }
+
+    public void setPartCancelNumber(String partCancelNumber) {
+        this.partCancelNumber = partCancelNumber;
+    }
+
+    public int getPartCancelAmount() {
+        return partCancelAmount;
+    }
+
+    public void setPartCancelAmount(int partCancelAmount) {
+        this.partCancelAmount = partCancelAmount;
+    }
+
+    public String getPartCancelDt() {
+        return partCancelDt;
+    }
+
+    public void setPartCancelDt(String partCancelDt) {
+        this.partCancelDt = partCancelDt;
+    }
+
+    public String getApprovalNo() {
+        return approvalNo;
+    }
+
+    public void setApprovalNo(String approvalNo) {
+        this.approvalNo = approvalNo;
+    }
+
+    public String getCreditNo() {
+        return creditNo;
+    }
+
+    public void setCreditNo(String creditNo) {
+        this.creditNo = creditNo;
     }
 }

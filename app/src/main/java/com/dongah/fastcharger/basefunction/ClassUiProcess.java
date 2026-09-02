@@ -3,7 +3,6 @@ package com.dongah.fastcharger.basefunction;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -15,8 +14,8 @@ import com.dongah.fastcharger.controlboard.RxData;
 import com.dongah.fastcharger.pages.FaultFragment;
 import com.dongah.fastcharger.rfcard.RfCardReaderListener;
 import com.dongah.fastcharger.rfcard.RfCardReaderReceive;
-import com.dongah.fastcharger.vcat.VCatListener;
-import com.dongah.fastcharger.vcat.ServiceProcessingActivity;
+import com.dongah.fastcharger.smartro.VCatListener;
+import com.dongah.fastcharger.smartro.ServiceProcessingActivity;
 import com.dongah.fastcharger.websocket.ocpp.core.ChargePointErrorCode;
 import com.dongah.fastcharger.websocket.ocpp.core.ChargePointStatus;
 import com.dongah.fastcharger.websocket.ocpp.core.Reason;
