@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
 import com.dongah.fastcharger.basefunction.UiSeq;
-import com.dongah.fastcharger.vcat.ServiceProcessingActivity;
+import com.dongah.fastcharger.smartro.ServiceProcessingActivity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -88,6 +88,9 @@ public class GlobalVariables {
     public static String RSRP = "";
     public static boolean triggerSet = false;
 
+
+    public static boolean partialCancel;
+
     
     public static boolean memberRegisterMode = false;
     public static MemberCardRegisterCallback memberCardRegisterCallback = null;
