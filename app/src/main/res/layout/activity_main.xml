@@ -43,22 +43,21 @@
     
     <ImageView
         android:id="@+id/imageViewNetwork"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:layout_constraintHorizontal_bias="0.32"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="10dp"
         android:background="@drawable/nonetwork"
         android:importantForAccessibility="no"
         app:layout_constraintStart_toStartOf="@id/viewFooter"
         app:layout_constraintTop_toTopOf="@id/viewFooter"
-        app:layout_constraintBottom_toBottomOf="@id/viewFooter"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="@id/viewFooter"/>
 
     <TextView
         android:id="@+id/textViewVersionValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="VER-DEVD 1.0.0 | "
+        android:text="VER-DEVD 1.0.0"
         android:textSize="19sp"
         android:textColor="@color/white"
         app:layout_constraintTop_toTopOf="@id/imageViewNetwork"
@@ -66,15 +65,41 @@
         app:layout_constraintBottom_toBottomOf="@id/imageViewNetwork" />
 
     <TextView
-        android:id="@+id/textViewTime"
+        android:id="@+id/textViewCallCenter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="2026-01-15 12:47:50"
-        android:textSize="19sp"
+        android:layout_marginEnd="5dp"
+        android:text="고객센터 1660-3175"
         android:textColor="@color/white"
-        app:layout_constraintTop_toTopOf="@id/imageViewNetwork"
-        app:layout_constraintStart_toEndOf="@id/textViewVersionValue"
-        app:layout_constraintBottom_toBottomOf="@id/imageViewNetwork" />
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/textViewChargerId"
+        app:layout_constraintBottom_toBottomOf="@id/textViewChargerId"
+        app:layout_constraintEnd_toStartOf="@id/textViewChargerId"/>
+
+    <TextView
+        android:id="@+id/textViewChargerId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="| ID-DA000101"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/viewFooter"
+        app:layout_constraintTop_toTopOf="@id/viewFooter"
+        app:layout_constraintBottom_toBottomOf="@id/viewFooter" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/textViewTime"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="2026-01-15 12:47:50"-->
+<!--        android:textSize="19sp"-->
+<!--        android:textColor="@color/white"-->
+<!--        app:layout_constraintTop_toTopOf="@id/imageViewNetwork"-->
+<!--        app:layout_constraintStart_toEndOf="@id/textViewVersionValue"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/imageViewNetwork" />-->
 
     <FrameLayout
         android:id="@+id/frameFull"

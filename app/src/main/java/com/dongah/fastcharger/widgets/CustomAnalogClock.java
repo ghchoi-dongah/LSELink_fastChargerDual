@@ -13,6 +13,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class CustomAnalogClock extends View {
 
@@ -59,17 +60,17 @@ public class CustomAnalogClock extends View {
 
         // 그림자 사용하려면 SW 레이어로
         setLayerType(LAYER_TYPE_SOFTWARE, null);
-        backgroundPaint.setShadowLayer(20f, 0f, 0f, Color.argb(128, 0, 0, 0));
+//        backgroundPaint.setShadowLayer(20f, 0f, 0f, Color.argb(128, 0, 0, 0));
 
         // 시간 눈금 (굵은 눈금)
         hourTickPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         hourTickPaint.setColor(Color.BLACK);
-        hourTickPaint.setStrokeWidth(6f);
+        hourTickPaint.setStrokeWidth(2f);
 
         // 분 눈금 (얇은 눈금)
         minuteTickPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         minuteTickPaint.setColor(Color.GRAY);
-        minuteTickPaint.setStrokeWidth(3f);
+        minuteTickPaint.setStrokeWidth(2f);
 
         // 숫자(1~12)
 //        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -80,19 +81,19 @@ public class CustomAnalogClock extends View {
         // 시침
         hourHandPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         hourHandPaint.setColor(Color.BLACK);
-        hourHandPaint.setStrokeWidth(10f);
+        hourHandPaint.setStrokeWidth(3f);
         hourHandPaint.setStrokeCap(Paint.Cap.ROUND);
 
         // 분침
         minuteHandPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         minuteHandPaint.setColor(Color.BLACK);
-        minuteHandPaint.setStrokeWidth(8f);
+        minuteHandPaint.setStrokeWidth(3f);
         minuteHandPaint.setStrokeCap(Paint.Cap.ROUND);
 
         // 초침
         secondHandPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         secondHandPaint.setColor(Color.RED);
-        secondHandPaint.setStrokeWidth(4f);
+        secondHandPaint.setStrokeWidth(2f);
         secondHandPaint.setStrokeCap(Paint.Cap.ROUND);
 
 
@@ -119,19 +120,19 @@ public class CustomAnalogClock extends View {
 
         float cx = getWidth() / 2f;
         float cy = getHeight() / 2f;
-        float radius = Math.min(cx, cy) - 20f;  // 여백 조금
+        float radius = Math.min(cx, cy) * 0.9f;
 
         // 1) 배경 원
         canvas.drawCircle(cx, cy, radius, backgroundPaint);
 
         // 2) 눈금(60개) – 6도 단위로
         for (int i = 0; i < 60; i++) {
-            double degree = i * 6.0; // 360 / 60
+            double degree = i * 6.0 - 90.0; // 360 / 60, -90 보정으로 12시가 위쪽
             double radian = Math.toRadians(degree);
 
             boolean isHourTick = (i % 5 == 0);
 
-            float tickLength = isHourTick ? 40f : 20f;
+            float tickLength = isHourTick ? radius * 0.25f : radius * 0.12f;
             float startRadius = radius - tickLength;
             float endRadius = radius;
 
@@ -163,7 +164,7 @@ public class CustomAnalogClock extends View {
 //        }
 
         // 4) 현재 시간 받아오기
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"));
         int hour = calendar.get(Calendar.HOUR);        // 0~11
         int minute = calendar.get(Calendar.MINUTE);
         int second = calendar.get(Calendar.SECOND);
@@ -198,6 +199,6 @@ public class CustomAnalogClock extends View {
         canvas.drawLine(cx, cy, secEndX, secEndY, secondHandPaint);
 
         // 9) 중심점
-        canvas.drawCircle(cx, cy, 8f, centerPaint);
+        canvas.drawCircle(cx, cy, radius * 0.05f, centerPaint);
     }
 }
