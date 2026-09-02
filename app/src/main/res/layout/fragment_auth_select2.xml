@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="512dp"
     android:layout_height="662dp"
-    tools:context=".pages.AuthSelectFragment">
+    tools:context=".pages.AuthSelect2Fragment">
 
     <View
         android:id="@+id/view"
@@ -18,7 +18,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewMoe"
         android:layout_width="450dp"
-        android:layout_height="170dp"
+        android:layout_height="275dp"
         android:layout_marginTop="41dp"
         android:clickable="true"
         android:focusable="true"
@@ -38,24 +38,24 @@
                 android:id="@+id/textViewMoe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="-10dp"
+                android:layout_marginTop="6dp"
                 android:text="@string/moeMessage"
                 android:textSize="36dp"
                 android:textStyle="bold"
                 android:textColor="@color/green"
-                app:layout_constraintTop_toTopOf="@id/imageViewMoe"
-                app:layout_constraintStart_toEndOf="@id/imageViewMoe"/>
+                app:layout_constraintTop_toBottomOf="@id/imageViewMoe"
+                app:layout_constraintStart_toStartOf="@id/imageViewMoe"
+                app:layout_constraintEnd_toEndOf="@id/imageViewMoe"/>
 
             <ImageView
                 android:id="@+id/imageViewMoe"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
                 android:background="@drawable/moe"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 tools:ignore="contentDescription" />
 
             <TextView
@@ -75,85 +75,14 @@
                 android:id="@+id/textViewMoeContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="10dp"
                 android:gravity="start"
                 android:text="@string/moeInfoMessage"
                 android:textSize="22sp"
                 android:textColor="@color/gray_500"
                 app:layout_constraintStart_toStartOf="@id/textViewMoe"
-                app:layout_constraintTop_toBottomOf="@id/textViewMoe" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!--  법인  -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewCorp"
-        android:layout_width="450dp"
-        android:layout_height="170dp"
-        android:layout_marginTop="35dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardBackgroundColor="@android:color/transparent"
-        app:cardElevation="0dp"
-        app:layout_constraintTop_toBottomOf="@id/cardViewMoe"
-        app:layout_constraintStart_toStartOf="@id/cardViewMoe"
-        app:layout_constraintEnd_toEndOf="@id/cardViewMoe">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layoutCorp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/layer_list_rect_corner">
-
-            <TextView
-                android:id="@+id/textViewCorp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="-10dp"
-                android:text="@string/corpMessage"
-                android:textSize="36dp"
-                android:textStyle="bold"
-                android:textColor="@color/blue_900"
-                app:layout_constraintTop_toTopOf="@id/imageViewCorp"
-                app:layout_constraintStart_toEndOf="@id/imageViewCorp"/>
-
-            <ImageView
-                android:id="@+id/imageViewCorp"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="20dp"
-                android:background="@drawable/corp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="contentDescription" />
-
-            <TextView
-                android:id="@+id/textViewCorpUnitInput"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
-                android:text="0원/kWh"
-                android:textSize="20sp"
-                android:textColor="@color/black_600"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textViewCorpContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:gravity="start"
-                android:text="@string/corpInfoMessage"
-                android:textSize="22sp"
-                android:textColor="@color/gray_500"
-                app:layout_constraintStart_toStartOf="@id/textViewCorp"
-                app:layout_constraintTop_toBottomOf="@id/textViewCorp" />
+                app:layout_constraintTop_toBottomOf="@id/textViewMoe"
+                app:layout_constraintEnd_toEndOf="@id/textViewMoe" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
@@ -162,15 +91,15 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewMember"
         android:layout_width="450dp"
-        android:layout_height="170dp"
-        android:layout_marginTop="35dp"
+        android:layout_height="275dp"
+        android:layout_marginTop="30dp"
         android:clickable="true"
         android:focusable="true"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardElevation="0dp"
-        app:layout_constraintTop_toBottomOf="@id/cardViewCorp"
-        app:layout_constraintStart_toStartOf="@id/cardViewCorp"
-        app:layout_constraintEnd_toEndOf="@id/cardViewCorp">
+        app:layout_constraintTop_toBottomOf="@id/cardViewMoe"
+        app:layout_constraintStart_toStartOf="@id/cardViewMoe"
+        app:layout_constraintEnd_toEndOf="@id/cardViewMoe" >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutMember"
@@ -182,24 +111,24 @@
                 android:id="@+id/textViewMember"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="-10dp"
+                android:layout_marginTop="6dp"
                 android:text="@string/memberMessage"
                 android:textSize="36dp"
                 android:textStyle="bold"
                 android:textColor="@color/primary"
-                app:layout_constraintTop_toTopOf="@id/imageViewMember"
-                app:layout_constraintStart_toEndOf="@id/imageViewMember"  />
+                app:layout_constraintTop_toBottomOf="@id/imageViewMember"
+                app:layout_constraintStart_toStartOf="@id/imageViewMember"
+                app:layout_constraintEnd_toEndOf="@id/imageViewMember" />
 
             <ImageView
                 android:id="@+id/imageViewMember"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
                 android:background="@drawable/member"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 tools:ignore="contentDescription" />
 
             <TextView
@@ -219,15 +148,17 @@
                 android:id="@+id/textViewMemberContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="10dp"
                 android:gravity="start"
                 android:text="@string/memberInfoMessage"
                 android:textSize="22sp"
                 android:textColor="@color/gray_500"
+                app:layout_constraintStart_toStartOf="@id/textViewMember"
                 app:layout_constraintTop_toBottomOf="@id/textViewMember"
-                app:layout_constraintStart_toStartOf="@id/textViewMember" />
+                app:layout_constraintEnd_toEndOf="@id/textViewMember" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

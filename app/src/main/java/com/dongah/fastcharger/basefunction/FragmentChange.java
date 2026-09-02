@@ -11,6 +11,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
 import com.dongah.fastcharger.pages.AdminPasswordFragment;
+import com.dongah.fastcharger.pages.AuthSelect2Fragment;
+import com.dongah.fastcharger.pages.AuthSelect4Fragment;
 import com.dongah.fastcharger.pages.AuthSelectFragment;
 import com.dongah.fastcharger.pages.ChargingFinishFragment;
 import com.dongah.fastcharger.pages.ChargingFinishWaitFragment;
@@ -36,6 +38,8 @@ import com.dongah.fastcharger.pages.WebSocketDebugFragment;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 public class FragmentChange {
 
@@ -68,10 +72,23 @@ public class FragmentChange {
             case AUTH_SELECT:
                 try {
                     onFrameLayoutChange(false);
-                    AuthSelectFragment authFragment = new AuthSelectFragment();
-                    authFragment.setArguments(bundle);
-                    transaction.replace(frameLayoutId, authFragment, "AUTH_SELECT");
-                    transaction.commit();
+                    if (Objects.equals(type, "AUTH2")) {
+                        AuthSelect2Fragment auth2Fragment = new AuthSelect2Fragment();
+                        auth2Fragment.setArguments(bundle);
+                        transaction.replace(frameLayoutId, auth2Fragment, "AUTH_SELECT");
+                        transaction.commit();
+                    } else if (Objects.equals(type, "AUTH3")) {
+                        AuthSelectFragment authFragment = new AuthSelectFragment();
+                        authFragment.setArguments(bundle);
+                        transaction.replace(frameLayoutId, authFragment, "AUTH_SELECT");
+                        transaction.commit();
+                    } else if (Objects.equals(type, "AUTH4")) {
+                        AuthSelect4Fragment auth4Fragment = new AuthSelect4Fragment();
+                        auth4Fragment.setArguments(bundle);
+                        transaction.replace(frameLayoutId, auth4Fragment, "AUTH_SELECT");
+                        transaction.commit();
+                    }
+
                 } catch (Exception e) {
                     logger.error("onFragmentChange error : AUTH_SELECT {}", e.getMessage());
                 }

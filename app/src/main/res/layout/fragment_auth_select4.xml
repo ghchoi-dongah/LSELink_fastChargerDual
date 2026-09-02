@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="512dp"
     android:layout_height="662dp"
-    tools:context=".pages.AuthSelectFragment">
+    tools:context=".pages.AuthSelect4Fragment">
 
     <View
         android:id="@+id/view"
@@ -18,7 +18,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewMoe"
         android:layout_width="450dp"
-        android:layout_height="170dp"
+        android:layout_height="130dp"
         android:layout_marginTop="41dp"
         android:clickable="true"
         android:focusable="true"
@@ -41,7 +41,7 @@
                 android:layout_marginStart="14dp"
                 android:layout_marginTop="-10dp"
                 android:text="@string/moeMessage"
-                android:textSize="36dp"
+                android:textSize="32dp"
                 android:textStyle="bold"
                 android:textColor="@color/green"
                 app:layout_constraintTop_toTopOf="@id/imageViewMoe"
@@ -49,9 +49,9 @@
 
             <ImageView
                 android:id="@+id/imageViewMoe"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="20dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="16dp"
                 android:background="@drawable/moe"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -65,7 +65,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:text="0원/kWh"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textColor="@color/black_600"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +78,7 @@
                 android:layout_marginTop="6dp"
                 android:gravity="start"
                 android:text="@string/moeInfoMessage"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textColor="@color/gray_500"
                 app:layout_constraintStart_toStartOf="@id/textViewMoe"
                 app:layout_constraintTop_toBottomOf="@id/textViewMoe" />
@@ -90,8 +90,8 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewCorp"
         android:layout_width="450dp"
-        android:layout_height="170dp"
-        android:layout_marginTop="35dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="20dp"
         android:clickable="true"
         android:focusable="true"
         app:cardBackgroundColor="@android:color/transparent"
@@ -113,7 +113,7 @@
                 android:layout_marginStart="14dp"
                 android:layout_marginTop="-10dp"
                 android:text="@string/corpMessage"
-                android:textSize="36dp"
+                android:textSize="32dp"
                 android:textStyle="bold"
                 android:textColor="@color/blue_900"
                 app:layout_constraintTop_toTopOf="@id/imageViewCorp"
@@ -121,13 +121,13 @@
 
             <ImageView
                 android:id="@+id/imageViewCorp"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="20dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="16dp"
                 android:background="@drawable/corp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 tools:ignore="contentDescription" />
 
             <TextView
@@ -137,7 +137,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:text="0원/kWh"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textColor="@color/black_600"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -150,7 +150,7 @@
                 android:layout_marginTop="6dp"
                 android:gravity="start"
                 android:text="@string/corpInfoMessage"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textColor="@color/gray_500"
                 app:layout_constraintStart_toStartOf="@id/textViewCorp"
                 app:layout_constraintTop_toBottomOf="@id/textViewCorp" />
@@ -162,8 +162,8 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewMember"
         android:layout_width="450dp"
-        android:layout_height="170dp"
-        android:layout_marginTop="35dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="20dp"
         android:clickable="true"
         android:focusable="true"
         app:cardBackgroundColor="@android:color/transparent"
@@ -185,7 +185,7 @@
                 android:layout_marginStart="14dp"
                 android:layout_marginTop="-10dp"
                 android:text="@string/memberMessage"
-                android:textSize="36dp"
+                android:textSize="32dp"
                 android:textStyle="bold"
                 android:textColor="@color/primary"
                 app:layout_constraintTop_toTopOf="@id/imageViewMember"
@@ -193,9 +193,9 @@
 
             <ImageView
                 android:id="@+id/imageViewMember"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="20dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="16dp"
                 android:background="@drawable/member"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -209,7 +209,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:text="0원/kWh"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textColor="@color/black_600"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -222,10 +222,83 @@
                 android:layout_marginTop="6dp"
                 android:gravity="start"
                 android:text="@string/memberInfoMessage"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textColor="@color/gray_500"
                 app:layout_constraintTop_toBottomOf="@id/textViewMember"
                 app:layout_constraintStart_toStartOf="@id/textViewMember" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <!-- nomember info -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewNoMember"
+        android:layout_width="450dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardElevation="0dp"
+        app:layout_constraintTop_toBottomOf="@id/cardViewMember"
+        app:layout_constraintStart_toStartOf="@id/cardViewMember"
+        app:layout_constraintEnd_toEndOf="@id/cardViewMember">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutNoMember"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/layer_list_rect_corner">
+
+            <TextView
+                android:id="@+id/textViewNoMember"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="-10dp"
+                android:text="@string/nomemberMessage"
+                android:textSize="32dp"
+                android:textStyle="bold"
+                android:textColor="@color/yellow_900"
+                app:layout_constraintTop_toTopOf="@id/imageViewNoMember"
+                app:layout_constraintStart_toEndOf="@id/imageViewNoMember"/>
+
+            <ImageView
+                android:id="@+id/imageViewNoMember"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/nomember"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:ignore="contentDescription" />
+
+            <TextView
+                android:id="@+id/textViewNoMemberUnitInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:text="0원/kWh"
+                android:textSize="18sp"
+                android:textColor="@color/black_600"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textViewNoMemberContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="start"
+                android:text="@string/nomemberInfoMessage"
+                android:textSize="20sp"
+                android:textColor="@color/gray_500"
+                app:layout_constraintStart_toStartOf="@id/textViewNoMember"
+                app:layout_constraintTop_toBottomOf="@id/textViewNoMember" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

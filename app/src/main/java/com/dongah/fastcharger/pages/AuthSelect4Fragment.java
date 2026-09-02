@@ -35,12 +35,11 @@ import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AuthSelectFragment#newInstance} factory method to
+ * Use the {@link AuthSelect4Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AuthSelectFragment extends Fragment implements View.OnClickListener {
-    private static final Logger logger = LoggerFactory.getLogger(AuthSelectFragment.class);
-
+public class AuthSelect4Fragment extends Fragment implements View.OnClickListener {
+    private static final Logger logger = LoggerFactory.getLogger(AuthSelect4Fragment.class);
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,8 +52,8 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
     private String mParam2;
     private int mChannel;
 
-    CardView cardViewMember, cardViewCorp, cardViewMoe;
-    TextView textViewMemberUnitInput, textViewCorpUnitInput, textViewMoeUnitInput;
+    CardView cardViewMember, cardViewNoMember, cardViewCorp, cardViewMoe;
+    TextView textViewMemberUnitInput, textViewNoMemberUnitInput, textViewCorpUnitInput, textViewMoeUnitInput;
 
     MainActivity activity;
     ClassUiProcess classUiProcess;
@@ -63,7 +62,7 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
     ChargerConfiguration chargerConfiguration;
     Handler uiCheckHandler;
 
-    public AuthSelectFragment() {
+    public AuthSelect4Fragment() {
         // Required empty public constructor
     }
 
@@ -73,11 +72,11 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AuthFragment.
+     * @return A new instance of fragment AuthSelect4Fragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AuthSelectFragment newInstance(String param1, String param2) {
-        AuthSelectFragment fragment = new AuthSelectFragment();
+    public static AuthSelect4Fragment newInstance(String param1, String param2) {
+        AuthSelect4Fragment fragment = new AuthSelect4Fragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -98,7 +97,7 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_auth_select, container, false);
+        View view = inflater.inflate(R.layout.fragment_auth_select4, container, false);
         activity = (MainActivity) MainActivity.mContext;
         classUiProcess = activity.getClassUiProcess(mChannel);
         fragmentChange = activity.getFragmentChange();
@@ -107,11 +106,14 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
 
         cardViewMember = view.findViewById(R.id.cardViewMember);
         cardViewMember.setOnClickListener(this);
+        cardViewNoMember = view.findViewById(R.id.cardViewNoMember);
+        cardViewNoMember.setOnClickListener(this);
         cardViewCorp = view.findViewById(R.id.cardViewCorp);
         cardViewCorp.setOnClickListener(this);
         cardViewMoe = view.findViewById(R.id.cardViewMoe);
         cardViewMoe.setOnClickListener(this);
         textViewMemberUnitInput = view.findViewById(R.id.textViewMemberUnitInput);
+        textViewNoMemberUnitInput = view.findViewById(R.id.textViewNoMemberUnitInput);
         textViewCorpUnitInput = view.findViewById(R.id.textViewCorpUnitInput);
         textViewMoeUnitInput = view.findViewById(R.id.textViewMoeUnitInput);
 
@@ -124,11 +126,13 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
         super.onViewCreated(view, savedInstanceState);
         try {
             // 각 영역에 다른 색 적용
-            setCardBorderColor(view.findViewById(R.id.layoutMoe),    R.color.green);
-            setCardBorderColor(view.findViewById(R.id.layoutCorp), R.color.blue_900);
-            setCardBorderColor(view.findViewById(R.id.layoutMember), R.color.primary);
+            setCardBorderColor(view.findViewById(R.id.layoutMoe),       R.color.green);
+            setCardBorderColor(view.findViewById(R.id.layoutMember),    R.color.primary);
+            setCardBorderColor(view.findViewById(R.id.layoutCorp),      R.color.blue_900);
+            setCardBorderColor(view.findViewById(R.id.layoutNoMember),  R.color.yellow_900);
 
             textViewMemberUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeM));
+            textViewNoMemberUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeN));
             textViewCorpUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeC));
             textViewMoeUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeK));
 
@@ -154,6 +158,13 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
                 chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeM);
                 classUiProcess.setUiSeq(UiSeq.MEMBER_CARD);
                 fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
+            } else if (Objects.equals(getId, R.id.cardViewNoMember)) {
+                Toast.makeText(getActivity(), "서비스 준비 중입니다.", Toast.LENGTH_SHORT).show();
+//                chargingCurrentData.setAuthType("N");
+//                chargingCurrentData.setPaymentType(PaymentType.CREDIT);
+//                chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeN);
+//                classUiProcess.setUiSeq(UiSeq.CREDIT_CARD);
+//                fragmentChange.onFragmentChange(mChannel, UiSeq.CREDIT_CARD, "CREDIT_CARD", null);
             } else if (Objects.equals(getId, R.id.cardViewCorp)) {
                 chargingCurrentData.setAuthType("C");
                 chargingCurrentData.setPaymentType(PaymentType.CORP);

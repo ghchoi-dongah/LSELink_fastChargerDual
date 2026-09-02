@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
@@ -35,12 +34,11 @@ import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AuthSelectFragment#newInstance} factory method to
+ * Use the {@link AuthSelect2Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AuthSelectFragment extends Fragment implements View.OnClickListener {
-    private static final Logger logger = LoggerFactory.getLogger(AuthSelectFragment.class);
-
+public class AuthSelect2Fragment extends Fragment implements View.OnClickListener {
+    private static final Logger logger = LoggerFactory.getLogger(AuthSelect2Fragment.class);
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,8 +51,8 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
     private String mParam2;
     private int mChannel;
 
-    CardView cardViewMember, cardViewCorp, cardViewMoe;
-    TextView textViewMemberUnitInput, textViewCorpUnitInput, textViewMoeUnitInput;
+    CardView cardViewMember, cardViewMoe;
+    TextView textViewMemberUnitInput, textViewMoeUnitInput;
 
     MainActivity activity;
     ClassUiProcess classUiProcess;
@@ -63,7 +61,7 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
     ChargerConfiguration chargerConfiguration;
     Handler uiCheckHandler;
 
-    public AuthSelectFragment() {
+    public AuthSelect2Fragment() {
         // Required empty public constructor
     }
 
@@ -73,11 +71,11 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AuthFragment.
+     * @return A new instance of fragment AuthSelect2Fragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AuthSelectFragment newInstance(String param1, String param2) {
-        AuthSelectFragment fragment = new AuthSelectFragment();
+    public static AuthSelect2Fragment newInstance(String param1, String param2) {
+        AuthSelect2Fragment fragment = new AuthSelect2Fragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -98,7 +96,7 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_auth_select, container, false);
+        View view = inflater.inflate(R.layout.fragment_auth_select2, container, false);
         activity = (MainActivity) MainActivity.mContext;
         classUiProcess = activity.getClassUiProcess(mChannel);
         fragmentChange = activity.getFragmentChange();
@@ -106,15 +104,11 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
         chargerConfiguration = activity.getChargerConfiguration();
 
         cardViewMember = view.findViewById(R.id.cardViewMember);
-        cardViewMember.setOnClickListener(this);
-        cardViewCorp = view.findViewById(R.id.cardViewCorp);
-        cardViewCorp.setOnClickListener(this);
+        cardViewMember.setOnClickListener(this);;
         cardViewMoe = view.findViewById(R.id.cardViewMoe);
         cardViewMoe.setOnClickListener(this);
         textViewMemberUnitInput = view.findViewById(R.id.textViewMemberUnitInput);
-        textViewCorpUnitInput = view.findViewById(R.id.textViewCorpUnitInput);
         textViewMoeUnitInput = view.findViewById(R.id.textViewMoeUnitInput);
-
         return view;
     }
 
@@ -125,11 +119,9 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
         try {
             // 각 영역에 다른 색 적용
             setCardBorderColor(view.findViewById(R.id.layoutMoe),    R.color.green);
-            setCardBorderColor(view.findViewById(R.id.layoutCorp), R.color.blue_900);
             setCardBorderColor(view.findViewById(R.id.layoutMember), R.color.primary);
 
             textViewMemberUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeM));
-            textViewCorpUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeC));
             textViewMoeUnitInput.setText(getString(R.string.price, GlobalVariables.userTypeK));
 
             uiCheckHandler = new Handler();
@@ -152,12 +144,6 @@ public class AuthSelectFragment extends Fragment implements View.OnClickListener
                 chargingCurrentData.setAuthType("M");
                 chargingCurrentData.setPaymentType(PaymentType.MEMBER);
                 chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeM);
-                classUiProcess.setUiSeq(UiSeq.MEMBER_CARD);
-                fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
-            } else if (Objects.equals(getId, R.id.cardViewCorp)) {
-                chargingCurrentData.setAuthType("C");
-                chargingCurrentData.setPaymentType(PaymentType.CORP);
-                chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeC);
                 classUiProcess.setUiSeq(UiSeq.MEMBER_CARD);
                 fragmentChange.onFragmentChange(mChannel, UiSeq.MEMBER_CARD, "MEMBER_CARD", null);
             } else if (Objects.equals(getId, R.id.cardViewMoe)) {

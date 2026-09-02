@@ -30,7 +30,6 @@ import com.dongah.fastcharger.controlboard.RxData;
 import com.dongah.fastcharger.controlboard.TxData;
 import com.dongah.fastcharger.sqlite.SQLiteHelper;
 import com.dongah.fastcharger.utils.SharedModel;
-import com.dongah.fastcharger.websocket.socket.SocketState;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -201,29 +200,35 @@ public class InitFragment extends Fragment implements View.OnClickListener {
                 }
                 try {
                     switch (chargerConfiguration.getAuthMode()) {
-                        case 0:
-                            chargingCurrentData.setAuthType("M");
-                            chargingCurrentData.setPaymentType(PaymentType.MEMBER);
-                            chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeM);
+                        case 0: // 환경부
+                            chargingCurrentData.setAuthType("K");
+                            chargingCurrentData.setPaymentType(PaymentType.MOE);
+                            chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeK);
                             fragmentChangeAuthSelect();
                             break;
-                        case 1:
-                        case 2:
-                        case 3:
-                            activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.AUTH_SELECT);
-                            activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.AUTH_SELECT, "AUTH_SELECT", null);
-                            break;
-                        case 4:
+                        case 1: // 법인
                             chargingCurrentData.setAuthType("C");
                             chargingCurrentData.setPaymentType(PaymentType.CORP);
                             chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeC);
                             fragmentChangeAuthSelect();
                             break;
-                        case 5:
-                            chargingCurrentData.setAuthType("K");
-                            chargingCurrentData.setPaymentType(PaymentType.MOE);
-                            chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeK);
+                        case 2: // 회원
+                            chargingCurrentData.setAuthType("M");
+                            chargingCurrentData.setPaymentType(PaymentType.MEMBER);
+                            chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeM);
                             fragmentChangeAuthSelect();
+                            break;
+                        case 3: // 환경부+회원
+                            activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.AUTH_SELECT);
+                            activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.AUTH_SELECT, "AUTH_SELECT", "AUTH2");
+                            break;
+                        case 4: // 환경부+법인+회원
+                            activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.AUTH_SELECT);
+                            activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.AUTH_SELECT, "AUTH_SELECT", "AUTH3");
+                            break;
+                        case 5: // 환경부+법인+회원+비회원
+                            activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.AUTH_SELECT);
+                            activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.AUTH_SELECT, "AUTH_SELECT", "AUTH4");
                             break;
                         default:
                             logger.error("changeFragment error >> Invalid value");

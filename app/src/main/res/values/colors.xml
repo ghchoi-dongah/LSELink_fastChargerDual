@@ -12,4 +12,9 @@
     <color name="primary">#06377B</color>
     <color name="orange">#ff9900</color>
     <color name="gin_grey">#666666</color>
+    <color name="gray_500">#8C8C8C</color>
+
+    <color name="green">#468037</color>
+    <color name="blue_900">#465268</color>
+    <color name="yellow_900">#B49F4C</color>
 </resources>

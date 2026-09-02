@@ -41,10 +41,14 @@ public class ChargerConfiguration {
     public int serverPort = 4000;
 
     /** 회원 인증 모드
-     * 0: 회원카드
-     * 1: 회원카드 + 신용카드
+     * 0: 환경부
+     * 1: 법인
+     * 2: 회원
+     * 3: 환경부+회원
+     * 4: 환경부+법인+회원(기본)
+     * 5: 환경부+법인+회원+비회원
      * */
-    public int authMode = 0;
+    public int authMode = 4;
     public int authModeId;
 
     /** 운영모드
@@ -67,7 +71,7 @@ public class ChargerConfiguration {
 
     /** charging point configuration setting */
     public int chargerPointType = 0;                    // 커플러 타입
-    public String chargerPointModel = "DEVS100D";       // 충전기 모델ID
+    public String chargerPointModel = "DEVS100DN";      // 충전기 모델ID
     public int chargerPointModelCode = 9;
     public String chargeBoxSerialNumber = "";           // 충전소ID
     public String chargerId = "";                       // 충전기ID
@@ -83,7 +87,7 @@ public class ChargerConfiguration {
     public int targetSoc = 80;                          // SoC
     public int dr = 50;                                 // 전류 제한
 
-    public boolean StopConfirm;
+    public boolean StopConfirm = true;
     public boolean signed = true ;
     public boolean controlMonitor = true;
     public boolean initInfo = true;
