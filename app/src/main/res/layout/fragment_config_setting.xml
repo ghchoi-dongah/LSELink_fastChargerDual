@@ -281,6 +281,50 @@
         app:layout_constraintStart_toEndOf="@id/editConnectorPriority" />
 
     <TextView
+        android:id="@+id/textViewPaySerial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="결제단말기Serial"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/textViewChargePointType"
+        app:layout_constraintTop_toBottomOf="@id/textViewConnectorPriority" />
+
+    <EditText
+        android:id="@+id/editPaySerial"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewPaySerial"
+        app:layout_constraintStart_toStartOf="@id/spinnerChargePointType"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textViewBizNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="사업자등록번호"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@id/textViewChargePointType"
+        app:layout_constraintTop_toBottomOf="@id/textViewPaySerial" />
+
+    <EditText
+        android:id="@+id/editBizNo"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_edit_text_required"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="@id/textViewBizNo"
+        app:layout_constraintStart_toStartOf="@id/spinnerChargePointType"
+        tools:ignore="Autofill,LabelFor,TextFields,SpeakableTextPresentCheck" />
+
+    <TextView
         android:id="@+id/textViewChargePointSerialNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -1,4 +1,4 @@
-package com.dongah.fastcharger.vcat;
+package com.dongah.fastcharger.smartro;
 
 public interface VCatListener {
     /** V-CAT 이벤트/결과/연결 상태 수신 콜백 */

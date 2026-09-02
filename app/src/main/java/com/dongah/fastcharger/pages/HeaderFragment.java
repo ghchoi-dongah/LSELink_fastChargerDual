@@ -123,6 +123,7 @@ public class HeaderFragment extends Fragment implements View.OnClickListener {
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                activity.getClassUiProcess(mChannel).setUiSeq(UiSeq.ADMIN_PASS);
                                 activity.getFragmentChange().onFragmentChange(mChannel, UiSeq.ADMIN_PASS,"ADMIN_PASS",null);
                             }
                         });

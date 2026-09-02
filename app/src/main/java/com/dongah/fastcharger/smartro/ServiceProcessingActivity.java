@@ -1,4 +1,4 @@
-package com.dongah.fastcharger.vcat;
+package com.dongah.fastcharger.smartro;
 
 import android.content.ComponentName;
 import android.content.Context;

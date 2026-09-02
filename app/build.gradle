@@ -21,24 +21,24 @@ android {
 //    }
 
     // senke
-//    signingConfigs {
-//        getByName("debug") {
-//            keyAlias = "system-lztek"
-//            keyPassword = "123456"
-//            storeFile = file("D:\\AndroidDongah\\JSK_senke\\platform.jks")
-//            storePassword = "123456"
-//        }
-//    }
-
-    // hola
     signingConfigs {
         getByName("debug") {
-            keyAlias = "androiddebugkey"
-            keyPassword = "android"
-            storeFile = file("D:\\AndroidDongah\\JKS_hola\\platform.jks")
-            storePassword = "android"
+            keyAlias = "system-lztek"
+            keyPassword = "123456"
+            storeFile = file("D:\\AndroidDongah\\JSK_senke\\platform.jks")
+            storePassword = "123456"
         }
     }
+
+    // hola
+//    signingConfigs {
+//        getByName("debug") {
+//            keyAlias = "androiddebugkey"
+//            keyPassword = "android"
+//            storeFile = file("D:\\AndroidDongah\\JKS_hola\\platform.jks")
+//            storePassword = "android"
+//        }
+//    }
 
     defaultConfig {
         applicationId "com.dongah.fastcharger"

@@ -104,11 +104,11 @@ public class PaymentInfoData implements Validatable {
         this.merno = merno;
     }
 
-    public String getTran_serial() {
+    public String getTranSerial() {
         return tran_serial;
     }
 
-    public void setTran_serial(String tran_serial) {
+    public void setTranSerial(String tran_serial) {
         this.tran_serial = tran_serial;
     }
 
