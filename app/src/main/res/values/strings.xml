@@ -125,6 +125,8 @@
     <string name="dr"><font color="#000">출력 전류 제한(kW)</font></string>
     <string name="initInfoYn"><font color="#000">Soc/출력 정보 표시</font></string>
     <string name="stopConfirm"><font color="#000">충전태그 여부</font></string>
+    <string name="paySerial"><font color="#000">결제단말기Serial</font></string>
+    <string name="bizNo"><font color="#000">사업자등록번호</font></string>
 
     <!-- environment   -->
     <string name="configButton">환경설정</string>

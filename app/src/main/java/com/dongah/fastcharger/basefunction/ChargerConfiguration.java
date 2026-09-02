@@ -25,7 +25,12 @@ public class ChargerConfiguration {
 
     public String rootPath = "";
 
-    public String MID = "KIOSK1114915545";      // 결제MID
+    /**
+     * TLS3800 id
+     */
+    public String PaySerial = "";
+    public String MID = "t_2603092m";       // 결제MID, test
+    public String BizNo = "2178114493";     // 사업자등록번호, test
     
     /** MAX Channel Count */
     public int maxChannel = 2;
@@ -134,10 +139,12 @@ public class ChargerConfiguration {
                 setStopConfirm(obj.getBoolean("STOP_CONFIRM"));
                 setTargetSoc(obj.getInt("TARGET_SOC"));
                 setDr(obj.getInt("DR"));
-//                setStartMode(obj.getInt("START_MODE"));
                 setSigned(obj.getBoolean("SIGNED"));
                 setControlMonitor(obj.getBoolean("CONTROL_MONITOR"));
                 setInitInfo(obj.getBoolean("INIT_INFO"));
+                setPaySerial(obj.getString("PAY_SERIAL"));
+                setMID(obj.getString("MID"));
+                setBizNo(obj.getString("BIZ_NO"));
             }
         } catch (Exception e) {
             logger.error("configuration load fail: {}", e.getMessage(), e);
@@ -173,10 +180,12 @@ public class ChargerConfiguration {
             obj.put("STOP_CONFIRM", isStopConfirm());
             obj.put("TARGET_SOC", getTargetSoc());
             obj.put("DR", getDr());
-//            obj.put("START_MODE", getStartMode());
             obj.put("SIGNED", isSigned());
             obj.put("CONTROL_MONITOR", isControlMonitor());
             obj.put("INIT_INFO", isInitInfo());
+            obj.put("PAY_SERIAL", getPaySerial());
+            obj.put("MID", getMID());
+            obj.put("BIZ_NO", getBizNo());
             fileManagement.stringToFileSave(rootPath, CONFIG_FILE_NAME, obj.toString(), false);
         } catch (Exception e) {
             logger.error("configuration save fail: {}", e.getMessage(), e);
@@ -191,6 +200,14 @@ public class ChargerConfiguration {
         this.rootPath = rootPath;
     }
 
+    public String getPaySerial() {
+        return PaySerial;
+    }
+
+    public void setPaySerial(String paySerial) {
+        PaySerial = paySerial;
+    }
+
     public String getMID() {
         return MID;
     }
@@ -199,6 +216,13 @@ public class ChargerConfiguration {
         this.MID = MID;
     }
 
+    public String getBizNo() {
+        return BizNo;
+    }
+
+    public void setBizNo(String bizNo) {
+        BizNo = bizNo;
+    }
     public int getMaxChannel() {
         return maxChannel;
     }

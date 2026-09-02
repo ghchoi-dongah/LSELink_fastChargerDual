@@ -1,10 +1,9 @@
-package com.dongah.fastcharger.vcat;
+package com.dongah.fastcharger.smartro;
 
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.RemoteException;
-import android.widget.CheckBox;
 
 import org.json.JSONArray;
 import org.json.JSONException;

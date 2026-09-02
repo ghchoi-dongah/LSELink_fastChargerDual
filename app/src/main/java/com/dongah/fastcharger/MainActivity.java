@@ -35,6 +35,7 @@ import com.dongah.fastcharger.basefunction.ClassUiProcess;
 import com.dongah.fastcharger.basefunction.ConfigurationKeyRead;
 import com.dongah.fastcharger.controlboard.ControlBoard;
 import com.dongah.fastcharger.rfcard.RfCardReaderReceive;
+import com.dongah.fastcharger.smartro.VCatPaymentManager;
 import com.dongah.fastcharger.sqlite.SQLiteHelper;
 import com.dongah.fastcharger.basefunction.FragmentChange;
 import com.dongah.fastcharger.basefunction.FragmentCurrent;
@@ -42,7 +43,7 @@ import com.dongah.fastcharger.basefunction.GlobalVariables;
 import com.dongah.fastcharger.basefunction.UiSeq;
 import com.dongah.fastcharger.utils.DatabaseHttpServer;
 import com.dongah.fastcharger.utils.ToastPositionMake;
-import com.dongah.fastcharger.vcat.ServiceProcessingActivity;
+import com.dongah.fastcharger.smartro.ServiceProcessingActivity;
 import com.dongah.fastcharger.websocket.ocpp.core.ChargePointStatus;
 import com.dongah.fastcharger.websocket.ocpp.core.Reason;
 import com.dongah.fastcharger.websocket.ocpp.utilities.ZonedDateTimeConvert;
@@ -289,14 +290,18 @@ public class MainActivity extends AppCompatActivity {
 //            serviceProcessingActivity.bindVCATService();
 //        }
 
-        // 8. classUiProcess
+        // 7. classUiProcess
         classUiProcess = new ClassUiProcess[GlobalVariables.maxChannel];
         for (int i = 0; i < GlobalVariables.maxChannel; i++) {
             classUiProcess[i] = new ClassUiProcess(i);
             classUiProcess[i].setUiSeq(UiSeq.INIT);
         }
 
-        // 8. PLC modem
+        // 8. smatro service
+        VCatPaymentManager.getInstance().setDeviceSerial(chargerConfiguration.getPaySerial());
+        VCatPaymentManager.getInstance().bind(this);
+
+        // 9. PLC modem
         clientSocket = new ClientSocket("192.168.39.1", 9999, new ClientSocket.TcpClientListener() {
             @Override
             public void onConnected() {
