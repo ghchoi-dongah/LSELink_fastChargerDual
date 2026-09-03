@@ -59,7 +59,7 @@ public class CustomAnalogClock extends View {
         backgroundPaint.setStyle(Paint.Style.FILL);
 
         // 그림자 사용하려면 SW 레이어로
-        setLayerType(LAYER_TYPE_SOFTWARE, null);
+//        setLayerType(LAYER_TYPE_SOFTWARE, null);
 //        backgroundPaint.setShadowLayer(20f, 0f, 0f, Color.argb(128, 0, 0, 0));
 
         // 시간 눈금 (굵은 눈금)
