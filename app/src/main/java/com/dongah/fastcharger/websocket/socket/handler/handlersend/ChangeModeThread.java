@@ -237,9 +237,7 @@ public class ChangeModeThread extends Thread {
             boolean isModeValid = Objects.equals(targetStatus, ChargePointStatus.Unavailable);
             chargingCurrentData.setConnectUse(!isModeValid);
 
-            if (Objects.equals(activity.getClassUiProcess(connectorId-1).getUiSeq(), UiSeq.INIT)) {
-                activity.getClassUiProcess(connectorId-1).onHome();
-            }
+            onHome(connectorId);
         } catch (Exception e) {
             logger.error("setChgModeStatus error : {}", e.getMessage(), e);
         }
@@ -254,7 +252,6 @@ public class ChangeModeThread extends Thread {
         SQLiteHelper helper = null;
 
         try {
-            ClassUiProcess classUiProcess = activity.getClassUiProcess(connectorId-1);
             helper = SQLiteHelper.getInstance(activity);
             CpChangeMode dto = new CpChangeMode();
             String tableName = dto.getTableName();
@@ -263,9 +260,11 @@ public class ChangeModeThread extends Thread {
             TxData txData = activity.getControlBoard().getTxData(connectorId-1);
             if (!helper.isTableExists(helper, tableName)) {
                 logger.warn("setChgModeElec {} doesn't exist", tableName);
-                txData.setOutPowerLimit((short) chargerConfiguration.getDr());
-                activity.getChargingCurrentData(connectorId-1).setLimitPower((short) chargerConfiguration.getDr());
-                if (Objects.equals(classUiProcess.getUiSeq(), UiSeq.INIT)) classUiProcess.onHome();
+                if (!Objects.equals(txData.getOutPowerLimit(), (short) chargerConfiguration.getDr())) {
+                    txData.setOutPowerLimit((short) chargerConfiguration.getDr());
+                    onHome(connectorId);
+                    activity.getChargingCurrentData(connectorId-1).setLimitPower((short) chargerConfiguration.getDr());
+                }
                 return;
             }
 
@@ -274,24 +273,26 @@ public class ChangeModeThread extends Thread {
             // Cursor null 여부 확인, 조회 결과 존재 여부 확인
             if (cursor == null || !cursor.moveToFirst()) {
                 logger.warn("setChgModeElec {} cursor is null or no data. connectorId : {}", tableName, connectorId);
-                txData.setOutPowerLimit((short) chargerConfiguration.getDr());
-                activity.getChargingCurrentData(connectorId-1).setLimitPower((short) chargerConfiguration.getDr());
-                if (Objects.equals(classUiProcess.getUiSeq(), UiSeq.INIT)) classUiProcess.onHome();
+                if (!Objects.equals(txData.getOutPowerLimit(), (short) chargerConfiguration.getDr())) {
+                    txData.setOutPowerLimit((short) chargerConfiguration.getDr());
+                    activity.getChargingCurrentData(connectorId-1).setLimitPower((short) chargerConfiguration.getDr());
+                    onHome(connectorId);
+                }
                 return;
             }
 
             int value = cursor.getInt(cursor.getColumnIndexOrThrow("RECHG_ELEC"));
-            if (value == 0) {
+            if (value == 0 && !Objects.equals(txData.getOutPowerLimit(), (short) chargerConfiguration.getDr())) {
                 txData.setOutPowerLimit((short) chargerConfiguration.getDr());
                 activity.getChargingCurrentData(connectorId-1).setLimitPower((short) chargerConfiguration.getDr());
-            } else {
+                onHome(connectorId);
+            } else if (!Objects.equals(txData.getOutPowerLimit(), (short) value)) {
                 txData.setOutPowerLimit((short) value);
                 activity.getChargingCurrentData(connectorId-1).setLimitPower((short) value);
+                onHome(connectorId);
             }
 
             logger.info("setChgModeElec connectorId[{}] outPowerLimit : {}", connectorId, txData.getOutPowerLimit());
-            if (Objects.equals(classUiProcess.getUiSeq(), UiSeq.INIT)) classUiProcess.onHome();
-
             cursor.close();
         } catch (Exception e) {
             logger.error("setChgModeElec error : {}", e.getMessage(), e);
@@ -307,7 +308,6 @@ public class ChangeModeThread extends Thread {
         SQLiteHelper helper = null;
 
         try {
-            ClassUiProcess classUiProcess = activity.getClassUiProcess(connectorId-1);
             helper = SQLiteHelper.getInstance(activity);
             CpChangeMode dto = new CpChangeMode();
             String tableName = dto.getTableName();
@@ -315,8 +315,10 @@ public class ChangeModeThread extends Thread {
             ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(connectorId-1);
             if (!helper.isTableExists(helper, tableName)) {
                 logger.warn("setChgModeSoc {} doesn't exist", tableName);
-                chargingCurrentData.setLimitSoc(chargerConfiguration.getTargetSoc());
-                if (Objects.equals(classUiProcess.getUiSeq(), UiSeq.INIT)) classUiProcess.onHome();
+                if (!Objects.equals(chargingCurrentData.getLimitSoc(), chargerConfiguration.getTargetSoc())) {
+                    chargingCurrentData.setLimitSoc(chargerConfiguration.getTargetSoc());
+                    onHome(connectorId);
+                }
                 return;
             }
 
@@ -325,24 +327,36 @@ public class ChangeModeThread extends Thread {
             // Cursor null 여부 확인, 조회 결과 존재 여부 확인
             if (cursor == null || !cursor.moveToFirst()) {
                 logger.warn("setChgModeSoc {} cursor is null or no data. connectorId : {}", tableName, connectorId);
-                chargingCurrentData.setLimitSoc(chargerConfiguration.getTargetSoc());
-                if (Objects.equals(classUiProcess.getUiSeq(), UiSeq.INIT)) classUiProcess.onHome();
+                if (!Objects.equals(chargingCurrentData.getLimitSoc(), chargerConfiguration.getTargetSoc())) {
+                    chargingCurrentData.setLimitSoc(chargerConfiguration.getTargetSoc());
+                    onHome(connectorId);
+                }
                 return;
             }
 
             int value = cursor.getInt(cursor.getColumnIndexOrThrow("RECHG_AMT"));
-            if (value == 0) {
+            if (value == 0 && !Objects.equals(chargingCurrentData.getLimitSoc(), chargerConfiguration.getTargetSoc())) {
                 chargingCurrentData.setLimitSoc(chargerConfiguration.getTargetSoc());
-            } else {
+                onHome(connectorId);
+            } else if (!Objects.equals(value, chargingCurrentData.getLimitSoc())){
                 chargingCurrentData.setLimitSoc(value);
+                onHome(connectorId);
             }
 
             logger.info("setChgModeSoc connectorId[{}] limitSOc : {}", connectorId, chargingCurrentData.getLimitSoc());
-            if (Objects.equals(classUiProcess.getUiSeq(), UiSeq.INIT)) classUiProcess.onHome();
-
             cursor.close();
         } catch (Exception e) {
             logger.error("setChgModeSoc error : {}", e.getMessage(), e);
+        }
+    }
+
+    private static void onHome(int connectorId) {
+        try {
+            MainActivity activity = (MainActivity) MainActivity.mContext;
+            ClassUiProcess classUiProcess = activity.getClassUiProcess(connectorId-1);
+            if (Objects.equals(classUiProcess.getUiSeq(), UiSeq.INIT)) classUiProcess.onHome();
+        } catch (Exception e) {
+            logger.error("onHome error : {}", e.getMessage(), e);
         }
     }
 }

@@ -55,7 +55,7 @@ public class ChargerConfiguration {
      * 0: test
      * 1: server
      * */
-    public int opMode = 0;
+    public int opMode = 1;
     public int opModeId;
 
     /** 시작 모드
@@ -111,37 +111,42 @@ public class ChargerConfiguration {
             // get file context json string
             configurationString = fileManagement.getStringFromFile(GlobalVariables.ROOT_PATH  + File.separator + CONFIG_FILE_NAME);
             if (!TextUtils.isEmpty(configurationString)) {
-                JSONObject obj = new JSONObject(configurationString);
-                setChargerId(obj.getString("CHARGER_ID"));
-                setServerConnectingString(obj.getString("SERVER_CONNECTING_STRING"));
-                setServerPort(obj.getInt("SERVER_PORT"));
-                setAuthMode(obj.getInt("AUTH_MODE"));
-                setAuthModeId(obj.getInt("AUTH_MODE_ID"));
-                setOpMode(obj.getInt("OP_MODE"));
-                setOpModeId(obj.getInt("OP_MODE_ID"));
-                setControlCom(obj.getString("CONTROL_COM"));
-                setRfCom(obj.getString("RF_COM"));
-                setCreditCom(obj.getString("CREDIT_COM"));
-                setTestPrice(obj.getString("TEST_PRICE"));
-                setChargerPointType(obj.getInt("CHARGER_POINT_TYPE"));
-                setChargePointVendor(obj.getString("CHARGE_POINT_VENDOR"));
-                setChargerPointModel(obj.getString("CHARGER_POINT_MODEL"));
-                setChargerPointModelCode(obj.getInt("CHARGER_POINT_MODEL_CODE"));
-                setChargeBoxSerialNumber(obj.getString("CHARGE_BOX_SERIAL_NUMBER"));
-                setChargePointSerialNumber(obj.getString("CHARGE_POINT_SERIAL_NUMBER"));
-                setFirmwareVersion(obj.getString("FIRMWARE_VERSION"));
-                setIccid(obj.getString("ICCID"));
-                setImsi(obj.getString("IMSI"));
-                setMeterSerialNumber(obj.getString("METER_SERIAL_NUMBER"));
-                setMeterType(obj.getString("METER_TYPE"));
-                setConnectorPriority(obj.getInt("CONNECTOR_PRIORITY"));
-                setStopConfirm(obj.getBoolean("STOP_CONFIRM"));
-                setTargetSoc(obj.getInt("TARGET_SOC"));
-                setDr(obj.getInt("DR"));
+                try {
+                    JSONObject obj = new JSONObject(configurationString);
+                    setChargerId(obj.getString("CHARGER_ID"));
+                    setServerConnectingString(obj.getString("SERVER_CONNECTING_STRING"));
+                    setServerPort(obj.getInt("SERVER_PORT"));
+                    setAuthMode(obj.getInt("AUTH_MODE"));
+                    setAuthModeId(obj.getInt("AUTH_MODE_ID"));
+                    setOpMode(obj.getInt("OP_MODE"));
+                    setOpModeId(obj.getInt("OP_MODE_ID"));
+                    setControlCom(obj.getString("CONTROL_COM"));
+                    setRfCom(obj.getString("RF_COM"));
+                    setCreditCom(obj.getString("CREDIT_COM"));
+                    setTestPrice(obj.getString("TEST_PRICE"));
+                    setChargerPointType(obj.getInt("CHARGER_POINT_TYPE"));
+                    setChargePointVendor(obj.getString("CHARGE_POINT_VENDOR"));
+                    setChargerPointModel(obj.getString("CHARGER_POINT_MODEL"));
+                    setChargerPointModelCode(obj.getInt("CHARGER_POINT_MODEL_CODE"));
+                    setChargeBoxSerialNumber(obj.getString("CHARGE_BOX_SERIAL_NUMBER"));
+                    setChargePointSerialNumber(obj.getString("CHARGE_POINT_SERIAL_NUMBER"));
+                    setFirmwareVersion(obj.getString("FIRMWARE_VERSION"));
+                    setIccid(obj.getString("ICCID"));
+                    setImsi(obj.getString("IMSI"));
+                    setMeterSerialNumber(obj.getString("METER_SERIAL_NUMBER"));
+                    setMeterType(obj.getString("METER_TYPE"));
+                    setConnectorPriority(obj.getInt("CONNECTOR_PRIORITY"));
+                    setStopConfirm(obj.getBoolean("STOP_CONFIRM"));
+                    setTargetSoc(obj.getInt("TARGET_SOC"));
+                    setDr(obj.getInt("DR"));
 //                setStartMode(obj.getInt("START_MODE"));
-                setSigned(obj.getBoolean("SIGNED"));
-                setControlMonitor(obj.getBoolean("CONTROL_MONITOR"));
-                setInitInfo(obj.getBoolean("INIT_INFO"));
+                    setSigned(obj.getBoolean("SIGNED"));
+                    setControlMonitor(obj.getBoolean("CONTROL_MONITOR"));
+                    setInitInfo(obj.getBoolean("INIT_INFO"));
+                } catch (Exception e) {
+                    logger.error("configuration json parse fail: {}", e.getMessage(), e);
+                    return;
+                }
             }
         } catch (Exception e) {
             logger.error("configuration load fail: {}", e.getMessage(), e);

@@ -130,20 +130,17 @@ public class ChangeElecModeThread extends Thread {
 
                     // 시간대 전력 설정
                     TxData txData = activity.getControlBoard().getTxData(i-1);
-                    if (value == 0) {
+                    if (value == 0 && !Objects.equals(txData.getOutPowerLimit(), (short) chargerConfiguration.getDr())) {
                         txData.setOutPowerLimit((short) chargerConfiguration.getDr());
-                        activity.getChargingCurrentData(i).setLimitPower((short) chargerConfiguration.getDr());
-                    } else {
+                        activity.getChargingCurrentData(i-1).setLimitPower((short) chargerConfiguration.getDr());
+                        onHome(i);
+                    } else if (!Objects.equals(txData.getOutPowerLimit(), (short) value)) {
                         txData.setOutPowerLimit((short) value);
-                        activity.getChargingCurrentData(i).setLimitPower((short) value);
+                        activity.getChargingCurrentData(i-1).setLimitPower((short) value);
+                        onHome(i);
                     }
 
                     logger.info("processRechgElec connectorId[{}] outPowerLimit : {}", i, txData.getOutPowerLimit());
-
-                    if (Objects.equals(activity.getClassUiProcess(i-1).getUiSeq(), UiSeq.INIT)) {
-                        activity.getClassUiProcess(i-1).onHome();
-                    }
-
                     cursor.close();
                 } catch (Exception e) {
                     logger.error("processRechgElec select error : {}", e.getMessage(), e);
@@ -182,11 +179,19 @@ public class ChangeElecModeThread extends Thread {
             activity.getChargingCurrentData(connectorId-1).setLimitPower((short) chargerConfiguration.getDr());
             logger.info("insertChgElecMode connectorId[{}] outPowerLimit : {}", connectorId, txData.getOutPowerLimit());
 
-            if (Objects.equals(classUiProcess.getUiSeq(), UiSeq.INIT)) {
-                classUiProcess.onHome();
-            }
+            onHome(connectorId);
         } catch (Exception e) {
             logger.error("insertChgElecMode error : {}", e.getMessage(), e);
+        }
+    }
+
+    private static void onHome(int connectorId) {
+        try {
+            MainActivity activity = (MainActivity) MainActivity.mContext;
+            ClassUiProcess classUiProcess = activity.getClassUiProcess(connectorId-1);
+            if (Objects.equals(classUiProcess.getUiSeq(), UiSeq.INIT)) classUiProcess.onHome();
+        } catch (Exception e) {
+            logger.error("onHome error : {}", e.getMessage(), e);
         }
     }
 }

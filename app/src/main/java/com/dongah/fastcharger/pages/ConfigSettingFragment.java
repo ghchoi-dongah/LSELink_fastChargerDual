@@ -415,15 +415,17 @@ public class ConfigSettingFragment extends Fragment implements View.OnClickListe
 
     private void onSaveConfiguration() {
         try {
-            onConfigurationUpdate();
-            chargerConfiguration.onSaveConfiguration();
-            chargerConfiguration.onLoadConfiguration();
+            if (onConfigurationUpdate()) {
+                chargerConfiguration.onSaveConfiguration();
+                chargerConfiguration.onLoadConfiguration();
+            }
         } catch (Exception e) {
             logger.error("onSaveConfiguration error : {}",  e.getMessage());
         }
     }
 
-    private void onConfigurationUpdate() {
+    private boolean onConfigurationUpdate() {
+        boolean isResult = true;
         try {
             chargerConfiguration.setChargerPointType(spPosition);
             chargerConfiguration.setChargerPointModelCode(spChargerPointModelCode);
@@ -457,7 +459,9 @@ public class ConfigSettingFragment extends Fragment implements View.OnClickListe
             chargerConfiguration.setStopConfirm(checkboxStopConfirm.isChecked());
         } catch (Exception e) {
             logger.error("onConfigurationUpdate error : {}",  e.getMessage());
+            isResult = false;
         }
+        return isResult;
     }
 
     @Override

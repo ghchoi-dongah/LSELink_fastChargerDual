@@ -131,14 +131,12 @@ public class RechgrsocscheduleThread extends Thread {
                     System.out.println("processRechgSoc " + hourKey + " : " + value);
 
                     ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(i-1);
-                    chargingCurrentData.setLimitSoc(value);
-
-                    logger.info("processRechgElec connectorId[{}] limitSoc : {}", i, chargingCurrentData.getLimitSoc());
-
-                    if (Objects.equals(activity.getClassUiProcess(i-1).getUiSeq(), UiSeq.INIT)) {
-                        activity.getClassUiProcess(i-1).onHome();
+                    if (!Objects.equals(chargingCurrentData.getLimitSoc(), value)) {
+                        chargingCurrentData.setLimitSoc(value);
+                        onHome(i);
                     }
 
+                    logger.info("processRechgElec connectorId[{}] limitSoc : {}", i, chargingCurrentData.getLimitSoc());
                     cursor.close();
                 } catch (Exception e) {
                     logger.error("processRechgSoc select error : {}", e.getMessage(), e);
@@ -175,11 +173,19 @@ public class RechgrsocscheduleThread extends Thread {
 
             chargingCurrentData.setLimitSoc(chargerConfiguration.getTargetSoc());
 
-            if (Objects.equals(classUiProcess.getUiSeq(), UiSeq.INIT)) {
-                classUiProcess.onHome();
-            }
+            onHome(connectorId);
         } catch (Exception e) {
             logger.error("insertRechgSoc error : {}", e.getMessage(), e);
+        }
+    }
+
+    private static void onHome(int connectorId) {
+        try {
+            MainActivity activity = (MainActivity) MainActivity.mContext;
+            ClassUiProcess classUiProcess = activity.getClassUiProcess(connectorId-1);
+            if (Objects.equals(classUiProcess.getUiSeq(), UiSeq.INIT)) classUiProcess.onHome();
+        } catch (Exception e) {
+            logger.error("onHome error : {}", e.getMessage(), e);
         }
     }
 }

@@ -58,6 +58,7 @@ public class ClassUiProcess implements RfCardReaderListener {
     private Handler eventHandler;
     private Runnable eventRunnable;
 
+    double powerUnitPrice = 0f;
     int powerMeterCheck = 0;
     boolean chargingAlarm = true;
     boolean startCheck = true;
@@ -92,6 +93,14 @@ public class ClassUiProcess implements RfCardReaderListener {
 
     public void setoSeq(UiSeq oSeq) {
         this.oSeq = oSeq;
+    }
+
+    public double getPowerUnitPrice() {
+        return powerUnitPrice;
+    }
+
+    public void setPowerUnitPrice(double powerUnitPrice) {
+        this.powerUnitPrice = powerUnitPrice;
     }
 
     public int getPowerMeterCheck() {
@@ -360,6 +369,9 @@ public class ClassUiProcess implements RfCardReaderListener {
                 powerMeterCheck = gapPower == 0 ? powerMeterCheck + 1 : 0;
 
                 chargingCurrentData.setPowerMeterUse(chargingCurrentData.getPowerMeterUse() + gapPower);
+                gapPay = gapPower * 0.01 * powerUnitPrice;
+
+                chargingCurrentData.setPowerMeterUsePay(chargingCurrentData.getPowerMeterUsePay() + gapPay);
                 chargingCurrentData.setPowerMeterCalculate(rxData.getPowerMeter());
 
                 chargingCurrentData.setRemaintime(rxData.getRemainTime());
@@ -656,6 +668,8 @@ public class ClassUiProcess implements RfCardReaderListener {
     private void handleConnectCheck(RxData rxData) {
         if (rxData.isCsStart() && startCheck) {
             chargingCurrentData.setChargePointStatus(ChargePointStatus.Charging);
+            powerUnitPrice = Objects.equals(chargerConfiguration.getOpMode(), 1) ?
+                    chargingCurrentData.getPowerUnitPrice() : Double.parseDouble(chargerConfiguration.getTestPrice());
             chargingCurrentData.setPowerMeterStart(rxData.getPowerMeter()*10);
             chargingCurrentData.setPowerMeterCalculate(rxData.getPowerMeter());
             chargingCurrentData.setChargingStartTime(zonedDateTimeConvert.getStringCurrentTimeZone());

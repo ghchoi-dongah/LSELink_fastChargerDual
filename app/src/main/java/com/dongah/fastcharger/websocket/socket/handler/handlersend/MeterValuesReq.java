@@ -92,12 +92,6 @@ public class MeterValuesReq {
         if (activity == null) return;
         // 충전 상태가 아니면 중지
         ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(connectorId-1);
-//        if (!Objects.equals(chargingCurrentData.getChargePointStatus(), ChargePointStatus.Charging) ||
-//                !GlobalVariables.isTriggerSet()) {
-//            stopMeterValues();
-//            return;
-//        }
-
         ZonedDateTimeConvert zonedDateTimeConvert = new ZonedDateTimeConvert();
         ChargerConfiguration chargerConfiguration = activity.getChargerConfiguration();
 
@@ -119,9 +113,9 @@ public class MeterValuesReq {
         meterValuesData.timestamp = zonedDateTimeConvert.doGetKstDatetimeAsString();
         meterValuesData.power = (float) ((chargingCurrentData.getOutPutVoltage() * 10) * (chargingCurrentData.getOutPutCurrent() * 0.001));
         meterValuesData.eps = (int) (chargingCurrentData.getOutPutVoltage() * 10);
-        meterValuesData.ecu = (int) (chargingCurrentData.getOutPutCurrent() * 0.001) ;
-        meterValuesData.accWh = (float) (chargingCurrentData.getPowerMeter() * 10);
-        meterValuesData.accTickWh = (float) (diffPowerMeter *10);
+        meterValuesData.ecu = (int) (chargingCurrentData.getOutPutCurrent() * 0.001);
+        meterValuesData.accWh = (float) (chargingCurrentData.getPowerMeter() * 0.01);
+        meterValuesData.accTickWh = (float) (diffPowerMeter * 0.01);
         meterValuesData.accTickTime = GlobalVariables.getMeterValueSampleInterval();
         meterValuesData.rechgHr = (int) chargingCurrentData.getChargingTime();
         meterValuesData.remnHr = chargingCurrentData.getRemaintime() / 60;
