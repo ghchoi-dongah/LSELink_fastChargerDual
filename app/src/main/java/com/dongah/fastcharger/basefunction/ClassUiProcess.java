@@ -789,6 +789,12 @@ public class ClassUiProcess implements RfCardReaderListener {
         finishWaitScheduled = true;        // 첫 진입 시 잠금
 
         try {
+            // stop MeterValues
+            if (meterValuesReq != null) {
+                meterValuesReq.sendMeterValuesStop(chargingCurrentData.getConnectorId());
+            }
+            onMeterValueStop();
+
             controlBoard.getTxData(getCh()).setStop(true);
             controlBoard.getTxData(getCh()).setStart(false);
             controlBoard.getTxData(getCh()).setUiSequence((short) 3);
@@ -802,11 +808,6 @@ public class ClassUiProcess implements RfCardReaderListener {
             chargingCurrentData.setChargePointStatus(ChargePointStatus.Finishing);
             chargingCurrentData.setUserStop(false);
 
-            // stop MeterValues
-            if (meterValuesReq != null) {
-                meterValuesReq.sendMeterValues(chargingCurrentData.getConnectorId());
-            }
-            onMeterValueStop();
 
             if (chargingCurrentData.getReservedStatus() == ChargePointStatus.Reserved) {
                 // reservation clear
@@ -830,7 +831,7 @@ public class ClassUiProcess implements RfCardReaderListener {
                 GlobalVariables.RemoteStart[getCh()] = false;
                 setUiSeq(UiSeq.FINISH);
                 fragmentChange.onFragmentChange(getCh(), UiSeq.FINISH, "FINISH", null);
-            }, 2000);
+            }, 300);
         } catch (Exception e) {
             finishWaitScheduled = false;
             logger.error("ClassUiProcess - FINISH_WAIT error : {} ", e.getMessage());
@@ -855,7 +856,10 @@ public class ClassUiProcess implements RfCardReaderListener {
                     chargingCurrentData.setChargePointStatus(ChargePointStatus.Finishing);
 
                     // meter values stop
-                    meterValuesReq.sendMeterValues(chargingCurrentData.getConnectorId());
+                    // meter values stop
+                    if (meterValuesReq != null) {
+                        meterValuesReq.sendMeterValuesStop(chargingCurrentData.getConnectorId());
+                    }
                     onMeterValueStop();
 
                     handler.postDelayed(() -> {
@@ -867,7 +871,7 @@ public class ClassUiProcess implements RfCardReaderListener {
                             StopTransactionReq stopTransactionReq = new StopTransactionReq(chargingCurrentData.getConnectorId());
                             stopTransactionReq.sendStopTransactionReq();
                         }
-                    }, 3000);
+                    }, 300);
                 }
                 fragmentChange.onFragmentChange(getCh(), UiSeq.FAULT, "FAULT", null);
             }

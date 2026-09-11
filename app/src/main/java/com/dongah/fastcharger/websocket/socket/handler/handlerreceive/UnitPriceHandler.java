@@ -27,27 +27,26 @@ public class UnitPriceHandler implements OcppHandler  {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void handle(JSONObject payload, int connectorId, String messageId) throws Exception {
-        DataTransferStatus status = DataTransferStatus.valueOf(payload.getString("status"));
-        String dataStr = payload.getString("data");
+        try {
+            DataTransferStatus status = DataTransferStatus.valueOf(payload.getString("status"));
+            String dataStr = payload.getString("data");
 
-        if (status.equals(DataTransferStatus.Accepted)) {
-            // 저장
-            FileManagement fileManagement = new FileManagement();
-            fileManagement.stringToFileSave(GlobalVariables.getRootPath(), GlobalVariables.FILE_UNIT, dataStr, false);
+            if (status.equals(DataTransferStatus.Accepted)) {
+                // 저장
+                FileManagement fileManagement = new FileManagement();
+                fileManagement.stringToFileSave(GlobalVariables.getRootPath(), GlobalVariables.FILE_UNIT, dataStr, false);
 
-//            MainActivity activity = (MainActivity) MainActivity.mContext;
-//            SQLiteHelper helper = SQLiteHelper.getInstance(activity);
-//            SQLiteDatabase sqLiteDatabase = helper.getWritableDatabase();
-//            helper.dropTable(sqLiteDatabase, "CP_UNIT_PRICE");
-
-            /* DB update */
-            if (connectorId == 0 || connectorId == 100) {
-                for (int i = 1; i <= GlobalVariables.maxChannel; i++) {
-                    updateUnitPrice(dataStr, i);
+                /* DB update */
+                if (connectorId == 0 || connectorId == 100) {
+                    for (int i = 1; i <= GlobalVariables.maxChannel; i++) {
+                        updateUnitPrice(dataStr, i);
+                    }
+                } else {
+                    updateUnitPrice(dataStr, connectorId);
                 }
-            } else {
-                updateUnitPrice(dataStr, connectorId);
             }
+        } catch (Exception e) {
+            logger.error("UnitPriceHandler error : {}", e.getMessage(), e);
         }
     }
 

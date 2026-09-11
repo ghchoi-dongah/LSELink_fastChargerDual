@@ -385,13 +385,13 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode  == VCatPaymentManager.getInstance().getAwakeRequestCode()) {
-            VCatPaymentManager.getInstance().onVCatAwakeResult();
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode  == VCatPaymentManager.getInstance().getAwakeRequestCode()) {
+//            VCatPaymentManager.getInstance().onVCatAwakeResult();
+//        }
+//    }
 
     private void hideNavigationBar() {
         View decorView = getWindow().getDecorView();
@@ -584,7 +584,7 @@ public class MainActivity extends AppCompatActivity {
         if (monitorHttpServer != null) {
             monitorHttpServer.stopServer();
         }
-        VCatPaymentManager.getInstance().unbind();
+//        VCatPaymentManager.getInstance().unbind();
 //        if (serviceProcessingActivity != null) serviceProcessingActivity.unbind();
         super.onDestroy();
     }
