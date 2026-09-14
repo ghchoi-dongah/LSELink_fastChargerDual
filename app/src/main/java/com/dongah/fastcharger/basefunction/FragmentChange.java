@@ -12,7 +12,6 @@ import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
 import com.dongah.fastcharger.pages.AdminPasswordFragment;
 import com.dongah.fastcharger.pages.AuthSelect2Fragment;
-import com.dongah.fastcharger.pages.AuthSelect4Fragment;
 import com.dongah.fastcharger.pages.AuthSelectFragment;
 import com.dongah.fastcharger.pages.ChargingFinishFragment;
 import com.dongah.fastcharger.pages.ChargingFinishWaitFragment;
@@ -82,13 +81,7 @@ public class FragmentChange {
                         authFragment.setArguments(bundle);
                         transaction.replace(frameLayoutId, authFragment, "AUTH_SELECT");
                         transaction.commit();
-                    } else if (Objects.equals(type, "AUTH4")) {
-                        AuthSelect4Fragment auth4Fragment = new AuthSelect4Fragment();
-                        auth4Fragment.setArguments(bundle);
-                        transaction.replace(frameLayoutId, auth4Fragment, "AUTH_SELECT");
-                        transaction.commit();
                     }
-
                 } catch (Exception e) {
                     logger.error("onFragmentChange error : AUTH_SELECT {}", e.getMessage());
                 }

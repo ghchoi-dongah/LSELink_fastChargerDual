@@ -6,7 +6,8 @@ public enum ChargerPointType {
     CHADEMO(2),
     COMBO(3),
     BTYPE(4),
-    CTYPE(5);
+    CTYPE(5),
+    NACS(6);
 
     ChargerPointType(int value) {
         this.value = value;

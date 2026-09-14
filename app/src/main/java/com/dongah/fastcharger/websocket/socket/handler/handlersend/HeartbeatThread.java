@@ -68,7 +68,7 @@ public class HeartbeatThread extends Thread{
         logger.info("HeartbeatThread started");
         while (!stopped && !isInterrupted()) {
             try {
-                Thread.sleep(java.time.Duration.ofMinutes(delayTime).toMillis());
+                Thread.sleep(java.time.Duration.ofSeconds(delayTime).toMillis());
                 processHeartbeat();
             } catch (InterruptedException e) {
                 logger.info("HeartbeatThread interrupted");

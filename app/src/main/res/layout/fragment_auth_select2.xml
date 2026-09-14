@@ -87,9 +87,9 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- member info -->
+    <!-- nomember info -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewMember"
+        android:id="@+id/cardViewNoMember"
         android:layout_width="450dp"
         android:layout_height="275dp"
         android:layout_marginTop="30dp"
@@ -102,37 +102,37 @@
         app:layout_constraintEnd_toEndOf="@id/cardViewMoe" >
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layoutMember"
+            android:id="@+id/layoutNoMember"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/layer_list_rect_corner">
 
             <TextView
-                android:id="@+id/textViewMember"
+                android:id="@+id/textViewNoMember"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="@string/memberMessage"
+                android:text="@string/nomemberMessage"
                 android:textSize="36dp"
                 android:textStyle="bold"
-                android:textColor="@color/primary"
-                app:layout_constraintTop_toBottomOf="@id/imageViewMember"
-                app:layout_constraintStart_toStartOf="@id/imageViewMember"
-                app:layout_constraintEnd_toEndOf="@id/imageViewMember" />
+                android:textColor="@color/yellow_900"
+                app:layout_constraintTop_toBottomOf="@id/imageViewNoMember"
+                app:layout_constraintStart_toStartOf="@id/imageViewNoMember"
+                app:layout_constraintEnd_toEndOf="@id/imageViewNoMember" />
 
             <ImageView
-                android:id="@+id/imageViewMember"
+                android:id="@+id/imageViewNoMember"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
-                android:background="@drawable/member"
+                android:background="@drawable/nomember"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:ignore="contentDescription" />
 
             <TextView
-                android:id="@+id/textViewMemberUnitInput"
+                android:id="@+id/textViewNoMemberUnitInput"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -145,17 +145,17 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textViewMemberContent"
+                android:id="@+id/textViewNoMemberContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="start"
-                android:text="@string/memberInfoMessage"
+                android:text="@string/nomemberInfoMessage"
                 android:textSize="22sp"
                 android:textColor="@color/gray_500"
-                app:layout_constraintStart_toStartOf="@id/textViewMember"
-                app:layout_constraintTop_toBottomOf="@id/textViewMember"
-                app:layout_constraintEnd_toEndOf="@id/textViewMember" />
+                app:layout_constraintStart_toStartOf="@id/textViewNoMember"
+                app:layout_constraintTop_toBottomOf="@id/textViewNoMember"
+                app:layout_constraintEnd_toEndOf="@id/textViewNoMember" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

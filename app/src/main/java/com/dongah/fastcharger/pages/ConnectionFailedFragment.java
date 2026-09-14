@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.dongah.fastcharger.MainActivity;
 import com.dongah.fastcharger.R;
+import com.dongah.fastcharger.controlboard.RxData;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,9 +42,10 @@ public class ConnectionFailedFragment extends Fragment implements View.OnClickLi
     private int mChannel;
 
     private static final long UI_CHECK_INTERVAL_MS = 2 * 60 * 1000; // 2분
-    TextView textViewFailed;
+    TextView textViewFailed, textViewConnectorRetryMessage;
     ObjectAnimator fadeAnimator;
     Handler uiCheckHandler;
+    RxData rxData;
 
     public ConnectionFailedFragment() {
         // Required empty public constructor
@@ -83,6 +85,7 @@ public class ConnectionFailedFragment extends Fragment implements View.OnClickLi
         View view = inflater.inflate(R.layout.fragment_connection_failed, container, false);
         view.setOnClickListener(this);
         textViewFailed = view.findViewById(R.id.textViewFailed);
+        textViewConnectorRetryMessage = view.findViewById(R.id.textViewConnectorRetryMessage);
 
         // textViewFailed animation
         fadeAnimator = ObjectAnimator.ofFloat(textViewFailed, "alpha", 1f, 0.2f);
@@ -92,6 +95,7 @@ public class ConnectionFailedFragment extends Fragment implements View.OnClickLi
         fadeAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         fadeAnimator.start();
 
+        rxData = ((MainActivity) MainActivity.mContext).getControlBoard().getRxData(mChannel);
         return view;
     }
 
@@ -99,12 +103,14 @@ public class ConnectionFailedFragment extends Fragment implements View.OnClickLi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         try {
+            textViewConnectorRetryMessage.setVisibility(rxData.isCsPilot() ? View.VISIBLE : View.INVISIBLE);
+
             // unplug check 후 초기 화면
             uiCheckHandler = new Handler();
             uiCheckHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (!((MainActivity) MainActivity.mContext).getControlBoard().getRxData(mChannel).isCsPilot()) {
+                    if (!rxData.isCsPilot()) {
                         ((MainActivity) MainActivity.mContext).getClassUiProcess(mChannel).onHome();
                     }
                     uiCheckHandler.postDelayed(this, UI_CHECK_INTERVAL_MS);
