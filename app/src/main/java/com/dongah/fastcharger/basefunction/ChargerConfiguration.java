@@ -83,7 +83,7 @@ public class ChargerConfiguration {
     public int connectorPriority = 1;                   // 1구 제어 우선순위
     public String testPrice = "313.0";                  // 테스트 단가
     public int targetSoc = 80;                          // SoC
-    public int dr = 50;                                 // 전류 제한
+    public int dr = 80;                                 // 전류 제한
 
     public boolean StopConfirm = true;
     public boolean signed = true ;

@@ -2,6 +2,8 @@ package com.dongah.fastcharger.pages;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -84,8 +86,17 @@ public class ProductTestBottomFragment extends Fragment implements View.OnClickL
         btnIO.setOnClickListener(this);
         btnLoad.setOnClickListener(this);
         btnTotalLoad.setOnClickListener(this);
-        btnIO.performClick();
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        try {
+            btnIO.performClick();
+        } catch (Exception e) {
+            logger.error("onViewCreated error : {}", e.getMessage(), e);
+        }
     }
 
     @Override
@@ -131,13 +142,13 @@ public class ProductTestBottomFragment extends Fragment implements View.OnClickL
         transaction = ((MainActivity) MainActivity.mContext).getSupportFragmentManager().beginTransaction();
         switch (uiSeq) {
             case LOAD_TEST_IO:
-//                try {
-//                    ProductTestIoFragment productTestIoFragment = new ProductTestIoFragment();
-//                    transaction.replace(R.id.operationDisplay, productTestIoFragment, sendText);
-//                    transaction.commit();
-//                } catch (Exception e) {
-//                    logger.error("LOAD_TEST_IO error : " + e.getMessage());
-//                }
+                try {
+                    ProductTestIoFragment productTestIoFragment = new ProductTestIoFragment();
+                    transaction.replace(R.id.operationDisplay, productTestIoFragment, sendText);
+                    transaction.commit();
+                } catch (Exception e) {
+                    logger.error("LOAD_TEST_IO error : " + e.getMessage());
+                }
                 break;
             case LOAD_TEST:
                 try {

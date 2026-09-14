@@ -3,6 +3,8 @@ package com.dongah.fastcharger.pages;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -94,9 +96,7 @@ public class ProductTestLoadFragment extends Fragment implements View.OnClickLis
         voltageFormatter = new DecimalFormat("#,###,##0.0");
         imm = (InputMethodManager) ((MainActivity) MainActivity.mContext).getSystemService(Context.INPUT_METHOD_SERVICE);
         controlBoard = ((MainActivity) MainActivity.mContext).getControlBoard();
-        for (int i = 0; i < GlobalVariables.maxChannel; i++) {
-            controlBoard.getTxData(i).setChargerPointMode((short) 1);
-        }
+
         editDrV1 = view.findViewById(R.id.editDrV1);
         editDrA1 = view.findViewById(R.id.editDrA1);
         editDrV2 = view.findViewById(R.id.editDrV2);
@@ -122,6 +122,18 @@ public class ProductTestLoadFragment extends Fragment implements View.OnClickLis
         btnMainMC1.setOnClickListener(this);
         btnMainMC2.setOnClickListener(this);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        try {
+            for (int i = 0; i < GlobalVariables.maxChannel; i++) {
+                controlBoard.getTxData(i).setChargerPointMode((short) 1);
+            }
+        } catch (Exception e) {
+            logger.error("onViewCreated error : {}", e.getMessage(), e);
+        }
     }
 
     private void onDspControlStatus() {
@@ -227,8 +239,12 @@ public class ProductTestLoadFragment extends Fragment implements View.OnClickLis
     @Override
     public void onDetach() {
         super.onDetach();
-        statusHandler.removeCallbacks(statusRunnable);
-        statusHandler.removeCallbacksAndMessages(null);
-        statusHandler.removeMessages(0);
+        try {
+            statusHandler.removeCallbacks(statusRunnable);
+            statusHandler.removeCallbacksAndMessages(null);
+            statusHandler.removeMessages(0);
+        } catch (Exception e) {
+            logger.error("onDetach error : {}", e.getMessage(), e);
+        }
     }
 }

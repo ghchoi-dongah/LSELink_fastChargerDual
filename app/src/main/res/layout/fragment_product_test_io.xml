@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="1024dp"
+    android:layout_height="600dp"
+    android:orientation="horizontal"
+    tools:context=".pages.ProductTestIoFragment">
+
+    <TextView
+        android:id="@+id/txtTitle1"
+        android:layout_width="512dp"
+        android:layout_height="wrap_content"
+        android:textSize="36sp"
+        android:textAlignment="center"
+        android:layout_marginTop="10dp"
+        android:text="IO TEST (CH1)"
+        android:background="@drawable/shape_text_title"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/txtRy1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RY1 제어"
+        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtTitle1" />
+
+    <EditText
+        android:id="@+id/editRy1"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:inputType="text"
+        android:gravity="right"
+        android:textColor="#000000"
+        android:focusable="false"
+        android:background="@drawable/shape_edit_text_disenable"
+        app:layout_constraintStart_toEndOf="@id/txtRy1"
+        app:layout_constraintTop_toTopOf="@id/txtRy1"
+        app:layout_constraintBottom_toBottomOf="@id/txtRy1" />
+
+    <ToggleButton
+        android:id="@+id/btnRy1"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:textOff="RY1 off"
+        android:textOn="RY1 on"
+        android:textSize="24sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/editRy1"
+        app:layout_constraintTop_toTopOf="@id/editRy1"
+        app:layout_constraintBottom_toBottomOf="@id/editRy1" />
+
+    <TextView
+        android:id="@+id/txtRy2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RY2 제어"
+        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@id/txtRy1"
+        app:layout_constraintTop_toBottomOf="@id/txtRy1" />
+
+    <EditText
+        android:id="@+id/editRy2"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:inputType="numberDecimal"
+        android:gravity="right"
+        android:textColor="#000000"
+        android:focusable="false"
+        android:background="@drawable/shape_edit_text_disenable"
+        app:layout_constraintStart_toEndOf="@id/txtRy2"
+        app:layout_constraintTop_toTopOf="@id/txtRy2"
+        app:layout_constraintBottom_toBottomOf="@id/txtRy2" />
+
+    <ToggleButton
+        android:id="@+id/btnRy2"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:textOff="RY2 off"
+        android:textOn="RY2 on"
+        android:textSize="24sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/editRy2"
+        app:layout_constraintTop_toTopOf="@id/editRy2"
+        app:layout_constraintBottom_toBottomOf="@id/editRy2" />
+
+    <TextView
+        android:id="@+id/txtRy3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RY3 제어"
+        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@id/txtRy2"
+        app:layout_constraintTop_toBottomOf="@id/txtRy2" />
+
+    <EditText
+        android:id="@+id/editRy3"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:inputType="numberDecimal"
+        android:gravity="right"
+        android:textColor="#000000"
+        android:focusable="false"
+        android:background="@drawable/shape_edit_text_disenable"
+        app:layout_constraintStart_toEndOf="@id/txtRy3"
+        app:layout_constraintTop_toTopOf="@id/txtRy3"
+        app:layout_constraintBottom_toBottomOf="@id/txtRy3" />
+
+    <ToggleButton
+        android:id="@+id/btnRy3"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:textOff="RY3 off"
+        android:textOn="RY3 on"
+        android:textSize="24sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/editRy3"
+        app:layout_constraintTop_toTopOf="@id/editRy3"
+        app:layout_constraintBottom_toBottomOf="@id/editRy3" />
+
+    <TextView
+        android:id="@+id/txtRy4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RY4 제어"
+        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@id/txtRy3"
+        app:layout_constraintTop_toBottomOf="@id/txtRy3" />
+
+    <EditText
+        android:id="@+id/editRy4"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:inputType="numberDecimal"
+        android:gravity="right"
+        android:textColor="#000000"
+        android:focusable="false"
+        android:background="@drawable/shape_edit_text_disenable"
+        app:layout_constraintStart_toEndOf="@id/txtRy4"
+        app:layout_constraintTop_toTopOf="@id/txtRy4"
+        app:layout_constraintBottom_toBottomOf="@id/txtRy4" />
+
+    <ToggleButton
+        android:id="@+id/btnRy4"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:textOff="RY4 off"
+        android:textOn="RY4 on"
+        android:textSize="24sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/editRy4"
+        app:layout_constraintTop_toTopOf="@id/editRy4"
+        app:layout_constraintBottom_toBottomOf="@id/editRy4" />
+
+    <TextView
+        android:id="@+id/txtRy5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RY5 제어"
+        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@id/txtRy4"
+        app:layout_constraintTop_toBottomOf="@id/txtRy4" />
+
+    <EditText
+        android:id="@+id/editRy5"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:inputType="numberDecimal"
+        android:gravity="right"
+        android:textColor="#000000"
+        android:focusable="false"
+        android:background="@drawable/shape_edit_text_disenable"
+        app:layout_constraintStart_toEndOf="@id/txtRy5"
+        app:layout_constraintTop_toTopOf="@id/txtRy5"
+        app:layout_constraintBottom_toBottomOf="@id/txtRy5" />
+
+    <ToggleButton
+        android:id="@+id/btnRy5"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:textOff="RY5 off"
+        android:textOn="RY5 on"
+        android:textSize="24sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/editRy5"
+        app:layout_constraintTop_toTopOf="@id/editRy5"
+        app:layout_constraintBottom_toBottomOf="@id/editRy5" />
+
+    <TextView
+        android:id="@+id/txtRy6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RY6 제어"
+        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@id/txtRy5"
+        app:layout_constraintTop_toBottomOf="@id/txtRy5" />
+
+    <EditText
+        android:id="@+id/editRy6"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:inputType="numberDecimal"
+        android:gravity="right"
+        android:textColor="#000000"
+        android:focusable="false"
+        android:background="@drawable/shape_edit_text_disenable"
+        app:layout_constraintStart_toEndOf="@id/txtRy6"
+        app:layout_constraintTop_toTopOf="@id/txtRy6"
+        app:layout_constraintBottom_toBottomOf="@id/txtRy6" />
+
+    <ToggleButton
+        android:id="@+id/btnRy6"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:textOff="RY6 off"
+        android:textOn="RY6 on"
+        android:textSize="24sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/editRy6"
+        app:layout_constraintTop_toTopOf="@id/editRy6"
+        app:layout_constraintBottom_toBottomOf="@id/editRy6" />
+
+    <TextView
+        android:id="@+id/txtTitle2"
+        android:layout_width="512dp"
+        android:layout_height="wrap_content"
+        android:textSize="36sp"
+        android:textAlignment="center"
+        android:layout_marginTop="10dp"
+        android:text="IO TEST (CH2)"
+        android:background="@drawable/shape_text_title"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txtTitle1" />
+
+    <TextView
+        android:id="@+id/txtRy7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RY1 제어"
+        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toStartOf="@id/txtTitle2"
+        app:layout_constraintTop_toBottomOf="@id/txtTitle2" />
+
+    <EditText
+        android:id="@+id/editRy7"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:inputType="numberDecimal"
+        android:gravity="right"
+        android:textColor="#000000"
+        android:focusable="false"
+        android:background="@drawable/shape_edit_text_disenable"
+        app:layout_constraintStart_toEndOf="@id/txtRy7"
+        app:layout_constraintTop_toTopOf="@id/txtRy7"
+        app:layout_constraintBottom_toBottomOf="@id/txtRy7" />
+
+    <ToggleButton
+        android:id="@+id/btnRy7"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:textOff="RY1 off"
+        android:textOn="RY1 on"
+        android:textSize="24sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/editRy7"
+        app:layout_constraintTop_toTopOf="@id/editRy7"
+        app:layout_constraintBottom_toBottomOf="@id/editRy7" />
+
+    <TextView
+        android:id="@+id/txtRy8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RY2 제어"
+        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@id/txtRy7"
+        app:layout_constraintTop_toBottomOf="@id/txtRy7" />
+
+    <EditText
+        android:id="@+id/editRy8"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:inputType="numberDecimal"
+        android:gravity="right"
+        android:textColor="#000000"
+        android:focusable="false"
+        android:background="@drawable/shape_edit_text_disenable"
+        app:layout_constraintStart_toEndOf="@id/txtRy8"
+        app:layout_constraintTop_toTopOf="@id/txtRy8"
+        app:layout_constraintBottom_toBottomOf="@id/txtRy8" />
+
+    <ToggleButton
+        android:id="@+id/btnRy8"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:textOff="RY2 off"
+        android:textOn="RY2 on"
+        android:textSize="24sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/editRy8"
+        app:layout_constraintTop_toTopOf="@id/editRy8"
+        app:layout_constraintBottom_toBottomOf="@id/editRy8" />
+
+    <TextView
+        android:id="@+id/txtRy9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RY3 제어"
+        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@id/txtRy8"
+        app:layout_constraintTop_toBottomOf="@id/txtRy8" />
+
+    <EditText
+        android:id="@+id/editRy9"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:inputType="numberDecimal"
+        android:gravity="right"
+        android:textColor="#000000"
+        android:focusable="false"
+        android:background="@drawable/shape_edit_text_disenable"
+        app:layout_constraintStart_toEndOf="@id/txtRy9"
+        app:layout_constraintTop_toTopOf="@id/txtRy9"
+        app:layout_constraintBottom_toBottomOf="@id/txtRy9" />
+
+    <ToggleButton
+        android:id="@+id/btnRy9"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:textOff="RY3 off"
+        android:textOn="RY3 on"
+        android:textSize="24sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/editRy9"
+        app:layout_constraintTop_toTopOf="@id/editRy9"
+        app:layout_constraintBottom_toBottomOf="@id/editRy9" />
+
+    <TextView
+        android:id="@+id/txtRy10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RY4 제어"
+        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@id/txtRy9"
+        app:layout_constraintTop_toBottomOf="@id/txtRy9" />
+
+    <EditText
+        android:id="@+id/editRy10"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:inputType="numberDecimal"
+        android:gravity="right"
+        android:textColor="#000000"
+        android:focusable="false"
+        android:background="@drawable/shape_edit_text_disenable"
+        app:layout_constraintStart_toEndOf="@id/txtRy10"
+        app:layout_constraintTop_toTopOf="@id/txtRy10"
+        app:layout_constraintBottom_toBottomOf="@id/txtRy10" />
+
+    <ToggleButton
+        android:id="@+id/btnRy10"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:textOff="RY4 off"
+        android:textOn="RY4 on"
+        android:textSize="24sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/editRy10"
+        app:layout_constraintTop_toTopOf="@id/editRy10"
+        app:layout_constraintBottom_toBottomOf="@id/editRy10" />
+
+    <TextView
+        android:id="@+id/txtRy11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RY5 제어"
+        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@id/txtRy10"
+        app:layout_constraintTop_toBottomOf="@id/txtRy10" />
+
+    <EditText
+        android:id="@+id/editRy11"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:inputType="numberDecimal"
+        android:gravity="right"
+        android:textColor="#000000"
+        android:focusable="false"
+        android:background="@drawable/shape_edit_text_disenable"
+        app:layout_constraintStart_toEndOf="@id/txtRy11"
+        app:layout_constraintTop_toTopOf="@id/txtRy11"
+        app:layout_constraintBottom_toBottomOf="@id/txtRy11" />
+
+    <ToggleButton
+        android:id="@+id/btnRy11"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:textOff="RY5 off"
+        android:textOn="RY5 on"
+        android:textSize="24sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/editRy11"
+        app:layout_constraintTop_toTopOf="@id/editRy11"
+        app:layout_constraintBottom_toBottomOf="@id/editRy11" />
+
+    <TextView
+        android:id="@+id/txtRy12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RY6 제어"
+        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@id/txtRy11"
+        app:layout_constraintTop_toBottomOf="@id/txtRy11" />
+
+    <EditText
+        android:id="@+id/editRy12"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:inputType="numberDecimal"
+        android:gravity="right"
+        android:textColor="#000000"
+        android:focusable="false"
+        android:background="@drawable/shape_edit_text_disenable"
+        app:layout_constraintStart_toEndOf="@id/txtRy12"
+        app:layout_constraintTop_toTopOf="@id/txtRy12"
+        app:layout_constraintBottom_toBottomOf="@id/txtRy12" />
+
+    <ToggleButton
+        android:id="@+id/btnRy12"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:textOff="RY6 off"
+        android:textOn="RY6 on"
+        android:textSize="24sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/editRy12"
+        app:layout_constraintTop_toTopOf="@id/editRy12"
+        app:layout_constraintBottom_toBottomOf="@id/editRy12" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
