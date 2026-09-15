@@ -51,16 +51,29 @@
 
     <Button
         android:id="@+id/btnDbControl"
-        android:layout_width="420dp"
+        android:layout_width="205dp"
         android:layout_height="140dp"
-        android:background="@drawable/shape_btn_white_stroke_blue_rounded"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded_left"
         android:text="@string/dbControl"
-        android:textSize="40sp"
+        android:textSize="36sp"
         android:textStyle="bold"
         android:textColor="@color/primary"
         app:backgroundTint="@null"
         app:layout_constraintLeft_toLeftOf="@id/btnWebSocket"
         app:layout_constraintTop_toTopOf="@id/btnControl" />
+
+    <Button
+        android:id="@+id/btnRf"
+        android:layout_width="205dp"
+        android:layout_height="140dp"
+        android:background="@drawable/shape_btn_white_stroke_blue_rounded_right"
+        android:text="@string/rfTest"
+        android:textStyle="bold"
+        android:textSize="36sp"
+        android:textColor="@color/primary"
+        app:backgroundTint="@null"
+        app:layout_constraintRight_toRightOf="@id/btnWebSocket"
+        app:layout_constraintTop_toTopOf="@id/btnDbControl" />
 
     <Button
         android:id="@+id/btnLoadTest"
@@ -111,7 +124,7 @@
         android:textSize="36sp"
         android:textColor="@color/primary"
         app:backgroundTint="@null"
-        app:layout_constraintRight_toRightOf="@id/btnDbControl"
+        app:layout_constraintRight_toRightOf="@id/btnRf"
         app:layout_constraintTop_toTopOf="@id/btnUi" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

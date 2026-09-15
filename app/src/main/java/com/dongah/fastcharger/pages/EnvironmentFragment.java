@@ -39,7 +39,7 @@ public class EnvironmentFragment extends Fragment implements View.OnClickListene
     private int mChannel;
 
     Button btnConfig, btnWebSocket, btnControl, btnDbControl, btnLoadTest,
-            btnUi, btnSystemExit, btnMember;
+            btnUi, btnSystemExit, btnMember, btnRf;
     FragmentTransaction transaction;
     MainActivity activity;
     ClassUiProcess classUiProcess;
@@ -101,6 +101,8 @@ public class EnvironmentFragment extends Fragment implements View.OnClickListene
         btnSystemExit.setOnClickListener(this);
         btnMember = view.findViewById(R.id.btnMember);
         btnMember.setOnClickListener(this);
+        btnRf = view.findViewById(R.id.btnRf);
+        btnRf.setOnClickListener(this);
         return  view;
     }
 
@@ -143,6 +145,8 @@ public class EnvironmentFragment extends Fragment implements View.OnClickListene
             System.exit(0);
         } else if (Objects.equals(getId, R.id.btnMember)) {
             fragmentChange.onFragmentChange(mChannel,UiSeq.MEMBER_REGISTER, "MEMBER_REGISTER", null);
+        } else if (Objects.equals(getId, R.id.btnRf)) {
+            fragmentChange.onFragmentChange(mChannel,UiSeq.RF_CARD, "RF_CARD", null);
         }
     }
 }

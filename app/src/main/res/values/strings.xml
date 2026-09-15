@@ -136,6 +136,7 @@
     <string name="loadTest">Load\nTest</string>
     <string name="remoteTest">원격\n테스트</string>
     <string name="userInfoButton">회원\n등록</string>
+    <string name="rfTest">RF TEST</string>
 
     <!-- control board -->
     <string name="channelSelect">[채널 선택]</string>
@@ -160,4 +161,6 @@
     <string name="memberAlreadyExists">이미 등록된 카드입니다</string>
     <string name="memberDeleteConfirm">선택한 카드를 삭제하시겠습니까?</string>
 
+    <!--  rfcard test  -->
+    <string name="rfcardTitle">RFCARD TEST</string>
 </resources>

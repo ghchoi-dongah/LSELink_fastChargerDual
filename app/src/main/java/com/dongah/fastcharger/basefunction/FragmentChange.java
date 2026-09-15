@@ -32,6 +32,7 @@ import com.dongah.fastcharger.pages.MemberCheckFailedFragment;
 import com.dongah.fastcharger.pages.MemberCheckWaitFragment;
 import com.dongah.fastcharger.pages.MemberRegisterFragment;
 import com.dongah.fastcharger.pages.OperationStopFragment;
+import com.dongah.fastcharger.pages.RfcardTestFragment;
 import com.dongah.fastcharger.pages.ScreenSaverFragment;
 import com.dongah.fastcharger.pages.WebSocketDebugFragment;
 
@@ -318,6 +319,17 @@ public class FragmentChange {
                     transaction.commit();
                 } catch (Exception e) {
                     logger.error("onFragmentChange error : MEMBER_REGISTER {}", e.getMessage());
+                }
+                break;
+            case RF_CARD:
+                try {
+                    onFrameLayoutChange(true);
+                    RfcardTestFragment rfcardTestFragment = new RfcardTestFragment();
+                    rfcardTestFragment.setArguments(bundle);
+                    transaction.replace(R.id.frameFull, rfcardTestFragment, "RF_CARD");
+                    transaction.commit();
+                } catch (Exception e) {
+                    logger.error("onFragmentChange error : RF_CARD {}", e.getMessage());
                 }
                 break;
             default:

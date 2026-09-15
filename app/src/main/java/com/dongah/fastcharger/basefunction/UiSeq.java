@@ -33,7 +33,8 @@ public enum UiSeq {
     LOAD_TEST_IO(29),
     SCREEN_SAVER(30),
     DATABASE(31),
-    MEMBER_REGISTER(32);
+    MEMBER_REGISTER(32),
+    RF_CARD(33);
 
     private final int value;
 

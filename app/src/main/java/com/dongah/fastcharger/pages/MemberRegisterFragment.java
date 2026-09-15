@@ -230,4 +230,14 @@ public class MemberRegisterFragment extends Fragment {
             logger.error("exitFragment error: {}", e.getMessage());
         }
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        try {
+            ((MainActivity) MainActivity.mContext).getRfCardReaderReceive().rfCardReadRelease();
+        } catch (Exception e){
+            logger.error("onDetach error : {}", e.getMessage(), e);
+        }
+    }
 }

@@ -499,7 +499,13 @@ public class ClassUiProcess implements RfCardReaderListener {
         try {
             if (GlobalVariables.memberRegisterMode && GlobalVariables.memberCardRegisterCallback != null &&
                     !cardNum.isEmpty() && !Objects.equals(cardNum, "0000000000000000")) {
-                GlobalVariables.memberCardRegisterCallback.onCardReceived("M" + cardNum);
+                GlobalVariables.memberCardRegisterCallback.onCardReceived(cardNum);
+                return;
+            }
+
+            if (GlobalVariables.rfcardTestMode && GlobalVariables.rfCardTestCallback != null &&
+                    !cardNum.isEmpty() && !Objects.equals(cardNum, "0000000000000000")) {
+                GlobalVariables.rfCardTestCallback.onCardReceived(cardNum);
                 return;
             }
 

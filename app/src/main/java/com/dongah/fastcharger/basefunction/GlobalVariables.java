@@ -95,6 +95,12 @@ public class GlobalVariables {
         void onCardReceived(String cardId);
     }
 
+    public static boolean rfcardTestMode = false;
+    public static RfCardTestCallback rfCardTestCallback = null;
+    public interface RfCardTestCallback {
+        void onCardReceived(String cardId);
+    }
+
 
     public static String getRootPath() {
         return ROOT_PATH;
