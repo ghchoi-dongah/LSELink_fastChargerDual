@@ -178,7 +178,11 @@ public class InitFragment extends Fragment implements View.OnClickListener {
         try {
             chargingCurrentData.onCurrentDataClear();   // clear
             chargingCurrentData.setConnectorId(mChannel + 1);
-            chargingCurrentData.setChargerPointType(mChannel == 0 ? ChargerPointType.COMBO : ChargerPointType.NACS);
+            if (Objects.equals(chargerConfiguration.getChargerPointType(), 9)) {
+                chargingCurrentData.setChargerPointType(mChannel == 0 ? ChargerPointType.COMBO : ChargerPointType.NACS);
+            } else {
+                chargingCurrentData.setChargerPointType(ChargerPointType.COMBO);
+            }
         } catch (Exception e) {
             logger.error("initData error : {}", e.getMessage());
         }
