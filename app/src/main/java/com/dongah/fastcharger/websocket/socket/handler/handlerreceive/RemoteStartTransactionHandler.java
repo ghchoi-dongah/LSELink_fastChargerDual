@@ -45,7 +45,7 @@ public class RemoteStartTransactionHandler implements OcppHandler  {
             // 응답
             sendResponse(connector, messageId);
         } catch (Exception e) {
-            logger.error("RemoteStartTransactionHandler handle error : {}", e.getMessage());
+            logger.error("RemoteStartTransactionHandler error : {}", e.getMessage());
         }
     }
 
@@ -56,7 +56,10 @@ public class RemoteStartTransactionHandler implements OcppHandler  {
             UiSeq uiSeq = activity.getClassUiProcess(connectorId-1).getUiSeq();
             ChargingCurrentData chargingCurrentData = activity.getChargingCurrentData(connectorId-1);
 
-            RemoteStartStopStatus status = !Objects.equals(uiSeq, UiSeq.INIT) ? RemoteStartStopStatus.Rejected
+            String idTag = chargingCurrentData.getIdTag();
+            boolean result = isMemberIdTag(idTag.charAt(0), chargingCurrentData);
+
+            RemoteStartStopStatus status = (!Objects.equals(uiSeq, UiSeq.INIT) || !result) ? RemoteStartStopStatus.Rejected
                     : connectorId == 0 ? RemoteStartStopStatus.Rejected : RemoteStartStopStatus.Accepted;
             RemoteStartTransactionConfirmation remoteStartTransactionConfirmation =
                     new RemoteStartTransactionConfirmation(status);
@@ -68,8 +71,6 @@ public class RemoteStartTransactionHandler implements OcppHandler  {
             );
 
             if (Objects.equals(status, RemoteStartStopStatus.Accepted)) {
-                String idTag = chargingCurrentData.getIdTag();
-                authType(idTag.charAt(0), chargingCurrentData);
                 GlobalVariables.RemoteStart[connectorId-1] = true;
 
                 // Authorize
@@ -77,40 +78,58 @@ public class RemoteStartTransactionHandler implements OcppHandler  {
                 authorizeReq.sendAuthorize(chargingCurrentData.getIdTag());
             }
         } catch (Exception e) {
-            logger.error("RemoteStartTransactionHandler sendResponse error : {}", e.getMessage());
+            logger.error("sendResponse error : {}", e.getMessage());
         }
     }
 
-    private void authType(char type, ChargingCurrentData chargingCurrentData) {
-
+    private boolean authType(char type, ChargingCurrentData chargingCurrentData) {
+        boolean result = true;
         try {
             switch (type) {
                 case 'C':
                     chargingCurrentData.setAuthType("C");
                     chargingCurrentData.setPaymentType(PaymentType.CORP);
                     chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeC);
+                    chargingCurrentData.setCrtrPrice(GlobalVariables.crtrUnitPriceC);
                     break;
                 case 'M':
                     chargingCurrentData.setAuthType("M");
                     chargingCurrentData.setPaymentType(PaymentType.MEMBER);
                     chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeM);
+                    chargingCurrentData.setCrtrPrice(GlobalVariables.crtrUnitPriceM);
                     break;
                 case 'N':
                     chargingCurrentData.setAuthType("N");
                     chargingCurrentData.setPaymentType(PaymentType.CREDIT);
                     chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeN);
+                    chargingCurrentData.setCrtrPrice(GlobalVariables.crtrUnitPriceN);
                     break;
                 case 'K':
                     chargingCurrentData.setAuthType("K");
                     chargingCurrentData.setPaymentType(PaymentType.MOE);
                     chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeK);
+                    chargingCurrentData.setCrtrPrice(GlobalVariables.crtrUnitPriceK);
                     break;
                 default:
                     logger.error("authType none");
                     break;
             }
         } catch (Exception e) {
+            result = false;
             logger.error("authType error : {}", e.getMessage(), e);
         }
+        return result;
+    }
+
+    private boolean isMemberIdTag(char type, ChargingCurrentData chargingCurrentData) {
+        boolean result = false;
+        if (Objects.equals(type, 'M')) {
+            chargingCurrentData.setAuthType("M");
+            chargingCurrentData.setPaymentType(PaymentType.MEMBER);
+            chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeM);
+            chargingCurrentData.setCrtrPrice(GlobalVariables.crtrUnitPriceM);
+            result = true;
+        }
+        return result;
     }
 }

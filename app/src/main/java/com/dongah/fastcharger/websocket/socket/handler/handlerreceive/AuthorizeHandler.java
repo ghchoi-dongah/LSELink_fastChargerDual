@@ -70,12 +70,12 @@ public class AuthorizeHandler implements OcppHandler {
                     chargingCurrentData.setParentIdTag(parentIdTag);
 
                     // test mode
-                    if (Objects.equals(activity.getChargerConfiguration().getOpMode(), 0)) {
-                        chargingCurrentData.setPowerUnitPrice(Double.parseDouble(activity.getChargerConfiguration().getTestPrice()));
-
-                        //test 용
-                        chargingCurrentData.setIdTag("C1010010341009611");
-                    }
+//                    if (Objects.equals(activity.getChargerConfiguration().getOpMode(), 0)) {
+//                        chargingCurrentData.setPowerUnitPrice(Double.parseDouble(activity.getChargerConfiguration().getTestPrice()));
+//
+//                        //test 용
+//                        chargingCurrentData.setIdTag("C1010010341009611");
+//                    }
 
                     // DataTransfer (Authorize)
                     DtAuthorizeReq dtAuthorizeReq = new DtAuthorizeReq(

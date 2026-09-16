@@ -58,6 +58,7 @@ public class ChargingCurrentData {
     int soc = 0;
     int targetSoc = 80;
     long chargingRemainTime = 0;
+    double crtrPrice = 0;
 
     /**
      * 신용 카드 결제
@@ -216,6 +217,7 @@ public class ChargingCurrentData {
             setAuthType("M");
             setFullrechgsoc(100);
             setStopReason(Reason.Other);
+            setCrtrPrice(0);
         } catch (Exception e) {
             logger.error("ChargingCurrentData onCurrentDataClear error : {}", e.getMessage(), e);
         }
@@ -875,5 +877,13 @@ public class ChargingCurrentData {
 
     public void setFullrechgsoc(int fullrechgsoc) {
         this.fullrechgsoc = fullrechgsoc;
+    }
+
+    public double getCrtrPrice() {
+        return crtrPrice;
+    }
+
+    public void setCrtrPrice(double crtrPrice) {
+        this.crtrPrice = crtrPrice;
     }
 }

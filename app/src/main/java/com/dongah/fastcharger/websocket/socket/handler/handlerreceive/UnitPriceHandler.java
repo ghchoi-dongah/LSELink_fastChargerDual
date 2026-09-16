@@ -110,6 +110,7 @@ public class UnitPriceHandler implements OcppHandler  {
                             connectorId, userTypeCd, id);
                 }
                 setUnitPriceCd(userTypeCd, unitPrice);
+                setUnitPriceCrtr(userTypeCd, crtrUnitPrice);
             }
         } catch (Exception e) {
             logger.error("updateUnitPrice error : {}", e.getMessage(), e);
@@ -137,6 +138,7 @@ public class UnitPriceHandler implements OcppHandler  {
                 cv.put("REG_DT", convert.doGetKstDatetimeAsString());
 
                 setUnitPriceCd(row.getString("UserTypeCd"), row.getDouble("UnitPrice"));
+                setUnitPriceCrtr(row.getString("UserTypeCd"), row.getDouble("CrtrUnitPrice"));
 
                 long id = db.insert(tableName, null, cv);
                 logger.info("insertUnitPrice inserted: connectorId={}, userTypeCd={}, id={}",
@@ -161,6 +163,24 @@ public class UnitPriceHandler implements OcppHandler  {
                 break;
             case "N":
                 GlobalVariables.userTypeN = unitPrice;
+                break;
+        }
+    }
+
+    // 회원별 한전 계약단가 설정
+    private void setUnitPriceCrtr(String userTypeCd, double crtrUnitPrice) {
+        switch (userTypeCd) {
+            case "C":
+                GlobalVariables.crtrUnitPriceC = crtrUnitPrice;
+                break;
+            case "K":
+                GlobalVariables.crtrUnitPriceK = crtrUnitPrice;
+                break;
+            case "M":
+                GlobalVariables.crtrUnitPriceM = crtrUnitPrice;
+                break;
+            case "N":
+                GlobalVariables.crtrUnitPriceN = crtrUnitPrice;
                 break;
         }
     }

@@ -37,6 +37,12 @@ public class GlobalVariables {
     public static double userTypeM = 0;    // 회원 단가
     public static double userTypeN = 0;    // 비회원 단가
 
+    // CrtrUnitPrice
+    public static double crtrUnitPriceC = 0;    // 법인 한전 계약단가
+    public static double crtrUnitPriceK = 0;    // 환경부 한전 계약단가
+    public static double crtrUnitPriceM = 0;    // 회원 한전 계약단가
+    public static double crtrUnitPriceN = 0;    // 비회원 한전 계약단가
+
 
     /**
      * Max plug count

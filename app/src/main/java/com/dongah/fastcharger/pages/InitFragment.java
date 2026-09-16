@@ -208,12 +208,14 @@ public class InitFragment extends Fragment implements View.OnClickListener {
                             chargingCurrentData.setAuthType("K");
                             chargingCurrentData.setPaymentType(PaymentType.MOE);
                             chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeK);
+                            chargingCurrentData.setCrtrPrice(GlobalVariables.crtrUnitPriceK);
                             fragmentChangeAuthSelect();
                             break;
                         case 1: // 법인
                             chargingCurrentData.setAuthType("C");
                             chargingCurrentData.setPaymentType(PaymentType.CORP);
                             chargingCurrentData.setPowerUnitPrice(GlobalVariables.userTypeC);
+                            chargingCurrentData.setCrtrPrice(GlobalVariables.crtrUnitPriceC);
                             fragmentChangeAuthSelect();
                             break;
                         case 2: // 환경부+비화원
