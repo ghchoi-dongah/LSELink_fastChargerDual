@@ -1,5 +1,6 @@
 package com.dongah.fastcharger.websocket.socket.handler.handlersend;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -44,6 +45,7 @@ public class StopTransactionReq {
     }
 
 
+    @SuppressLint("DefaultLocale")
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void sendStopTransactionReq() {
         try {
@@ -64,7 +66,7 @@ public class StopTransactionReq {
 
             // 충전 사용량
             SampledValue energy = new SampledValue();
-            energy.setValue(String.valueOf(chargingCurrentData.getPowerMeterUse() * 0.01));
+            energy.setValue(String.format("%.3f", chargingCurrentData.getPowerMeterUse() * 0.01));
             energy.setContext("Transaction.End");
             energy.setFormat(ValueFormat.Raw);
             energy.setMeasurand("Current.Export");

@@ -135,7 +135,7 @@ public class ChargingCurrentData {
      * M: 회원카드
      * N: 신용카드
      * */
-    public String authType = "M";
+    public String authType = "K";
 
     /**
      * 커넥터 상태
@@ -214,7 +214,7 @@ public class ChargingCurrentData {
             setSoc(0);
             setTargetSoc(80);
             setTargetCurrent(0);
-            setAuthType("M");
+            setAuthType("K");
             setFullrechgsoc(100);
             setStopReason(Reason.Other);
             setCrtrPrice(0);
